@@ -1,0 +1,19 @@
+# A2b: depth-matched secondary control (§3) -- 6 layers like A1. d_state=32 (lower than A2's 64)
+# to partially offset the extra layer's cost; still runs somewhat over transformer param count
+# (see measured value in BENCHMARK_PLAN.md §3) since 6 layers of this bidirectional design have
+# a higher minimum cost than the transformer's 6 layers even at small d_state. Not gated at 2%
+# (that check is only for the primary A1/A2 pair) -- report the actual measured gap in the paper.
+arm: mamba
+d_model: 512
+d_in: 356
+enc_layers: 6
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 32
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64

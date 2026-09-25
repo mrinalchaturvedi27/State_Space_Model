@@ -1,0 +1,19 @@
+# A2: primary SSM arm, matched params to configs/model/transformer.yaml (§3).
+# d_state=64, not the plan's original guess of 256: this BiMamba2Layer implementation runs two
+# FULL independent Mamba2 modules (forward + backward) plus a concat->proj, which costs more
+# per unit of d_state than the plan's pre-implementation estimate assumed. Solved empirically
+# via scripts/count_params.py -- see BENCHMARK_PLAN.md §3 for the measured params and the note.
+arm: mamba
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64

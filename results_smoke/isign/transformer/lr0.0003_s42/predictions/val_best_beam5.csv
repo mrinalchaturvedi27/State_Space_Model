@@ -1,0 +1,401 @@
+video_id,prediction,ground_truth,sent_chrF2,sent_ROUGE-L,ref_words,pred_words,n_frames
+eabe1f38221a-3,,"On a school day, you are busy studying, playing and chatting with friends.",0.0,0,13,0,143
+eabe1f38221a-5,,"When you have a holiday from school, what do you do? Would you behave a little like the frog in the following poem?",0.0,0,23,0,281
+eabe1f38221a-7,,Fred is a very lazy frog.,0.0,0,6,0,149
+eabe1f38221a-8,,who lolls all day upon a log.,0.0,0,7,0,216
+eabe1f38221a-9,,He always manages to shirk.,0.0,0,5,0,112
+eabe1f38221a-10,,Doing a single stroke of work.,0.0,0,6,0,112
+eabe1f38221a-11,,His poor old mother calls in vain.,0.0,0,7,0,123
+eabe1f38221a-13,,He does not bother. To move two inches.,0.0,0,8,0,108
+eabe1f38221a-14,,much preferring to be extremely hard of hearing.,0.0,0,8,0,259
+eabe1f38221a-15,,He lies there in a silent heap and stays conveniently asleep.,0.0,0,11,0,198
+eabe1f38221a-16,,If a lady frog hops past...,0.0,0,6,0,91
+eabe1f38221a-17,,You'd think he would get up at last?,0.0,0,8,0,250
+eabe1f38221a-18,,"to bow and help her on her way? But no, I'm ashamed to say that when a lady frog comes by.",0.0,0,21,0,248
+eabe1f38221a-19,,He does not open up one eye.,0.0,0,7,0,96
+eabe1f38221a-23,,to lie around lazily. Log,0.0,0,5,0,181
+eabe1f38221a-24,,trunk of a tree that has been cut.,0.0,0,8,0,126
+eabe1f38221a-26,,to not do something you should do.,0.0,0,7,0,128
+eabe1f38221a-34,,to bend your head to show respect.,0.0,0,7,0,126
+eabe1f38221a-36,,What did the frog do all day? Two,0.0,0,8,0,171
+eabe1f38221a-38,,What other word can you think of to describe the frog?,0.0,0,11,0,171
+eabe1f38221a-40,,How he behaved with his mother?,0.0,0,6,0,176
+eabe1f38221a-41,,When a lady frog walked by. 3,0.0,0,7,0,206
+eabe1f38221a-42,,Complete the sentences with reference to the poem.,0.0,0,8,0,166
+eabe1f38221a-44,,"When the frog's mother called him, he pretended to...",0.0,0,9,0,119
+eabe1f38221a-47,,"When a lady frog hops by, he does not even......blank. 4",0.0,0,11,0,266
+eabe1f38221a-48,,Did you like the frog's behaviour?,0.0,0,6,0,136
+eabe1f38221a-51,,Refer to the poem and understand.,0.0,0,6,0,116
+eabe1f38221a-52,,"The frog loved to, laze and lie around all day.",0.0,0,10,0,286
+eabe1f38221a-53,,He did not like to do any work at all.,0.0,0,10,0,141
+eabe1f38221a-54,,"Now, make true sentences about yourself.",0.0,0,6,0,184
+eabe1f38221a-55,,Write about the people you like.,0.0,0,6,0,76
+eabe1f38221a-59,,You may use the following clues.,0.0,0,6,0,131
+eabe1f38221a-65,,Try and find out the same from your family members also.,0.0,0,11,0,141
+eabe1f38221a-67,,Add one more matching word to each pair.,0.0,0,8,0,106
+eabe1f38221a-68,,One has been done for you.,0.0,0,6,0,86
+eabe1f38221a-86,,What kind of words are they? Blank,0.0,0,7,0,154
+ef52bca1a454-3,,Do you have a grandparent who does things for you?,0.0,0,10,0,83
+ef52bca1a454-5,,Let's read about the granny in this poem.,0.0,0,8,0,126
+ef52bca1a454-6,,"Granny, Granny, please comb my hair.",0.0,0,6,0,131
+ef52bca1a454-7,,"Granny, Granny, please comb my hair.",0.0,0,6,0,116
+ef52bca1a454-8,,"You always take your time, you always take such care.",0.0,0,10,0,141
+ef52bca1a454-9,,You put me to sit on a cushion between your knees.,0.0,0,11,0,156
+ef52bca1a454-20,,What does the little girl want her granny to do?,0.0,0,10,0,131
+ef52bca1a454-21,,What does Granny rub on her hair?,0.0,0,7,0,164
+ef52bca1a454-22,,Does the little girl love her granny?,0.0,0,7,0,121
+ef52bca1a454-24,,Do your grandparents live with you?,0.0,0,6,0,171
+ef52bca1a454-25,,Do you spend some time with them?,0.0,0,7,0,176
+ef52bca1a454-26,,How do you help them?,0.0,0,5,0,113
+ef52bca1a454-28,,What do you call grandmother in your language?,0.0,0,8,0,179
+ef52bca1a454-29,,What do you call grandfather in your language?,0.0,0,8,0,161
+ef52bca1a454-30,,Do you know any old people?,0.0,0,6,0,133
+ef52bca1a454-31,,Can you name them? How can you make them happy?,0.0,0,10,0,181
+ef52bca1a454-34,,Have you ever gone out with your grandparents?,0.0,0,8,0,131
+ef52bca1a454-37,,make new words using letters from the word grandparents.,0.0,0,9,0,141
+ef52bca1a454-39,,You may use the letters in any order.,0.0,0,8,0,106
+ef52bca1a454-40,,One has been done for you.,0.0,0,6,0,176
+ef52bca1a454-41,,Here in the picture you can see two happy grandparents.,0.0,0,10,0,181
+ef52bca1a454-42,,With the word grandparents make other words in the seven other boxes like the one that is done for you. Rent,0.0,0,21,0,306
+ef52bca1a454-44,,"Sometimes, we replace the names of people with another word.",0.0,0,10,0,321
+ef52bca1a454-45,,"Instead of repeating the name, replace the names in the sentences using a word from the box. it!",0.0,0,18,0,221
+ef52bca1a454-49,,1. Mina is playing with a doll. Dash.,0.0,0,8,0,129
+ef52bca1a454-51,,2. Ram is climbing a tree. Dash is a boy.,0.0,0,10,0,208
+ef52bca1a454-52,,3. Do not eat that mango. Dash is not ripe.,0.0,0,10,0,236
+ef52bca1a454-55,,Suppose you go to stay with your grandparents for a week.,0.0,0,11,0,123
+ef52bca1a454-57,,Make a list of things that you would like to take with you for them.,0.0,0,15,0,184
+ef52bca1a454-58,,Do not forget to put,0.0,0,5,0,71
+ef52bca1a454-59,,"a, an, or the before each thing.",0.0,0,7,0,218
+ef52bca1a454-60,,And now you have some space to list out the things. Fun time!,0.0,0,13,0,174
+ef52bca1a454-61,,Make a thank you card for your grandparents.,0.0,0,8,0,126
+ef52bca1a454-62,,You need......chart paper of any colour of 9 inches by 12 inches.,0.0,0,12,0,221
+ef52bca1a454-68,,1. Fold the paper into 2.,0.0,0,6,0,134
+ef52bca1a454-69,,2. Draw or stick pictures on it.,0.0,0,7,0,181
+ef52bca1a454-70,,3. Write a message inside.,0.0,0,5,0,113
+ef52bca1a454-71,,Begin with Dear Grandfather or Grandmother,0.0,0,6,0,169
+ef52bca1a454-73,,This is an outline of Meena's grandfather.,0.0,0,7,0,193
+ef52bca1a454-74,,"Add his hat, tie, mustache, glasses, stick, etc.",0.0,0,8,0,254
+ef52bca1a454-75,,Write each word in the given box.,0.0,0,7,0,146
+ef52bca1a454-76,,Call out the picture and write his name.,0.0,0,8,0,68
+ef52bca1a454-78,,On the left you can see picture of Meena's grandfather.,0.0,0,10,0,216
+ef52bca1a454-79,,Now follow the instructions and name the things that you add.,0.0,0,11,0,146
+ef52bca1a454-82,,This is a family picnic scene.,0.0,0,6,0,148
+ef52bca1a454-83,,give names to all the people.,0.0,0,6,0,136
+ef52bca1a454-84,,Look at the picture and make sentences using phrases given in the box.,0.0,0,13,0,171
+ef52bca1a454-85,,Here in the picture you can see a family of six people enjoying a picnic.,0.0,0,15,0,206
+ef52bca1a454-86,,Now use these phrases to finish up sentences of what is happening in the picture.,0.0,0,15,0,241
+ef52bca1a454-89,,Picking up wrappers or waste papers,0.0,0,6,0,141
+809a3a5e02d1-3,,It was the summer of 1880.,0.0,0,6,0,94
+809a3a5e02d1-4,,A healthy baby girl was born in a small town in...,0.0,0,11,0,126
+809a3a5e02d1-6,,Her parents loved her dearly and named her.,0.0,0,8,0,101
+809a3a5e02d1-9,,The baby became ill and day after day.,0.0,0,8,0,108
+809a3a5e02d1-10,,Her fever stayed high. Everyone in the family tried to help her.,0.0,0,12,0,199
+809a3a5e02d1-11,,"to get better. But all they could say was, there is nothing more we can do.",0.0,0,16,0,198
+809a3a5e02d1-12,,The baby may not live.,0.0,0,5,0,101
+809a3a5e02d1-14,,but she was not the same after her illness.,0.0,0,9,0,183
+809a3a5e02d1-17,,"At last, they found out what was wrong.",0.0,0,8,0,128
+809a3a5e02d1-18,,The child could not see or hear.,0.0,0,7,0,131
+809a3a5e02d1-19,,The baby grew into a little girl. Her parents felt sorry for her.,0.0,0,13,0,191
+809a3a5e02d1-20,,Hellen often cried and held on to her mother.,0.0,0,9,0,196
+809a3a5e02d1-21,,Give the poor child what she wants.,0.0,0,7,0,84
+809a3a5e02d1-23,,"Though Helen could not hear or see, she was a bright little girl.",0.0,0,13,0,171
+809a3a5e02d1-24,,Some people thought Helen could not learn anything.,0.0,0,8,0,156
+809a3a5e02d1-25,,Her mother did not agree.,0.0,0,5,0,63
+809a3a5e02d1-26,,Helen is very smart. She said.,0.0,0,6,0,101
+809a3a5e02d1-27,,and added. The problem is how can we reach her? She is locked up inside herself.,0.0,0,16,0,289
+809a3a5e02d1-28,,Helen began to grow wild. She would not let anyone comb her hair.,0.0,0,13,0,188
+809a3a5e02d1-30,,Her clothes were always dirty.,0.0,0,5,0,94
+809a3a5e02d1-32,,"Sometimes, she even lay on the floor and kicked her feet.",0.0,0,11,0,138
+809a3a5e02d1-33,,Her parents thought that they should find a teacher for her.,0.0,0,11,0,146
+809a3a5e02d1-35,,A young teacher agreed to help Helen to learn to see the world.,0.0,0,13,0,291
+809a3a5e02d1-36,,Miss Sullivan gave Hellen a doll. D,0.0,0,7,0,168
+809a3a5e02d1-39,,She spelled the word with her fingers.,0.0,0,7,0,93
+809a3a5e02d1-40,,into Helen's hand. She made the letter.,0.0,0,7,0,181
+809a3a5e02d1-42,,Helen copied her teacher and spelled D-O-L.,0.0,0,7,0,134
+809a3a5e02d1-43,,L. too. But she did not understand.,0.0,0,7,0,136
+809a3a5e02d1-44,,what she was doing. Helen liked Miss Sullivan.,0.0,0,8,0,131
+809a3a5e02d1-45,,"She was strict, but kind.",0.0,0,5,0,113
+809a3a5e02d1-46,,She spelt a lot of words for Helen on her hand.,0.0,0,11,0,139
+809a3a5e02d1-47,,Day and night to make Helen understand.,0.0,0,7,0,181
+809a3a5e02d1-48,,"One day, her teacher made Helen put her hand into running water. Then she spelt.",0.0,0,15,0,221
+809a3a5e02d1-49,,"w, a, t, e, r.",0.0,0,5,0,141
+809a3a5e02d1-50,,Suddenly Helen understood that W-A-T,0.0,0,5,0,181
+809a3a5e02d1-52,,Water meant something wet running over her hand,0.0,0,8,0,128
+809a3a5e02d1-54,,She understood that words were the most important things in the world.,0.0,0,12,0,186
+809a3a5e02d1-55,,words would tell her everything she wanted to know.,0.0,0,9,0,129
+809a3a5e02d1-63,,Something is wrong. Said Helen's mother. What was wrong with Helen? 2?,0.0,0,12,0,311
+809a3a5e02d1-64,,Although Helen could not hear or see?,0.0,0,7,0,91
+809a3a5e02d1-65,,What kind of girl was she?,0.0,0,6,0,99
+809a3a5e02d1-67,,Who agreed to help Hellen? Four.,0.0,0,6,0,184
+809a3a5e02d1-68,,How did Miss Sullivan help Helen.,0.0,0,6,0,223
+809a3a5e02d1-70,,What did Helen learn when the teacher put her hand into running water?,0.0,0,13,0,141
+809a3a5e02d1-72,,What was the most important thing that Helen finally understood?,0.0,0,10,0,218
+809a3a5e02d1-74,,"1. Using sign language, make these letters with your hand.",0.0,0,10,0,204
+809a3a5e02d1-77,,Spell these words to hand signs.,0.0,0,6,0,112
+809a3a5e02d1-80,,3. How do people who cannot see read? 4.,0.0,0,9,0,218
+809a3a5e02d1-81,,What is the script for children who cannot see?,0.0,0,9,0,86
+809a3a5e02d1-83,,How do you think you can help children who cannot see?,0.0,0,11,0,246
+809a3a5e02d1-84,,"Page 85. 6. Look at the signs for the letters of the alphabet. In this page, sign language for alphabet A.",0.0,0,21,0,379
+809a3a5e02d1-85,,to alphabet L is given.,0.0,0,5,0,181
+809a3a5e02d1-86,,"Page 86 In this page,",0.0,0,5,0,136
+809a3a5e02d1-87,,Sign language for Alphabet M to alphabet Z is given.,0.0,0,10,0,188
+809a3a5e02d1-90,,1. Match the two parts of sentences.,0.0,0,7,0,108
+809a3a5e02d1-91,,given under column A and B. Add but to join the two parts and write complete sentences.,0.0,0,17,0,294
+809a3a5e02d1-93,,Helen lived after her illness. Two.,0.0,0,6,0,176
+809a3a5e02d1-94,,She could not see or here.,0.0,0,6,0,74
+809a3a5e02d1-96,,3. People thought that she could not learn anything.,0.0,0,9,0,264
+809a3a5e02d1-97,,4. Helen copied the woods 5.,0.0,0,6,0,243
+809a3a5e02d1-101,,Her mother thought she could learn.,0.0,0,6,0,76
+809a3a5e02d1-103,,"B, she did not understand what she was doing.",0.0,0,9,0,166
+809a3a5e02d1-104,,"C, she could not hear or see.",0.0,0,7,0,146
+809a3a5e02d1-107,,E. She was very intelligent.,0.0,0,5,0,113
+809a3a5e02d1-108,,blank space has been provided for your answers.,0.0,0,8,0,131
+809a3a5e02d1-112,,A. Her clothes were always dirty.,0.0,0,6,0,139
+809a3a5e02d1-113,,B. She was often angry.,0.0,0,5,0,113
+809a3a5e02d1-115,,Sometimes she lay on the floor. D.,0.0,0,7,0,169
+809a3a5e02d1-116,,Her parents never scolded her.,0.0,0,5,0,108
+809a3a5e02d1-117,,2. Ask yourself the following questions.,0.0,0,6,0,126
+809a3a5e02d1-118,,Put a tick under the right column. 4,0.0,0,8,0,119
+809a3a5e02d1-119,,Now your friend will ask you the same questions.,0.0,0,9,0,112
+809a3a5e02d1-120,,"In first column, questions are given.",0.0,0,6,0,88
+809a3a5e02d1-121,,"In second column, option always is given.",0.0,0,7,0,131
+809a3a5e02d1-124,,"In fourth column, option sometimes is given.",0.0,0,7,0,112
+809a3a5e02d1-127,,Put the tick mark accordingly.,0.0,0,5,0,76
+809a3a5e02d1-130,,A. obey be your parent.,0.0,0,5,0,114
+809a3a5e02d1-131,,B. Visit your grandparents. C.,0.0,0,5,0,133
+809a3a5e02d1-132,,Fight with your brother or sister.,0.0,0,6,0,69
+809a3a5e02d1-135,,throw waste in the dustbin F.,0.0,0,6,0,131
+809a3a5e02d1-136,,Switch off the lights when you go out of the room.,0.0,0,11,0,131
+809a3a5e02d1-137,,G. Leave the tap on while brushing your teeth. H.,0.0,0,10,0,168
+809a3a5e02d1-138,,Tear pages from your notebook. Page.,0.0,0,6,0,161
+809a3a5e02d1-141,,"1. From newspapers or old magazines, collect stories or reports.",0.0,0,10,0,189
+809a3a5e02d1-143,,a. Draw pictures of the story,0.0,0,6,0,121
+809a3a5e02d1-144,,B. Talk about the stories. Sing this song.,0.0,0,8,0,131
+809a3a5e02d1-147,,"I have a little sister, they call her pretty.",0.0,0,9,0,104
+809a3a5e02d1-149,,She waits in the waters.,0.0,0,5,0,124
+809a3a5e02d1-151,,"She climbs up the mountains. high, high, high, high.",0.0,0,9,0,171
+809a3a5e02d1-153,,She has just one eye.,0.0,0,5,0,98
+9b0136913690-3,,"Long, long ago, a sultan.",0.0,0,5,0,226
+9b0136913690-5,,Ruled over a large kingdom.,0.0,0,5,0,118
+9b0136913690-6,,His queen was a good storyteller. Each night she would tell a story to the king.,0.0,0,16,0,239
+9b0136913690-7,,She narrated ancient persian and Arabic folk stories.,0.0,0,8,0,181
+9b0136913690-8,,This is one of the stories from the Arabian Knights.,0.0,0,10,0,208
+9b0136913690-9,,Read this story about a man who cannot stop.,0.0,0,9,0,119
+9b0136913690-11,,in the city of Cashgar lived a barber,0.0,0,8,0,283
+9b0136913690-12,,who was a great talker.,0.0,0,5,0,131
+9b0136913690-13,,Once the Sultan called the barber to shave his head.,0.0,0,10,0,181
+9b0136913690-14,,The barber started talking non-stop instead of shaving him.,0.0,0,9,0,179
+9b0136913690-16,,When are you going to stop talking and begin to do your work? The barber replied.,0.0,0,16,0,246
+9b0136913690-17,,You do me an injury by calling me a chatterer.,0.0,0,10,0,148
+9b0136913690-18,,For everyone says I am very quiet!,0.0,0,7,0,112
+9b0136913690-20,,whom you might call chatters. They are names are.,0.0,0,9,0,161
+9b0136913690-31,,One is deaf and the other has a defect in his speech.,0.0,0,12,0,166
+9b0136913690-32,,& they are all great talkers,0.0,0,6,0,91
+9b0136913690-33,,"But I am the youngest of my family, and I am very quiet and sparing with words.",0.0,0,17,0,263
+9b0136913690-35,,Give him three pieces of gold the Sultan cried,0.0,0,9,0,196
+9b0136913690-37,,and send him away. I will not be shaved today. My Master!,0.0,0,12,0,168
+9b0136913690-39,,It was not I who came to see you.,0.0,0,9,0,121
+9b0136913690-40,,It was you who ordered me to come. So I will not quit your house till I have shaved you.,0.0,0,20,0,261
+9b0136913690-41,,He then began narrating another story which lasted half an hour.,0.0,0,11,0,171
+9b0136913690-42,,Stop making your fine speeches and let me go quickly!,0.0,0,10,0,173
+9b0136913690-43,,I have an affair of the greatest importance!,0.0,0,8,0,84
+9b0136913690-44,,I have to go out at noon!,0.0,0,7,0,98
+9b0136913690-47,,"When he saw that the Sultan was really angry with him,",0.0,0,11,0,96
+9b0136913690-48,,"The barber said, Oh Master, do not be angry, I will begin to shave you. Saying this.",0.0,0,17,0,231
+9b0136913690-49,,He washed the sultans head and began to shave.,0.0,0,9,0,154
+9b0136913690-50,,But he had not touched him even four times with the razor when he stopped.,0.0,0,15,0,206
+9b0136913690-51,,"And said, My Master, you are acting hastily in this matter.",0.0,0,11,0,221
+9b0136913690-52,,Go on shaving me! Speak no more!,0.0,0,7,0,83
+9b0136913690-53,,"order the Sultan, be patient. said the barber.",0.0,0,8,0,171
+9b0136913690-54,,Perhaps you have not considered well what you were going to do.,0.0,0,12,0,166
+9b0136913690-55,,I wish you would tell me what this matter of great importance is all about.,0.0,0,15,0,209
+9b0136913690-56,,And then I will give you my opinion on it.,0.0,0,10,0,133
+9b0136913690-57,,Finish shaving at once! The Sultana exclaimed.,0.0,0,7,0,154
+9b0136913690-58,,But instead of doing this,0.0,0,5,0,78
+9b0136913690-59,,The Barber left the Sultan half-shaped.,0.0,0,6,0,159
+9b0136913690-60,,to go and see what time it was.,0.0,0,8,0,108
+9b0136913690-63,,"Be calm, my master. And you shall be shaved in a moment. said the Barber",0.0,0,15,0,196
+9b0136913690-64,,"And saying this, he continued shaving the sultan.",0.0,0,8,0,136
+9b0136913690-65,,But while he was doing this...,0.0,0,6,0,68
+9b0136913690-66,,He could not help talking.,0.0,0,5,0,101
+9b0136913690-67,,If you could inform me what this,0.0,0,7,0,76
+9b0136913690-68,,Important affair is I would give more advice which you might find useful. he said.,0.0,0,15,0,279
+9b0136913690-69,,The sultan was completely fed up by now and decided to satisfy the Barber.,0.0,0,14,0,193
+9b0136913690-70,,He told him that he was giving a feast.,0.0,0,9,0,66
+9b0136913690-71,,"to some friends at noon, which was why he was in a hurry to leave.",0.0,0,15,0,206
+9b0136913690-72,,"When the Barber heard the Sothan mention of feast, he exclaimed, that reminds me.",0.0,0,14,0,171
+9b0136913690-73,,"Yesterday I invited four or five friends to come to my house today, but I had quite forgotten it.",0.0,0,19,0,219
+9b0136913690-74,,and have not made any preparations for them.,0.0,0,8,0,106
+9b0136913690-75,,The Sultan who was at the mercy of the Barber was ready to do anything to be rid of him.,0.0,0,20,0,223
+9b0136913690-76,,Be quick and finish your work!,0.0,0,6,0,116
+9b0136913690-77,,"The Sultan replied, and you shall have all the food that has been prepared for me today.",0.0,0,17,0,259
+9b0136913690-78,,Please show me the food so that I may judge if it is enough for my five friends.,0.0,0,18,0,251
+9b0136913690-79,,I have enough food for you! The Sultan exclaimed,0.0,0,9,0,128
+9b0136913690-80,,But he ordered that all the food prepared for his feast be...,0.0,0,12,0,106
+9b0136913690-82,,The barber looked over the food and said,0.0,0,8,0,81
+9b0136913690-83,,This is very good but I shall want some fruit for the dessert also.,0.0,0,14,0,191
+9b0136913690-85,,The sultan in desperation since his head was half shaved ordered that the fruits should also be brought in.,0.0,0,19,0,250
+9b0136913690-87,,The Barber left off shaving the sultan to examine each dish separately. This took up half an hour.,0.0,0,18,0,226
+9b0136913690-88,,The sultans stamped his feet impatiently.,0.0,0,6,0,146
+9b0136913690-89,,But the Barber did not hurry.,0.0,0,6,0,88
+9b0136913690-90,,"At length, however, he again took up the razor.",0.0,0,9,0,124
+9b0136913690-91,,"But after a few minutes of work, stopped suddenly and cried.",0.0,0,11,0,193
+9b0136913690-92,,I never knew that you were...,0.0,0,6,0,66
+9b0136913690-96,,Someone who talks a lot.,0.0,0,5,0,126
+9b0136913690-100,,"What a person feels about a person, thing or subject.",0.0,0,10,0,174
+9b0136913690-104,,A sweet dish served after the main meal.,0.0,0,8,0,126
+9b0136913690-106,,to look at something very carefully.,0.0,0,6,0,112
+9b0136913690-111,,How many brothers did the barber have? Two!,0.0,0,8,0,161
+9b0136913690-112,,Why was the Sultan in a hurry?,0.0,0,7,0,94
+9b0136913690-114,,Why did the barber take so long to shave the sultan? 5,0.0,0,12,0,243
+9b0136913690-115,,"Write, True or False? One.",0.0,0,5,0,134
+9b0136913690-116,,The bubble was shaving the sultan's beard.,0.0,0,7,0,121
+9b0136913690-118,,"The Sultan gave him three gold coins, blank. Three",0.0,0,9,0,201
+9b0136913690-119,,The barber refused to leave the Sultan's palace.,0.0,0,8,0,106
+9b0136913690-121,,"There were seven brothers altogether in the Sultan's family, blank.",0.0,0,10,0,176
+9b0136913690-123,,Why did the barber want a lot of food?,0.0,0,9,0,136
+ijrjSBx7WTc--2,,a supplementary reader in English for Class 6.,0.0,0,8,0,99
+ijrjSBx7WTc--7,,The synopsis are the first part of the story.,0.0,0,9,0,136
+ijrjSBx7WTc--8,,"A farmer, his wife and their small child lived in a village.",0.0,0,12,0,289
+ijrjSBx7WTc--9,,There was also a baby mongoose in the house.,0.0,0,9,0,158
+ijrjSBx7WTc--10,,Who they believed would be their son's companion and friend in future.,0.0,0,12,0,316
+ijrjSBx7WTc--11,,"One day, the farmer and his wife",0.0,0,7,0,76
+ijrjSBx7WTc--12,,went out leaving the child alone with the mongoose.,0.0,0,9,0,219
+ijrjSBx7WTc--14,,Once a farmer and his wife lived in a village with their small son.,0.0,0,14,0,296
+ijrjSBx7WTc--15,,They loved him very much. We must have a pet.,0.0,0,10,0,236
+ijrjSBx7WTc--16,,"The farmer said to his wife one day,",0.0,0,8,0,236
+ijrjSBx7WTc--17,,"When our son grows up, he will need a companion. This pet will be our son's companion. His wife.",0.0,0,19,0,341
+ijrjSBx7WTc--19,,"One evening, the farmer brought with him a tiny mongoose. It's a baby mongoose.",0.0,0,14,0,214
+ijrjSBx7WTc--20,,"said his wife, but will soon be fully groomed.",0.0,0,9,0,303
+ijrjSBx7WTc--21,,He will be a friend to our son.,0.0,0,8,0,134
+ijrjSBx7WTc--23,,Both the baby and the mongoose grew. In five or six months the mongoose had grown.,0.0,0,16,0,178
+ijrjSBx7WTc--24,,"to its full size, a lovely animal.",0.0,0,7,0,74
+ijrjSBx7WTc--25,,with two shining black eyes and a bushy tail.,0.0,0,9,0,363
+ijrjSBx7WTc--26,,"The farmer's son was still a baby in the cradle, sleeping and crying alternately.",0.0,0,14,0,376
+ijrjSBx7WTc--27,,One day the farmer's wife wanted to go to the market.,0.0,0,11,0,179
+ijrjSBx7WTc--28,,She fed the baby and dragged him to sleep in his little cradle.,0.0,0,13,0,238
+ijrjSBx7WTc--29,,"Picking up the basket, she said to her husband.",0.0,0,9,0,91
+ijrjSBx7WTc--30,,I'm off to the bazar.,0.0,0,5,0,64
+ijrjSBx7WTc--31,,The baby is sleeping. Keep an eye on him.,0.0,0,9,0,418
+ijrjSBx7WTc--32,,"Frankly, I don't like to leave the child alone with the mongoose.",0.0,0,12,0,341
+ijrjSBx7WTc--33,,"You needn't be afraid, said the farmer.",0.0,0,7,0,74
+ijrjSBx7WTc--34,,The Mongoose is a friendly animal.,0.0,0,6,0,166
+ijrjSBx7WTc--35,,It's as sweet as our baby and they are the best friends you know.,0.0,0,14,0,146
+ijrjSBx7WTc--36,,The wife went away and the farmer having nothing to do in the house.,0.0,0,14,0,156
+ijrjSBx7WTc--37,,decided to go out and take a look at his fields not far away.,0.0,0,14,0,233
+ijrjSBx7WTc--38,,He ran into some friends on the way back and didn't return for quite some time.,0.0,0,16,0,234
+ijrjSBx7WTc--39,,Now the synopsis for the rest of the story.,0.0,0,9,0,121
+ijrjSBx7WTc--40,,The farmers wife returned home from the market carrying a heavy basket.,0.0,0,12,0,233
+ijrjSBx7WTc--41,,She found the mongoose at the entrance of the house with blood.,0.0,0,12,0,116
+ijrjSBx7WTc--42,,on his face and balls.,0.0,0,5,0,219
+ijrjSBx7WTc--43,,She jumped to the conclusion that it was her son's blood.,0.0,0,11,0,93
+ijrjSBx7WTc--44,,and the mongoose was the guilty one.,0.0,0,7,0,91
+ijrjSBx7WTc--46,,The farmer's wife finished her shopping and came back home.,0.0,0,10,0,131
+ijrjSBx7WTc--47,,with a basket full of groceries.,0.0,0,6,0,191
+ijrjSBx7WTc--48,,She saw the mongoose sitting outside as if waiting for her.,0.0,0,11,0,216
+ijrjSBx7WTc--49,,"On seeing her, he ran to welcome her.",0.0,0,8,0,114
+ijrjSBx7WTc--51,,The farmer's wife took one look at the mongoose and screamed.,0.0,0,11,0,126
+ijrjSBx7WTc--53,,The face and paws of the mongoose were smeared with blood.,0.0,0,11,0,394
+ijrjSBx7WTc--54,,You wicked animal! You have killed my baby!,0.0,0,8,0,98
+ijrjSBx7WTc--56,,She was blind with rage and with all her strength brought down the heavy basket full of groceries.,0.0,0,18,0,203
+ijrjSBx7WTc--57,,On the blood-spir mongoose and ran inside to the child's cradle.,0.0,0,11,0,149
+ijrjSBx7WTc--59,,The baby was fast asleep.,0.0,0,5,0,104
+ijrjSBx7WTc--60,,But on the floor lay a black snake torn and bleeding. In a flash.,0.0,0,14,0,236
+ijrjSBx7WTc--61,,She realized what had happened. She ran out looking for the mongoose,0.0,0,12,0,208
+ijrjSBx7WTc--62,,"Oh, you saved my child.",0.0,0,5,0,166
+ijrjSBx7WTc--64,,What have I done? She cried.,0.0,0,6,0,83
+ijrjSBx7WTc--65,,touching the mongoose who lay dead and still.,0.0,0,8,0,201
+ijrjSBx7WTc--66,,Unaware of her sobbing. The farmer's wife.,0.0,0,7,0,254
+ijrjSBx7WTc--67,,"who had acted hastily and rashly, stared long at the dead mongoose.",0.0,0,12,0,223
+ijrjSBx7WTc--68,,Then she heard the baby crying.,0.0,0,6,0,106
+ijrjSBx7WTc--69,,wiping her tears she went in to feed him.,0.0,0,9,0,254
+ijrjSBx7WTc--70,,This is a story from the Panchatantra.,0.0,0,7,0,283
+ijrjSBx7WTc--73,,Why did the farmer bring a baby mongoose into the house?,0.0,0,11,0,203
+ijrjSBx7WTc--75,,Why didn't the farmer's wife want to leave the baby alone with the mongoose?,0.0,0,14,0,323
+ijrjSBx7WTc--77,,What was the farmer's comment on his wife's fears?,0.0,0,9,0,223
+ijrjSBx7WTc--79,,Why did the farmer's wife strike the mongoose with her basket?,0.0,0,11,0,266
+ijrjSBx7WTc--80,,Question number five. Did she repent her hasty action?,0.0,0,9,0,151
+ijrjSBx7WTc--81,,How does she show her repentance?,0.0,0,6,0,351
+ijrjSBx7WTc--82,,"Do you have a pet, a cat or a dog?",0.0,0,10,0,141
+ijrjSBx7WTc--83,,"If not, would you like one?",0.0,0,6,0,88
+ijrjSBx7WTc--84,,How would you look after it?,0.0,0,6,0,211
+ijrjSBx7WTc--85,,Are you for or against keeping birds in a cage as pets?,0.0,0,12,0,301
+dPuKX_lM4Zc--135,,Draw some shapes which will look the same after one third turn. 4,0.0,0,13,0,381
+dPuKX_lM4Zc--136,,Draw some shapes which will look the same after 1-6th turn.,0.0,0,11,0,368
+BTqVQCBPUzg--148,,Next time when you watch your favourite TV program,0.0,0,9,0,311
+BTqVQCBPUzg--149,,Count the number of advertisements during each break.,0.0,0,8,0,106
+BTqVQCBPUzg--152,,Put a dot below the tally when you find children in any advertisement.,0.0,0,13,0,148
+BTqVQCBPUzg--154,,Do you get different answers?,0.0,0,5,0,76
+Zc2bgIDZ-Ks--3,,The shepherd's treasure. The synopsis,0.0,0,5,0,281
+Zc2bgIDZ-Ks--4,,for the first part of this story.,0.0,0,7,0,91
+Zc2bgIDZ-Ks--5,,A poor shepherd once lived in Iran.,0.0,0,7,0,256
+Zc2bgIDZ-Ks--6,,"Though uneducated, he was very wise and helpful.",0.0,0,8,0,328
+Zc2bgIDZ-Ks--7,,The king decided to meet him in disguise. Now the story,0.0,0,11,0,279
+Zc2bgIDZ-Ks--8,,in a village in Iran.,0.0,0,5,0,66
+Zc2bgIDZ-Ks--9,,Their ones lived a shepherd. He was very poor.,0.0,0,9,0,153
+Zc2bgIDZ-Ks--10,,He did not have even a small cottage of his own.,0.0,0,11,0,169
+Zc2bgIDZ-Ks--11,,He had never been to school or learned to read and write.,0.0,0,12,0,206
+Zc2bgIDZ-Ks--12,,for there were very few schools in those days.,0.0,0,9,0,141
+Zc2bgIDZ-Ks--14,,This shepherd was very wise.,0.0,0,5,0,106
+Zc2bgIDZ-Ks--15,,He understood people's sorrows and troubles and helped them phase their problems with courage and common sense.,0.0,0,17,0,376
+Zc2bgIDZ-Ks--16,,Many people came to him for advice.,0.0,0,7,0,168
+Zc2bgIDZ-Ks--17,,Soon he became famous for his wisdom and friendly nature.,0.0,0,10,0,229
+Zc2bgIDZ-Ks--18,,The king of that country heard about him and thought of meeting him.,0.0,0,13,0,191
+Zc2bgIDZ-Ks--19,,"disguised as a shepherd and riding on a mule, one day the king came to the cave where the wise shepherd lived.",0.0,0,22,0,461
+Zc2bgIDZ-Ks--21,,As soon as the shepherd saw the traveler coming towards the cave.,0.0,0,12,0,141
+Zc2bgIDZ-Ks--22,,He rose to welcome him.,0.0,0,5,0,96
+Zc2bgIDZ-Ks--23,,"He took the tired traveller inside the cave, gave him water to drink, and a share of his own meager meal.",0.0,0,21,0,356
+Zc2bgIDZ-Ks--24,,The king rested for the night in the cave and was greatly impressed by the shepherd hospitality and wise conversation.,0.0,0,20,0,391
+Zc2bgIDZ-Ks--25,,Now the synopsis of the next part of the story.,0.0,0,10,0,431
+Zc2bgIDZ-Ks--26,,The Shefford was able to make out that his visitor was none other than the King.,0.0,0,16,0,216
+Zc2bgIDZ-Ks--27,,"The king made the wise, shepherd governor of a small district.",0.0,0,11,0,246
+Zc2bgIDZ-Ks--28,,Other governors became jealous of the new governor.,0.0,0,8,0,91
+Zc2bgIDZ-Ks--30,,"Though still tired, the king decided to depart the next morning. He said,",0.0,0,13,0,181
+Zc2bgIDZ-Ks--31,,Many thanks for your kindness to a poor traveler.,0.0,0,9,0,179
+Zc2bgIDZ-Ks--32,,I have a long way to go.,0.0,0,7,0,63
+Zc2bgIDZ-Ks--34,,"Looking straight into the eyes of the guest, the shepherd replied,",0.0,0,11,0,146
+Zc2bgIDZ-Ks--36,,for paying me the compliment of a visit.,0.0,0,8,0,113
+Zc2bgIDZ-Ks--37,,The king was astonished as well as pleased.,0.0,0,8,0,114
+Zc2bgIDZ-Ks--38,,"He is indeed very wise, he thought to himself, I need people like him to work for me.",0.0,0,18,0,253
+Zc2bgIDZ-Ks--39,,"and the king appointed this humble shepherd, the governor of a small district.",0.0,0,13,0,171
+Zc2bgIDZ-Ks--41,,"Although he rose to power and dignity, the Shefford remained as humble as ever.",0.0,0,14,0,308
+Zc2bgIDZ-Ks--42,,"people loved and honoured him for his wisdom, sympathy and goodness.",0.0,0,11,0,251
+Zc2bgIDZ-Ks--43,,He was kind and just to one and all. His fame as a fear.,0.0,0,14,0,231
+Zc2bgIDZ-Ks--44,,and wise governor soon spread throughout the country.,0.0,0,8,0,294
+Zc2bgIDZ-Ks--45,,Now the governors of other provinces grew terribly jealous of him and began to talk to the king against him. The said,0.0,0,22,0,356
+Zc2bgIDZ-Ks--46,,He is very dishonest and keeps for himself part of the money that he collects as text from the people.,0.0,0,20,0,283
+Zc2bgIDZ-Ks--47,,Why did he always carry with him?,0.0,0,7,0,141
+Zc2bgIDZ-Ks--48,,the added and iron chest.,0.0,0,5,0,94
+Zc2bgIDZ-Ks--49,,Perhaps he carried in it the treasure that he had secretly collected.,0.0,0,12,0,158
+Zc2bgIDZ-Ks--50,,"After all, they said mockingly.",0.0,0,5,0,99
+Zc2bgIDZ-Ks--51,,He was an ordinary shepherd and could behave no better.,0.0,0,10,0,366
+Zc2bgIDZ-Ks--53,,Now the synopsis of the next part of the story.,0.0,0,10,0,81
+Zc2bgIDZ-Ks--54,,The new governor was called to the palace.,0.0,0,8,0,194
+Zc2bgIDZ-Ks--55,,He was ordered to explain why he always carried an iron chest.,0.0,0,12,0,221
+Zc2bgIDZ-Ks--56,,They chest contained no gold or silver.,0.0,0,7,0,176
+Zc2bgIDZ-Ks--57,,Now the next part of this story.,0.0,0,7,0,78
+Zc2bgIDZ-Ks--58,,"At first, the king did not pay attention to these reports, but how long could he ignore these governors and their endless stories about the sheph",0.0,0,26,0,316
+Zc2bgIDZ-Ks--59,,"One thing was certain, the king discovered. The new governor did carry an iron chest with him all the time.",0.0,0,20,0,304
+Zc2bgIDZ-Ks--60,,"So, one day the new governor was summoned to the palace.",0.0,0,11,0,231
+Zc2bgIDZ-Ks--61,,He came riding on his camel.,0.0,0,6,0,73
+Zc2bgIDZ-Ks--62,,"And to everyone's delight, the famous iron chest was there, fastened securely behind him on the camel's back.",0.0,0,18,0,234
+Zc2bgIDZ-Ks--64,,Now the king was angry. He thundered.,0.0,0,7,0,103
+Zc2bgIDZ-Ks--65,,Why do you always carry that iron just with you?,0.0,0,10,0,109
+Zc2bgIDZ-Ks--68,,He asked his servant to bring in the chest.,0.0,0,9,0,94
+Zc2bgIDZ-Ks--69,,How eagerly the people standing around waited for the shepherd to be found out.,0.0,0,14,0,226
+Zc2bgIDZ-Ks--70,,but how great was their astonishment and even of the king himself when the chest was opened.,0.0,0,17,0,236
+Zc2bgIDZ-Ks--71,,"No go the silver, or jewels.",0.0,0,6,0,221
+Zc2bgIDZ-Ks--72,,But an old blanket was all that came out.,0.0,0,9,0,143
+Zc2bgIDZ-Ks--74,,"holding it up proudly, the shepherd's said. This my dear master is my only treasure.",0.0,0,15,0,286
+Zc2bgIDZ-Ks--75,,I always carry it with me.,0.0,0,6,0,233
+Zc2bgIDZ-Ks--76,,But why do you carry such an ordinary blanket with you?,0.0,0,11,0,171
+Zc2bgIDZ-Ks--77,,Surely you are the governor of a district.,0.0,0,8,0,112
+Zc2bgIDZ-Ks--79,,to which the shepherd replied with quiet dignity.,0.0,0,8,0,101
+Zc2bgIDZ-Ks--82,,It will still protect me if at any time your majesty should wish to take away my new cloaks.,0.0,0,19,0,431
+Zc2bgIDZ-Ks--83,,"How pleased the King was, and how embarrassed the jealous governors became to hear the wise man's reply.",0.0,0,18,0,296
+Zc2bgIDZ-Ks--85,,that the shuffled was indeed the humblest and the wisest man in the land.,0.0,0,14,0,184
+Zc2bgIDZ-Ks--86,,The King made him the governor of a much bigger district that very day.,0.0,0,14,0,288
+Zc2bgIDZ-Ks--87,,This story has been taken from an Iranian folk tale.,0.0,0,10,0,154
+HBQwzyxvkZA--329,,that you could see in a herbarium of leaves of plants from all regions of the earth.,0.0,0,17,0,176
+HBQwzyxvkZA--330,,Figure 9.9 shows some aquatic plants float on water. Some have their roots fixed in the soil at the bottom.,0.0,0,20,0,196
+HBQwzyxvkZA--331,,Some aquatic plants are submerged in water.,0.0,0,7,0,176

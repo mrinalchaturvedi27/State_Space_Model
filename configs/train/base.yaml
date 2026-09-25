@@ -1,0 +1,13 @@
+# Training protocol, identical for every arm (BENCHMARK_PLAN.md §4)
+t_max: 512
+max_tokens: 24576       # ~64 clips at mean length; equal frames/step across arms, not equal clips
+grad_accum: 1
+max_epochs: 40
+warmup_steps: 4000
+weight_decay: 0.01
+betas: [0.9, 0.98]
+eps: 1.0e-8
+grad_clip: 1.0
+patience: 8              # early stopping, on val corpus_chrF2
+min_lr_ratio: 0.1         # cosine decays to 10% of peak lr
+num_workers: 8

@@ -1,0 +1,101 @@
+video_id,prediction,ground_truth,sent_chrF2,sent_ROUGE-L,ref_words,pred_words,n_frames
+ed5590797795-8,,"When Bobby made her, she smiled at him.",0.0,0,8,0,368
+ed5590797795-11,,and I will call you Sundari.,0.0,0,6,0,124
+ed5590797795-13,,Bobby took Sundari to the fair.,0.0,0,6,0,213
+ed5590797795-14,,The band was playing and everyone was smiling.,0.0,0,8,0,246
+ed5590797795-15,,A merry go round was playing a happy little tune.,0.0,0,10,0,126
+ed5590797795-16,,It was carrying lots of boys and girls round and round on its wooden animals. Bobby looked,0.0,0,17,0,341
+ed5590797795-18,,where he could run and fly his kite.,0.0,0,8,0,86
+ed5590797795-20,,Sundari looked too. Out in the...,0.0,0,6,0,168
+ed5590797795-22,,Holding up his kite as high as he could.,0.0,0,9,0,181
+ed5590797795-23,,Puff! The wind came along!,0.0,0,5,0,79
+ed5590797795-24,,"Sundari started to fly up, but she could not go very high.",0.0,0,12,0,143
+ed5590797795-25,,A little dog was holding on to her long tail. It was in his mouth.,0.0,0,15,0,284
+ed5590797795-26,,Bobby shooed the dog away.,0.0,0,5,0,63
+ed5590797795-28,,We will try again. Bobby said.,0.0,0,6,0,143
+ed5590797795-29,,"This time, Sundari leaped up in the air.",0.0,0,8,0,204
+ed5590797795-31,,Oh! How she wanted Bobby to let go of her string!,0.0,0,11,0,228
+ed5590797795-32,,She gave a big tug!,0.0,0,5,0,139
+ed5590797795-33,,Bobby had to let her go. Weeeeeee cried Sundari. Now I can fly as high as I please.,0.0,0,18,0,298
+ed5590797795-34,,and away she went. She flew up up.,0.0,0,8,0,136
+ed5590797795-36,,Adapted from Cleo by Ruth Dixon,0.0,0,6,0,356
+ed5590797795-41,,Let's read. I feel dizzy.,0.0,0,5,0,124
+ed5590797795-43,,The band was playing a tune.,0.0,0,6,0,91
+ed5590797795-47,,Why did Bobby call his kite Sundari?,0.0,0,7,0,258
+ed5590797795-48,,Did Sundari fly very high at first?,0.0,0,7,0,204
+ed5590797795-49,,What made Sundari really happy?,0.0,0,5,0,196
+ed5590797795-51,,Do you like to fly kite?,0.0,0,6,0,104
+ed5590797795-52,,Who helps you to fly kites?,0.0,0,6,0,101
+ed5590797795-54,,Tick the objects you need to fly a kite. Color the kite.,0.0,0,12,0,173
+ed5590797795-55,,Here you can see pictures of various objects and a kite.,0.0,0,11,0,284
+ed5590797795-62,,Name the objects in your own language.,0.0,0,7,0,143
+ed5590797795-64,,Trace over the dotted lines.,0.0,0,5,0,86
+ed5590797795-65,,"Here in this picture you can see some lines, follow the lines and connect the dots to complete the lines. Follow the same pattern for each and every line.",0.0,0,29,0,336
+ed5590797795-68,,Look at the pictures and tell the story in your own words.,0.0,0,12,0,126
+ed5590797795-69,,the umbrella and the crow.,0.0,0,5,0,63
+ed5590797795-70,,In the first picture you can see,0.0,0,7,0,84
+ed5590797795-71,,a girl walking bare feet.,0.0,0,5,0,166
+ed5590797795-72,,She's holding an umbrella and enjoying the rain.,0.0,0,8,0,106
+ed5590797795-76,,"In the third picture, the crow flies away high into the sky with the umbrella in his hold.",0.0,0,18,0,250
+ed5590797795-77,,"And in the last picture, you can see the crow sitting on the tree with the umbrella hanging on a branch.",0.0,0,21,0,223
+ed5590797795-78,,with its young ones inside.,0.0,0,5,0,196
+ed5590797795-80,,Rearrange the following sentences in the right order.,0.0,0,8,0,119
+ed5590797795-81,,to make it into a story on the left page.,0.0,0,10,0,378
+ed5590797795-83,,It is raining. The crow flies away.,0.0,0,7,0,121
+ed5590797795-85,,The girl has an umbrella.,0.0,0,5,0,101
+ed5590797795-86,,The umbrella is now a nest. The umbrella,0.0,0,8,0,221
+ed5590797795-87,,hangs from a tree. Now say the story.,0.0,0,8,0,189
+ed5590797795-88,,in English using the words.,0.0,0,5,0,151
+ed5590797795-98,,Here are some words given below like,0.0,0,7,0,106
+ed5590797795-103,,And these words are repeated.,0.0,0,5,0,136
+ed5590797795-104,,Connect the dots to complete each and every word.,0.0,0,9,0,196
+ed5590797795-105,,"And again, follow the same pattern for the next line.",0.0,0,10,0,138
+ed5590797795-106,,And then there is the word tree. Wind.,0.0,0,8,0,134
+ed5590797795-107,,and follow the pattern for these two.,0.0,0,7,0,81
+43a0131cb836-2,,the tiger and the mosquito.,0.0,0,5,0,141
+43a0131cb836-3,,Read and act out this story.,0.0,0,6,0,176
+43a0131cb836-4,,A tiger was dozing under a tree.,0.0,0,7,0,149
+43a0131cb836-5,,a mosquito came buzzing by.,0.0,0,5,0,131
+43a0131cb836-6,,"The tiger said, Hey Mosquito, go away!",0.0,0,7,0,148
+43a0131cb836-7,,"The mosquito said, Why should I go away?",0.0,0,8,0,91
+43a0131cb836-8,,I'm not afraid of you.,0.0,0,5,0,69
+43a0131cb836-9,,The tiger was angry. He hit out with his paw.,0.0,0,10,0,213
+43a0131cb836-10,,Page 92 The mosquito flew off.,0.0,0,6,0,141
+43a0131cb836-11,,The paw struck his own cheek.,0.0,0,6,0,64
+43a0131cb836-12,,"The blow scraped his cheek, it began to bleed.",0.0,0,9,0,91
+43a0131cb836-14,,The tiger struck with his other paw.,0.0,0,7,0,76
+43a0131cb836-15,,"The mosquito flew off. This time too, he hit himself.",0.0,0,10,0,153
+43a0131cb836-17,,The mosquito continued to buzz. The tiger got up and quietly walked away.,0.0,0,13,0,201
+43a0131cb836-18,,"The mosquito called out after him. Don't be so proud, my friend. Everyone is great in his own way.",0.0,0,19,0,231
+43a0131cb836-19,,...a story by Mrinalini Srivastava,0.0,0,5,0,369
+43a0131cb836-25,,I must not hit anyone.,0.0,0,5,0,106
+43a0131cb836-26,,I'm proud to be an Indian. Page,0.0,0,7,0,126
+43a0131cb836-28,,Reading is fun. What was the tiger doing?,0.0,0,8,0,146
+43a0131cb836-29,,"When the mosquito came, buzzing by.",0.0,0,6,0,91
+43a0131cb836-30,,Why did the tiger's cheek start to bleed?,0.0,0,8,0,144
+43a0131cb836-31,,Why did the tiger walk away?,0.0,0,6,0,121
+43a0131cb836-33,,Why did the mosquito say?,0.0,0,5,0,63
+43a0131cb836-34,,I'm not afraid of you.,0.0,0,5,0,136
+43a0131cb836-50,,What do we learn from this story?,0.0,0,7,0,104
+43a0131cb836-51,,Describe the lion and the tiger. How are they different from each other?,0.0,0,13,0,193
+43a0131cb836-52,,Here in a picture you can see a lion standing next to a tiger.,0.0,0,14,0,250
+43a0131cb836-55,,Fill in the blanks by tracing the dotted woods.,0.0,0,9,0,184
+43a0131cb836-56,,1. A dash was dozing.,0.0,0,5,0,103
+43a0131cb836-58,,Trace the dots to form the word.,0.0,0,7,0,83
+43a0131cb836-61,,A dash came buzzing by.,0.0,0,5,0,91
+43a0131cb836-62,,Trace the dots to form the word M-O,0.0,0,8,0,166
+43a0131cb836-64,,The tiger hit out with his dash.,0.0,0,7,0,124
+43a0131cb836-65,,Trace the dots to make the word P.,0.0,0,8,0,143
+43a0131cb836-69,,to make the word AWA.,0.0,0,5,0,81
+43a0131cb836-71,,Everyone is dash in his own way. Trace the dots to make the word GR-E-A-T.,0.0,0,15,0,304
+43a0131cb836-77,,Here are some alphabets given below. Connect the dots to complete each and every alphabet. G.,0.0,0,16,0,211
+43a0131cb836-78,,H I J K L,0.0,0,5,0,114
+43a0131cb836-79,,Follow the same pattern for each and every line.,0.0,0,9,0,318
+43a0131cb836-81,,Look at the pictures below.,0.0,0,5,0,86
+43a0131cb836-82,,What are the cat and mouse saying?,0.0,0,7,0,136
+43a0131cb836-83,,"First, say this in your language.",0.0,0,6,0,124
+43a0131cb836-84,,Now act out the story and say the words and sentences in English.,0.0,0,13,0,246
+43a0131cb836-86,,"In the first picture, you can see a mouse holding a piece of cheese while the cat secretly notices him.",0.0,0,20,0,314
+43a0131cb836-87,,"In the second picture, the cat is chasing after the mouse while the mouse runs away. In the third picture,",0.0,0,20,0,346
+43a0131cb836-88,,The rat is trying to scare the cat off using a magnifying glass.,0.0,0,13,0,311
+2c7d130870a8-8,,Anybody's lap will do. Anywhere.,0.0,0,5,0,143

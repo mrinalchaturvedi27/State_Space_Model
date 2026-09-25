@@ -1,0 +1,12 @@
+dataset: isign
+train_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/train_split_unicode_filtered.csv
+val_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/val_split_unicode_filtered.csv
+test_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/test_split_unicode_filtered.csv
+pose_dir: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/pose_data/isign/iSign-poses_v1.1/
+pose_ext: .pose
+uid_col: uid
+text_col: text
+pose_id_col: uid   # pose files are named <uid>.pose, verified 2026-08-24 (0 missing)
+source_fps: 25      # nominal; actual fps is read per-clip from pose.body.fps and resampled to target_fps
+vocab_size: 4000
+lang: en
