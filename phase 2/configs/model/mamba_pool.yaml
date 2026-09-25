@@ -1,0 +1,25 @@
+# Phase-2 gate arm. Horizon-banked BiMamba-2 (short τ≈14 frames, mid τ≈75,
+# long τ≈500) whose decoder memory is the frames where the short bank's
+# cumulative Δ crosses one sign of time (pool_every_frames).
+# Same parameter count as configs/model/mamba.yaml. Phase-1 mamba.yaml is the baseline.
+#
+# iSign, seed 42, the lr the phase-1 Mamba arm selected:
+#   python src/train.py --data configs/data/isign.yaml --model configs/model/mamba_pool.yaml --lr 3e-4 --seed 42
+arm: mamba_pool
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+pool_every_frames: 16
+short_heads: 8
+mid_heads: 4
+dt_weight_scale: 0.05

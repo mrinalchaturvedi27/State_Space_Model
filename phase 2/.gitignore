@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Models and checkpoints
+checkpoints/
+
+# Caches
+caches/
+cache/
+cache_smoke/
+
+# Logs and outputs
+*.log
+logs/
+# results/
+# results_smoke/
+wandb/
+scratch/

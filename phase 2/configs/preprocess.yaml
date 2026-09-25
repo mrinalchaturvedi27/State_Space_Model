@@ -1,0 +1,8 @@
+# Frozen preprocessing protocol -- BENCHMARK_PLAN.md §2. Identical across datasets and arms.
+# Changing any value here changes the cache hash (see build_cache.py:config_hash) and invalidates
+# existing caches on purpose -- training refuses to start on a hash mismatch.
+n_keypoints: 178       # pose_format.utils.generic.reduce_holistic output
+dims: 2                 # x, y only; z dropped (MediaPipe z is unreliable), confidence dropped from features
+target_fps: 25          # every dataset resampled to this via temporal linear interpolation
+t_max: 512              # longer clips uniformly subsampled to this length (not truncated)
+cache_dtype: float16

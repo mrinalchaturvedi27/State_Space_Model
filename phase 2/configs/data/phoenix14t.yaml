@@ -1,0 +1,12 @@
+dataset: phoenix14t
+train_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/Phonix_csv/train.csv
+val_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/Phonix_csv/val.csv
+test_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/Phonix_csv/test.csv
+pose_dir: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/pose_data/phoenixT/pose_Phoenix/
+pose_ext: .pose
+uid_col: uid
+text_col: text   # German, lowercase, no punctuation; `glosses` column present but ignored (no CTC, see plan §3)
+pose_id_col: uid  # maps 1:1 to <uid>.pose, verified 2026-08-24 (0 missing / 7,096 train rows)
+source_fps: 25
+vocab_size: 1000   # small corpus (7,096 sentences) -> smaller vocab, per plan §2
+lang: de

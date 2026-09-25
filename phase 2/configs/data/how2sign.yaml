@@ -1,0 +1,12 @@
+dataset: how2sign
+train_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/How2sign_csv/How2sign_train.csv
+val_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/How2sign_csv/How2sign_val.csv
+test_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/How2sign_csv/How2sign_test.csv
+pose_dir: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/pose_data/how2sign/
+pose_ext: .pose
+uid_col: uid
+text_col: text            # lowercase/normalized column; SENTENCE has original casing+punct if ever needed
+pose_id_col: SENTENCE_ID   # NOT uid -- pose files are named <SENTENCE_ID>.pose, verified 2026-08-24 (0 missing / 31,092 train rows)
+source_fps: 30              # actual fps read per-clip from pose.body.fps and resampled to target_fps=25
+vocab_size: 4000
+lang: en
