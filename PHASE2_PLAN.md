@@ -99,6 +99,12 @@ Input for clip i = `[clip_{i-k}, …, clip_{i-1}, clip_i]` from the same video (
 - The decoder cross-attends to the **current clip's encoder states only**. Context can reach the
   translation only through the encoder (Mamba recurrence / Transformer self-attention). Same decoder,
   same one-variable-changed discipline as Phase 1.
+- **Forward scan crosses clip boundaries; backward scan resets at them** (`seq_idx` per clip). Context
+  then flows only past → present, so each context clip's encoding never depends on the clip after it.
+  That makes streaming state-carry *exact* rather than approximate, and context encodings can be cached.
+- **Memory horizon:** with the default Mamba2 init (A ∈ [1, 16], dt ∈ [0.001, 0.1]) the longest per-head
+  retention horizon is τ = 1/(Δ·|A|) ≈ 1,000 frames ≈ 4–5 iSign clips. k = 8 (~1,750 frames) exceeds it
+  at init. Ablate a "long-memory" init: dt_min = 1e-4 for a quarter of the heads (τ up to ~10k frames).
 - Cap total context frames (default 2,048; sweep in ablation).
 - Streaming inference variant (Mamba only): carry the forward scan's final SSM state + last `d_conv−1`
   frames across clips instead of re-encoding the context. Verify numerically that it matches the
