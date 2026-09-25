@@ -4,7 +4,6 @@ __pycache__/
 *$py.class
 
 # Models and checkpoints
-models/
 checkpoints/
 
 # Caches
