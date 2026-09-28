@@ -20,3 +20,8 @@ logs/
 # results_smoke/
 wandb/
 scratch/
+
+# Not part of this project (committed by mistake in 0b0c728); kept on disk, untracked.
+reports/
+research_notes/
+mml.md
