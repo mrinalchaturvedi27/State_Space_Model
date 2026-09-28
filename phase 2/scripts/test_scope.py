@@ -14,6 +14,7 @@ from src.models.scope import (  # noqa: E402
     delta_avg_pool,
     delta_pool,
     flip_valid,
+    frame_hash_weights,
     horizon_specs,
     matched_delta_pool,
     softplus_inv,
@@ -158,6 +159,21 @@ def test_delta_avg_pool_constant_delta_is_uniform_avg():
     b, b_pad = uniform_avg_pool(memory, pad, 8)
     assert torch.equal(a_pad, b_pad)
     assert torch.allclose(a, b, atol=1e-5)
+
+
+def test_frame_hash_weights_are_lognormal_noise():
+    torch.manual_seed(0)
+    x = torch.randn(4, 3000, 64)
+    direction = torch.randn(64)
+    w = frame_hash_weights(x, direction, sigma=1.0)
+    z = torch.log(w).flatten()
+    assert abs(float(z.mean())) < 0.05 and abs(float(z.std()) - 1.0) < 0.05
+    # No temporal structure: lag-1 autocorrelation of the log-weights is ~0.
+    zz = torch.log(w)
+    ac = float(((zz[:, 1:] - zz.mean()) * (zz[:, :-1] - zz.mean())).mean() / zz.var())
+    assert abs(ac) < 0.05
+    # A hash, not a sampler: the same frame always gets the same weight.
+    assert torch.equal(w, frame_hash_weights(x, direction, sigma=1.0))
 
 
 def test_encode_uses_pooled_mask():

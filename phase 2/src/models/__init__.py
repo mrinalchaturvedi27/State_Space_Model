@@ -11,6 +11,7 @@ PHASE2_ARMS = {
     "mamba_pool": ("delta", True),
     "mamba_uniform_avg": ("uniform_avg", True),
     "mamba_pool_avg": ("delta_avg", True),
+    "mamba_pool_random": ("random_matched", True),
 }
 
 
@@ -50,6 +51,7 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
             short_heads=model_cfg.get("short_heads", 8),
             mid_heads=model_cfg.get("mid_heads", 4),
             dt_weight_scale=model_cfg.get("dt_weight_scale", 0.05),
+            random_sigma=model_cfg.get("random_sigma", 1.0),
         )
     else:
         raise ValueError(f"unknown arm: {arm!r}")

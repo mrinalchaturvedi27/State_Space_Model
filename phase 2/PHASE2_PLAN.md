@@ -203,6 +203,20 @@ Single seed — round 2 (`scripts/run_phase2_round2.sh`, 10 runs queued over 4 G
 Plus `scripts/eval_phase2_gate.sh` (beam-5 test for the gate arms) and `scripts/analyze_delta.py`
 (ρ between Δ and body/face/hand speed per layer and bank, lag profile, hand speed at kept frames).
 
+### Round 2 result and round 3 (2026-09-28)
+Round 2 (val chrF2, Δ-chosen minus uniform at the same count): 1/8 +0.14, 1/16 +0.71 (3 seeds, all
+positive), 1/32 +1.03; averaging lifts both arms (Δ-avg 20.55 is the best compressed model).
+Gate on **test** (beam 5, s42): Δ 20.39 vs uniform 20.06, paired bootstrap p=0.002, ~+0.3 in every
+length bucket. `analyze_delta.py`: Δ barely tracks keypoint speed (ρ≈+0.02) but spaces frames about
+twice as unevenly as a stride (CV 0.31 vs 0.14) — so the gain could be uneven spacing alone.
+
+Round 3 (`scripts/run_phase2_round3.sh`, one shared queue over the GPUs):
+1. `mamba_pool_random` / `_s32`: same selection and count as `pool_matched`, content-blind log-normal
+   weights (σ=1 → spacing CV≈0.29, vs Δ's 0.31). **Decides the Δ claim**: Δ > random ⇒ Δ is informative.
+2. beam-5 decodes for the round-2 runs; seeds 13/1337 for the 1/32 and averaging pairs.
+3. How2Sign phase-1 rerun with the F3 fix (`configs/train/base_f3.yaml`: warmup ≤ 10% of the run,
+   patience only after warmup), into `results_f3/`.
+
 ## Backup — C3: articulator-factored scanning
 Separate scans for hands / face / body with light cross-stream fusion (manual and non-manual channels are
 asynchronous in sign languages). Plausible, but multi-stream designs are common in sign recognition, so

@@ -253,6 +253,19 @@ def delta_avg_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Te
     return segment_mean(memory, weights, segment, n_seg)
 
 
+def frame_hash_weights(x: torch.Tensor, direction: torch.Tensor, sigma: float) -> torch.Tensor:
+    """Content-blind random pooling weights, (B, T), log-normal with log-sd `sigma`.
+
+    Each frame's weight is a hash of its own input vector (sin-fract of a fixed random
+    projection) pushed through the normal inverse CDF. It carries no usable information,
+    yet eval is reproducible per clip and train-time noise changes with augmentation --
+    the control for "Δ helps only by spacing frames unevenly".
+    """
+    h = torch.sin((x.float() * direction.float()).sum(-1)) * 43758.5453
+    u = (h - torch.floor(h)).clamp(1e-6, 1 - 1e-6)
+    return torch.exp(sigma * torch.special.ndtri(u))
+
+
 def uniform_pool(memory: torch.Tensor, pad_mask: torch.Tensor | None,
                  stride: int) -> tuple[torch.Tensor, torch.Tensor]:
     """Keep every `stride`-th real frame plus the last one. The no-Δ control."""

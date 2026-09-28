@@ -16,6 +16,10 @@ The phase-2 gate arms all use this module (see configs/model/ and scripts/run_ph
 - mamba_pool_avg: banks on, CIF-style. Segments end at equal quantiles of cumulative Δ (same
   count as uniform_avg) and each token is the Δ-weighted mean of its segment. Δ is the weight,
   so the decoder loss trains it directly; the pick-one-frame arms cannot.
+- mamba_pool_random: banks on, same selection code and count as mamba_pool_matched, but the
+  weights are content-blind log-normal noise (random_sigma=1.0 reproduces Δ's measured spacing
+  irregularity, CV≈0.31 at 1/16). If it matches mamba_pool_matched, Δ carries no information
+  and the gain comes from uneven spacing alone.
 
 The backward scan is reversed inside each clip's own length. The phase-1 encoder
 is unchanged and remains the baseline.
@@ -31,6 +35,7 @@ from .scope import (
     delta_avg_pool,
     delta_pool,
     flip_valid,
+    frame_hash_weights,
     matched_delta_pool,
     short_head_delta,
     uniform_avg_pool,
@@ -74,9 +79,9 @@ class ScopePoolEncoder(nn.Module):
                  headdim: int = 64, d_conv: int = 4, dropout: float = 0.1,
                  pool_mode: str = "delta", pool_every_frames: int = 16,
                  short_heads: int = 8, mid_heads: int = 4, dt_weight_scale: float = 0.05,
-                 horizon_banks: bool = True):
+                 horizon_banks: bool = True, random_sigma: float = 1.0):
         super().__init__()
-        if pool_mode not in ("delta", "delta_matched", "delta_avg", "uniform", "uniform_avg", "none"):
+        if pool_mode not in ("delta", "delta_matched", "delta_avg", "random_matched", "uniform", "uniform_avg", "none"):
             raise ValueError(f"unknown pool_mode: {pool_mode!r}")
         if pool_mode.startswith("delta") and not horizon_banks:
             raise ValueError("Δ pooling reads the short bank, so it needs horizon_banks=True")
@@ -97,6 +102,14 @@ class ScopePoolEncoder(nn.Module):
             "pool_threshold",
             torch.tensor(short_dt * pool_every_frames, dtype=torch.float32),
             persistent=True,
+        )
+        # Fixed projection for mamba_pool_random's frame hash. Regenerated from a fixed seed,
+        # not saved: a persistent buffer would break loading the other arms' existing checkpoints.
+        self.random_sigma = random_sigma
+        self.register_buffer(
+            "hash_direction",
+            torch.randn(d_model, generator=torch.Generator().manual_seed(1234)),
+            persistent=False,
         )
         self.reset_pool_stats()
 
@@ -122,6 +135,7 @@ class ScopePoolEncoder(nn.Module):
         pad = src_key_padding_mask
         if pad is not None:
             x = x.masked_fill(pad.unsqueeze(-1), 0)
+        encoder_input = x
         last_hidden = None
         last_layer = self.layers[-1]
         for layer in self.layers:
@@ -139,6 +153,10 @@ class ScopePoolEncoder(nn.Module):
             memory, mem_pad = uniform_pool(x, pad, self.pool_every_frames)
         elif self.pool_mode == "uniform_avg":
             memory, mem_pad = uniform_avg_pool(x, pad, self.pool_every_frames)
+        elif self.pool_mode == "random_matched":
+            with torch.no_grad():
+                weights = frame_hash_weights(encoder_input, self.hash_direction, self.random_sigma)
+            memory, mem_pad = matched_delta_pool(x, weights, pad, self.pool_every_frames)
         elif self.pool_mode == "delta_avg":
             # With grad: Δ is the averaging weight, so the loss reaches the dt projection.
             delta = short_head_delta(last_layer.fwd, last_hidden, self.short_heads)

@@ -156,8 +156,14 @@ def main():
     steps_per_epoch = max(1, len(train_sampler) // train_cfg.get("grad_accum", 1))
     max_epochs = args.max_epochs or train_cfg["max_epochs"]
     total_steps = args.max_steps or steps_per_epoch * max_epochs
+    # Token-budget batching makes steps/epoch scale with a dataset's total frames, so a fixed
+    # 4,000-step warmup can outlast most of a small dataset's run (F3, PHASE2_PLAN.md). With
+    # warmup_ratio set, warmup is capped at that fraction of the run; without it, unchanged.
+    warmup_steps = train_cfg["warmup_steps"]
+    if train_cfg.get("warmup_ratio"):
+        warmup_steps = min(warmup_steps, max(1, int(train_cfg["warmup_ratio"] * total_steps)))
     scheduler = LambdaLR(optimizer, lr_lambda=functools.partial(
-        cosine_with_warmup, warmup_steps=train_cfg["warmup_steps"], total_steps=total_steps,
+        cosine_with_warmup, warmup_steps=warmup_steps, total_steps=total_steps,
         min_lr_ratio=train_cfg.get("min_lr_ratio", 0.1)))
 
     run_name = f"{dataset_name}-{arm}-lr{args.lr:g}-s{args.seed}"
@@ -179,7 +185,7 @@ def main():
     global_step, stop = 0, False
 
     print(f"[{run_name}] params={n_params:,} steps_per_epoch={steps_per_epoch} "
-         f"total_steps={total_steps} run_dir={run_dir}")
+         f"total_steps={total_steps} warmup_steps={warmup_steps} run_dir={run_dir}")
 
     for epoch in range(max_epochs):
         train_ds.set_epoch(epoch)
@@ -235,7 +241,9 @@ def main():
 
         if is_best:
             best_metric, best_epoch, patience_ctr = val_metrics["corpus_chrF2"], epoch, 0
-        else:
+        elif global_step >= warmup_steps or not train_cfg.get("warmup_ratio"):
+            # With warmup_ratio set, patience only counts once warmup is over: val chrF2 is
+            # too noisy while the LR is still ramping to stop a run on.
             patience_ctr += 1
         if patience_ctr >= train_cfg.get("patience", 8) or stop:
             print(f"[{run_name}] stopping at epoch {epoch} (best epoch {best_epoch}, chrF2={best_metric:.2f})")

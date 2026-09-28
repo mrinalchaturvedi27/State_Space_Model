@@ -1,0 +1,26 @@
+# Content-blind control for mamba_pool_matched_s32: identical encoder, selection code and
+# memory-token count, but frames are chosen at quantiles of log-normal noise (a hash of each
+# frame, so eval is reproducible) instead of Δ. random_sigma=1.0 reproduces the spacing
+# irregularity Δ showed on iSign val (CV≈0.31 at 1/16; the hash gives 0.29, calibrated offline). If this arm
+# matches mamba_pool_matched_s32, Δ's gain over uniform comes from uneven spacing alone.
+#
+arm: mamba_pool_random
+tag: mamba_pool_random_s32
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+pool_every_frames: 32
+short_heads: 8
+mid_heads: 4
+dt_weight_scale: 0.05
+random_sigma: 1.0

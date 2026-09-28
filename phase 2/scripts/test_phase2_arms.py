@@ -124,6 +124,23 @@ def test_avg_arms_keep_the_same_count_and_train_delta():
         assert bool(dt_rows.abs().sum() > 0) == expect, arm
 
 
+def test_random_arm_matches_count_is_reproducible_and_checkpoint_compatible():
+    src, pad = batch([37, 5, 64, 16])
+    counts = {arm: (~make(arm).encode(src, pad)[1]).sum(1)
+              for arm in ("mamba_uniform", "mamba_pool_matched", "mamba_pool_random")}
+    assert torch.equal(counts["mamba_uniform"], counts["mamba_pool_random"])
+    model = make("mamba_pool_random")
+    a, _ = model.encode(src, pad)
+    b, _ = model.encode(src, pad)
+    assert torch.equal(a, b), "eval selection must be reproducible"
+    # The hash projection is not saved, so every phase-2 checkpoint keeps the same keys and
+    # existing gate / round-2 checkpoints still load.
+    keys = set(make("mamba_pool_matched").state_dict())
+    assert set(model.state_dict()) == keys
+    assert not any("hash_direction" in k for k in keys)
+    make("mamba_pool_matched").load_state_dict(model.state_dict())
+
+
 def test_pool_stats():
     src, pad = batch([37, 5, 64, 16])
     real = int((~pad).sum())
