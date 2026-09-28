@@ -161,6 +161,28 @@ from "better gating".
 
 ---
 
+### C2 gate as implemented — horizon banks + Δ-synchronous pooling
+Code: `src/models/{scope,mamba_pool}.py`; run: `scripts/run_phase2_gate.sh` (iSign, s42, lr 3e-4,
+4 arms on 4 GPUs). Each arm changes one thing relative to the one before it:
+
+| arm | encoder | decoder memory | isolates |
+|---|---|---|---|
+| `mamba_padfix` | phase-1 Mamba + per-clip reversal (F1) | all frames | gate baseline |
+| `mamba_banks` | + head banks: 8 short (τ≈14 fr), 4 mid (τ≈75), 4 long (τ≈500) | all frames | the init |
+| `mamba_uniform` | same as banks | every 16th frame + last | shorter memory |
+| `mamba_pool_matched` | same as banks | same count as uniform, at equal quantiles of short-bank cumulative Δ | **where Δ puts the tokens** |
+
+`mamba_pool` (fixed threshold, free rate) is kept as a variant but is not in the gate: its frame
+count drifts as Δ trains, so it is not matched to the uniform control. Every epoch logs
+`train_/val_kept_frac` and `mem_tokens`.
+
+**Reading the gate:** Δ claim ⇔ `pool_matched` > `uniform` beyond seed noise (~0.5 val chrF2). If
+`pool_matched` ≈ `padfix` while using ~1/16 of the memory, that is an efficiency result even
+without a quality gain. Pooling selection runs under `no_grad`, so this tests whether Δ is *already*
+sign-aligned; if it is, a CIF-style Δ-weighted average within each bucket makes it trainable.
+Prior art to position against: CIF (Dong & Xu, ICASSP 2020), H-Net dynamic chunking (Hwang, Wang &
+Gu, 2025) — verify both. Novelty is the SSM's own Δ as the integrator, with zero extra parameters.
+
 ## Backup — C3: articulator-factored scanning
 Separate scans for hands / face / body with light cross-stream fusion (manual and non-manual channels are
 asynchronous in sign languages). Plausible, but multi-stream designs are common in sign recognition, so

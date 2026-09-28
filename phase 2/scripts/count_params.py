@@ -34,7 +34,8 @@ def main():
     args = ap.parse_args()
 
     rows = []
-    for name in ("transformer", "mamba", "mamba_depth", "mamba_pool", "mamba_uniform"):
+    phase2 = ("mamba_padfix", "mamba_banks", "mamba_uniform", "mamba_pool_matched", "mamba_pool")
+    for name in ("transformer", "mamba", "mamba_depth", *phase2):
         cfg = load(name)
         model = build_model(cfg, vocab_size=args.vocab_size)
         n = count_params(model)
@@ -49,12 +50,12 @@ def main():
         print(f"ABORT: transformer vs mamba differ by more than {args.tolerance:.0%} "
               f"-- adjust d_state/enc_layers in configs/model/*.yaml before training.")
         sys.exit(1)
-    for name in ("mamba_pool", "mamba_uniform"):
+    for name in phase2:
         if by_name[name] != a2_n:
             print(f"ABORT: {name} has {by_name[name]:,} params, mamba has {a2_n:,}. "
                   "The phase-2 gate must not add parameters.")
             sys.exit(1)
-    print("OK: primary pair is within tolerance, and both phase-2 arms match mamba.")
+    print("OK: primary pair is within tolerance, and every phase-2 arm matches mamba.")
 
 
 if __name__ == "__main__":

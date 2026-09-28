@@ -2,12 +2,21 @@ from __future__ import annotations
 
 from .common import PoseToTextModel
 
+# Phase-2 arm -> (pool_mode, horizon_banks). All share ScopePoolEncoder and mamba's params.
+PHASE2_ARMS = {
+    "mamba_padfix": ("none", False),
+    "mamba_banks": ("none", True),
+    "mamba_uniform": ("uniform", True),
+    "mamba_pool_matched": ("delta_matched", True),
+    "mamba_pool": ("delta", True),
+}
+
 
 def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToTextModel:
     """Dispatches on model_cfg['arm']. See configs/model/*.yaml.
 
-    transformer / mamba are the phase-1 arms. mamba_pool and mamba_uniform are the
-    phase-2 gate: the same horizon-banked encoder, Δ pooling versus a uniform stride.
+    transformer / mamba are the phase-1 arms. PHASE2_ARMS are the phase-2 gate; see
+    src/models/mamba_pool.py for what each one isolates.
     """
     arm = model_cfg["arm"]
     d_model = model_cfg["d_model"]
@@ -27,13 +36,14 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
             expand=model_cfg["expand"], headdim=model_cfg["headdim"], d_conv=model_cfg["d_conv"],
             dropout=dropout,
         )
-    elif arm in ("mamba_pool", "mamba_uniform"):
+    elif arm in PHASE2_ARMS:
         from .mamba_pool import ScopePoolEncoder
+        pool_mode, horizon_banks = PHASE2_ARMS[arm]
         encoder = ScopePoolEncoder(
             d_model=d_model, n_layers=model_cfg["enc_layers"], d_state=model_cfg["d_state"],
             expand=model_cfg["expand"], headdim=model_cfg["headdim"], d_conv=model_cfg["d_conv"],
             dropout=dropout,
-            pool_mode="delta" if arm == "mamba_pool" else "uniform",
+            pool_mode=pool_mode, horizon_banks=horizon_banks,
             pool_every_frames=model_cfg.get("pool_every_frames", 16),
             short_heads=model_cfg.get("short_heads", 8),
             mid_heads=model_cfg.get("mid_heads", 4),

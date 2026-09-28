@@ -14,7 +14,9 @@ from src.models.scope import (  # noqa: E402
     delta_pool,
     flip_valid,
     horizon_specs,
+    matched_delta_pool,
     softplus_inv,
+    uniform_keep_count,
     uniform_pool,
 )
 
@@ -75,6 +77,45 @@ def test_uniform_pool_stride():
     assert not bool(packed_pad.any())
 
 
+def test_uniform_keep_count_matches_uniform_pool():
+    for length in range(1, 70):
+        for stride in (1, 4, 16):
+            memory = torch.zeros(1, 80, 1)
+            pad = torch.arange(80).unsqueeze(0) >= length
+            _, packed_pad = uniform_pool(memory, pad, stride)
+            expected = int(uniform_keep_count(torch.tensor([length]), stride))
+            assert int((~packed_pad).sum()) == expected, (length, stride)
+
+
+def test_matched_pool_same_count_as_uniform():
+    torch.manual_seed(0)
+    lengths = torch.tensor([1, 2, 15, 16, 17, 33, 200, 512])
+    T, stride = 512, 16
+    pad = torch.arange(T).unsqueeze(0) >= lengths.unsqueeze(1)
+    memory = torch.arange(T, dtype=torch.float32).view(1, T, 1).repeat(len(lengths), 1, 1)
+    # Spiky Δ, including frames that alone exceed a quantile, to exercise the dedup path.
+    delta = torch.rand(len(lengths), T) ** 8 * 5
+    packed, packed_pad = matched_delta_pool(memory, delta, pad, stride)
+    _, uni_pad = uniform_pool(memory, pad, stride)
+    assert torch.equal((~packed_pad).sum(1), (~uni_pad).sum(1))
+    for row, length in enumerate(lengths.tolist()):
+        kept = packed[row, ~packed_pad[row], 0]
+        assert torch.all(kept[1:] > kept[:-1]), "frames must be distinct and in order"
+        assert int(kept[-1]) == length - 1, "the last real frame is always kept"
+        assert int(kept.max()) < length, "never a padded frame"
+
+
+def test_matched_pool_follows_delta():
+    # All of Δ's mass in the second half: every kept frame except the forced last one
+    # should land there, whereas uniform spreads them evenly.
+    T, stride = 64, 8
+    memory = torch.arange(T, dtype=torch.float32).view(1, T, 1)
+    delta = torch.cat([torch.full((1, T // 2), 1e-4), torch.ones(1, T // 2)], dim=1)
+    packed, packed_pad = matched_delta_pool(memory, delta, None, stride)
+    kept = packed[0, ~packed_pad[0], 0]
+    assert int((kept >= T // 2).sum()) >= len(kept) - 1
+
+
 def test_encode_uses_pooled_mask():
     class Half(nn.Module):
         def forward(self, x, src_key_padding_mask=None):
@@ -100,9 +141,7 @@ def test_encode_uses_pooled_mask():
 
 
 if __name__ == "__main__":
-    test_horizon_math()
-    test_flip_keeps_pads_at_the_right()
-    test_delta_pool_keeps_bucket_ends()
-    test_uniform_pool_stride()
-    test_encode_uses_pooled_mask()
+    for name, fn in list(globals().items()):
+        if name.startswith("test_") and callable(fn):
+            fn()
     print("ok")

@@ -109,8 +109,10 @@ class PoseTextDataset(Dataset):
             rng = np.random.default_rng([self.seed, self.epoch, int(idx)])
             feat = augment_clip(feat, rng, self.t_max)
         elif feat.shape[0] > self.t_max:
-            step = max(1, feat.shape[0] // self.t_max)
-            feat = feat[::step][: self.t_max]
+            # Uniform subsample over the whole clip (§2). The phase-1 `feat[::T // t_max][:t_max]`
+            # has step 1 for 513-1023 frames and so cut off the end of the sentence.
+            keep = np.linspace(0, feat.shape[0] - 1, self.t_max).round().astype(int)
+            feat = feat[keep]
 
         ids = self.sp.encode(str(row.text), out_type=int)[: self.max_tgt_len - 2]
         ids = [self.bos_id] + ids + [self.eos_id]

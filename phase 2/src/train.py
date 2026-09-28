@@ -34,6 +34,13 @@ def cosine_with_warmup(step: int, warmup_steps: int, total_steps: int, min_lr_ra
     return min_lr_ratio + (1 - min_lr_ratio) * cosine
 
 
+def pop_pool_stats(model, prefix: str) -> dict:
+    """Decoder-memory length stats from pooling encoders ({} for the others), prefixed by split.
+    kept_frac = memory tokens / real frames; mem_tokens = memory tokens per clip."""
+    pop = getattr(model.encoder, "pop_pool_stats", None)
+    return {f"{prefix}_{k}": v for k, v in pop().items()} if pop else {}
+
+
 @torch.no_grad()
 def greedy_decode(model, src, src_key_padding_mask, bos_id, eos_id, pad_id, max_new_tokens=64):
     memory, mem_pad = model.encode(src, src_key_padding_mask)
@@ -187,6 +194,7 @@ def main():
         model.train()
         epoch_loss, n_steps, t0 = 0.0, 0, time.time()
         optimizer.zero_grad()
+        pop_pool_stats(model, "train")  # reset counters
 
         for i, batch in enumerate(train_loader):
             batch = batch.to(device)
@@ -207,21 +215,25 @@ def main():
             if stop:
                 break
         train_loss = epoch_loss / max(1, n_steps)
+        pool_stats = pop_pool_stats(model, "train")
 
         val_loss, val_metrics, val_uids, val_preds, val_refs, val_nf = run_eval(
             model, val_loader, train_ds.sp, device, train_ds.bos_id, train_ds.eos_id, train_ds.pad_id,
             max_new_tokens=model_cfg.get("max_tgt_len", 64))
+        pool_stats |= pop_pool_stats(model, "val")
+        pool_stats = {k: round(v, 4) for k, v in pool_stats.items()}
 
-        xl.log_epoch(epoch, train_loss, val_loss, val_metrics)
+        xl.log_epoch(epoch, train_loss, val_loss, val_metrics, **pool_stats)
         xl.log_predictions("val", val_uids, val_preds, val_refs, epoch=epoch, extra={"n_frames": val_nf})
         print(f"[{run_name}] epoch {epoch}: train_loss={train_loss:.4f} val_loss={val_loss:.4f} "
              f"val_chrF2={val_metrics['corpus_chrF2']:.2f} val_BLEU4={val_metrics['corpus_BLEU-4']:.2f} "
-             f"({time.time() - t0:.0f}s)")
+             f"{''.join(f' {k}={v}' for k, v in pool_stats.items())} ({time.time() - t0:.0f}s)")
 
         if use_wandb:
             import wandb
             wandb.log({"epoch": epoch, "train_loss": train_loss, "val_loss": val_loss,
-                      **{f"val_{k}": v for k, v in val_metrics.items() if isinstance(v, (int, float))}},
+                      **{f"val_{k}": v for k, v in val_metrics.items() if isinstance(v, (int, float))},
+                      **pool_stats},
                      step=global_step)
 
         is_best = val_metrics["corpus_chrF2"] > best_metric

@@ -1,0 +1,19 @@
+# Phase-2 gate baseline. The phase-1 Mamba encoder (default Mamba2 init, full-length
+# decoder memory) with only the padding fix: the backward scan is reversed inside each
+# clip's own length. Every other gate arm differs from this one by a single change.
+#
+#   python src/train.py --data configs/data/isign.yaml --model configs/model/mamba_padfix.yaml --lr 3e-4 --seed 42
+arm: mamba_padfix
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64

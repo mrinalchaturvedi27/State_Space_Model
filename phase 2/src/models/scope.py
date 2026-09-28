@@ -140,6 +140,55 @@ def delta_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Tensor
     return pack_kept(memory, keep)
 
 
+def uniform_keep_count(lengths: torch.Tensor, stride: int) -> torch.Tensor:
+    """How many frames uniform_pool keeps for clips of these lengths:
+    every stride-th frame from 0, plus the last frame when the stride misses it."""
+    stride = max(1, stride)
+    lengths = lengths.clamp_min(1)
+    return (lengths + stride - 1) // stride + ((lengths - 1) % stride != 0).long()
+
+
+def matched_delta_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Tensor | None,
+                       stride: int) -> tuple[torch.Tensor, torch.Tensor]:
+    """Δ-timed pooling that keeps exactly as many frames per clip as uniform_pool.
+
+    Each clip's cumulative Δ is split into n equal quantiles, n = uniform_keep_count(length),
+    and the frame where each quantile is reached is kept. The frame count is identical to
+    the uniform control; only the positions differ, so the comparison isolates *where*
+    Δ puts the memory tokens from *how many* there are. The last real frame is always kept,
+    as in uniform_pool.
+    """
+    B, T, D = memory.shape
+    if pad_mask is None:
+        pad_mask = torch.zeros(B, T, dtype=torch.bool, device=memory.device)
+    valid = ~pad_mask
+    lengths = valid.sum(dim=1).clamp_min(1)
+    n_keep = uniform_keep_count(lengths, stride)
+    N = int(n_keep.max().item())
+
+    # A tiny floor keeps the cumulative sum strictly increasing over real frames.
+    step = delta.float().clamp_min(1e-6).masked_fill(~valid, 0)
+    csum = torch.cumsum(step, dim=1)
+    last = (lengths - 1).unsqueeze(1)
+    total = csum.gather(1, last)
+
+    k = torch.arange(N, device=memory.device).unsqueeze(0)
+    q = total * (k + 1).float() / n_keep.unsqueeze(1).float()
+    idx = torch.searchsorted(csum.contiguous(), q.contiguous())
+    idx = torch.minimum(idx, last)
+    idx = idx.scatter(1, (n_keep - 1).unsqueeze(1), last)  # float rounding must not drop the last frame
+    # Force a strictly increasing selection that still fits before the clip's last frame:
+    # k + cummax(idx - k) never repeats a frame, min(., L - n + k) leaves room for the rest.
+    idx = k + torch.cummax(idx - k, dim=1).values
+    idx = torch.minimum(idx, lengths.unsqueeze(1) - n_keep.unsqueeze(1) + k)
+    idx = idx.clamp(0, T - 1)
+
+    packed_pad = k >= n_keep.unsqueeze(1)
+    packed = memory.gather(1, idx.unsqueeze(-1).expand(B, N, D))
+    packed = packed.masked_fill(packed_pad.unsqueeze(-1), 0)
+    return packed, packed_pad
+
+
 def uniform_pool(memory: torch.Tensor, pad_mask: torch.Tensor | None,
                  stride: int) -> tuple[torch.Tensor, torch.Tensor]:
     """Keep every `stride`-th real frame plus the last one. The no-Δ control."""
