@@ -146,7 +146,9 @@ def main():
     np.random.seed(args.seed)
     device = "cuda"
 
-    dataset_name, arm = data_cfg["dataset"], model_cfg["arm"]
+    # `tag` names the results directory; defaults to the arm. Sweeps over one arm (e.g. pooling
+    # stride) set distinct tags so their runs do not overwrite each other.
+    dataset_name, arm = data_cfg["dataset"], model_cfg.get("tag", model_cfg["arm"])
     train_ds, val_ds, train_loader, val_loader, train_sampler = build_loaders(
         args, data_cfg, model_cfg, train_cfg, args.seed)
 

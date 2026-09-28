@@ -1,0 +1,22 @@
+# Compression sweep: mamba_uniform keeping ~1/8 of the frames (the gate used 16).
+# If Δ picks informative frames, the pool_matched - uniform gap should grow as the stride grows.
+#
+arm: mamba_uniform
+tag: mamba_uniform_s8
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+pool_every_frames: 8
+short_heads: 8
+mid_heads: 4
+dt_weight_scale: 0.05

@@ -183,6 +183,26 @@ sign-aligned; if it is, a CIF-style Δ-weighted average within each bucket makes
 Prior art to position against: CIF (Dong & Xu, ICASSP 2020), H-Net dynamic chunking (Hwang, Wang &
 Gu, 2025) — verify both. Novelty is the SSM's own Δ as the integrator, with zero extra parameters.
 
+### Gate result (iSign val, s42, 2026-09-28) and round 2
+| arm | memory | val chrF2 | val BLEU-4 |
+|---|---|---|---|
+| phase-1 mamba | 195 frames | 20.74 | 3.40 |
+| `mamba_padfix` | all | 21.06 | 3.53 |
+| `mamba_banks` | all | 21.06 | 3.72 |
+| `mamba_uniform` | 13.6 (7%) | 19.63 | 2.87 |
+| `mamba_pool_matched` | 13.6 (7%) | 20.36 | 3.43 |
+
+Δ-chosen frames beat uniform at the same count by +0.73 chrF2 (+0.61 at equal epoch budget; ahead in
+all 10 epochs 18–27). Banks alone: no gain. Pooling to 7% still costs ~0.7 vs full memory.
+Single seed — round 2 (`scripts/run_phase2_round2.sh`, 10 runs queued over 4 GPUs):
+1. seeds 13 / 1337 for `uniform` and `pool_matched` (confirmation);
+2. `mamba_pool_avg` (CIF-style: Δ-quantile segments, Δ-weighted mean, so the loss trains Δ) vs
+   `mamba_uniform_avg` (plain 16-frame mean) — tests whether letting Δ learn closes the 0.7 gap;
+3. compression sweep 1/8 and 1/32 for `uniform` vs `pool_matched` — the Δ advantage should grow
+   with compression if Δ really locates content.
+Plus `scripts/eval_phase2_gate.sh` (beam-5 test for the gate arms) and `scripts/analyze_delta.py`
+(ρ between Δ and body/face/hand speed per layer and bank, lag profile, hand speed at kept frames).
+
 ## Backup — C3: articulator-factored scanning
 Separate scans for hands / face / body with light cross-stream fusion (manual and non-manual channels are
 asynchronous in sign languages). Plausible, but multi-stream designs are common in sign recognition, so

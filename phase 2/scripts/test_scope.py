@@ -11,11 +11,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from src.models.common import PoseToTextModel  # noqa: E402
 from src.models.scope import (  # noqa: E402
+    delta_avg_pool,
     delta_pool,
     flip_valid,
     horizon_specs,
     matched_delta_pool,
     softplus_inv,
+    uniform_avg_pool,
     uniform_keep_count,
     uniform_pool,
 )
@@ -114,6 +116,48 @@ def test_matched_pool_follows_delta():
     packed, packed_pad = matched_delta_pool(memory, delta, None, stride)
     kept = packed[0, ~packed_pad[0], 0]
     assert int((kept >= T // 2).sum()) >= len(kept) - 1
+
+
+def test_uniform_avg_pool_means():
+    memory = torch.arange(10, dtype=torch.float32).view(1, 10, 1)
+    pad = torch.arange(10).unsqueeze(0) >= 7
+    pooled, pooled_pad = uniform_avg_pool(memory, pad, stride=3)
+    # segments [0,1,2] [3,4,5] [6]; padded frames 7-9 are ignored
+    assert torch.allclose(pooled[0, :, 0], torch.tensor([1.0, 4.0, 6.0]))
+    assert not bool(pooled_pad.any())
+
+
+def test_delta_avg_pool_counts_weights_and_grad():
+    torch.manual_seed(0)
+    lengths = torch.tensor([1, 5, 16, 17, 40])
+    T, stride = 40, 4
+    pad = torch.arange(T).unsqueeze(0) >= lengths.unsqueeze(1)
+    memory = torch.randn(len(lengths), T, 3)
+    delta = (torch.rand(len(lengths), T) ** 6 * 3 + 1e-3).requires_grad_()
+    pooled, pooled_pad = delta_avg_pool(memory, delta, pad, stride)
+    _, uni_pad = uniform_avg_pool(memory, pad, stride)
+    assert torch.equal((~pooled_pad).sum(1), (~uni_pad).sum(1)), "same segment count as uniform_avg"
+    pooled[~pooled_pad].sum().backward()
+    assert delta.grad is not None and delta.grad[~pad].abs().sum() > 0, "Δ must receive gradient"
+    assert torch.all(delta.grad[pad] == 0), "pads must not"
+    # Each token is a convex combination of its clip's real frames.
+    for row, length in enumerate(lengths.tolist()):
+        real = memory[row, :length]
+        toks = pooled[row, ~pooled_pad[row]]
+        assert torch.all(toks <= real.max(0).values + 1e-5)
+        assert torch.all(toks >= real.min(0).values - 1e-5)
+
+
+def test_delta_avg_pool_constant_delta_is_uniform_avg():
+    # Equal only when the length is a multiple of the stride: otherwise uniform_avg ends on a
+    # short segment while Δ quantiles spread the remainder. 0.25 keeps the cumsum exact.
+    memory = torch.randn(2, 32, 4)
+    pad = torch.arange(32).unsqueeze(0) >= torch.tensor([[32], [16]])
+    delta = torch.full((2, 32), 0.25)
+    a, a_pad = delta_avg_pool(memory, delta, pad, 8)
+    b, b_pad = uniform_avg_pool(memory, pad, 8)
+    assert torch.equal(a_pad, b_pad)
+    assert torch.allclose(a, b, atol=1e-5)
 
 
 def test_encode_uses_pooled_mask():

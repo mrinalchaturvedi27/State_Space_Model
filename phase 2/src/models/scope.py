@@ -148,6 +148,33 @@ def uniform_keep_count(lengths: torch.Tensor, stride: int) -> torch.Tensor:
     return (lengths + stride - 1) // stride + ((lengths - 1) % stride != 0).long()
 
 
+def delta_quantile_ends(delta: torch.Tensor, valid: torch.Tensor,
+                        n_keep: torch.Tensor) -> torch.Tensor:
+    """Frame indices (B, N) where each clip's cumulative Δ reaches k/n of its total,
+    k = 1..n. Strictly increasing within a clip, the n-th is always the last real frame.
+    Entries past a clip's n are filler (non-decreasing, clamped into range)."""
+    B, T = delta.shape
+    lengths = valid.sum(dim=1).clamp_min(1)
+    N = int(n_keep.max().item())
+
+    # A tiny floor keeps the cumulative sum strictly increasing over real frames.
+    step = delta.float().clamp_min(1e-6).masked_fill(~valid, 0)
+    csum = torch.cumsum(step, dim=1)
+    last = (lengths - 1).unsqueeze(1)
+    total = csum.gather(1, last)
+
+    k = torch.arange(N, device=delta.device).unsqueeze(0)
+    q = total * (k + 1).float() / n_keep.unsqueeze(1).float()
+    idx = torch.searchsorted(csum.contiguous(), q.contiguous())
+    idx = torch.minimum(idx, last)
+    idx = idx.scatter(1, (n_keep - 1).unsqueeze(1), last)  # float rounding must not drop the last frame
+    # Force a strictly increasing selection that still fits before the clip's last frame:
+    # k + cummax(idx - k) never repeats a frame, min(., L - n + k) leaves room for the rest.
+    idx = k + torch.cummax(idx - k, dim=1).values
+    idx = torch.minimum(idx, lengths.unsqueeze(1) - n_keep.unsqueeze(1) + k)
+    return idx.clamp(0, T - 1)
+
+
 def matched_delta_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Tensor | None,
                        stride: int) -> tuple[torch.Tensor, torch.Tensor]:
     """Δ-timed pooling that keeps exactly as many frames per clip as uniform_pool.
@@ -162,31 +189,68 @@ def matched_delta_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torc
     if pad_mask is None:
         pad_mask = torch.zeros(B, T, dtype=torch.bool, device=memory.device)
     valid = ~pad_mask
-    lengths = valid.sum(dim=1).clamp_min(1)
-    n_keep = uniform_keep_count(lengths, stride)
-    N = int(n_keep.max().item())
+    n_keep = uniform_keep_count(valid.sum(dim=1).clamp_min(1), stride)
+    idx = delta_quantile_ends(delta, valid, n_keep)
 
-    # A tiny floor keeps the cumulative sum strictly increasing over real frames.
-    step = delta.float().clamp_min(1e-6).masked_fill(~valid, 0)
-    csum = torch.cumsum(step, dim=1)
-    last = (lengths - 1).unsqueeze(1)
-    total = csum.gather(1, last)
-
-    k = torch.arange(N, device=memory.device).unsqueeze(0)
-    q = total * (k + 1).float() / n_keep.unsqueeze(1).float()
-    idx = torch.searchsorted(csum.contiguous(), q.contiguous())
-    idx = torch.minimum(idx, last)
-    idx = idx.scatter(1, (n_keep - 1).unsqueeze(1), last)  # float rounding must not drop the last frame
-    # Force a strictly increasing selection that still fits before the clip's last frame:
-    # k + cummax(idx - k) never repeats a frame, min(., L - n + k) leaves room for the rest.
-    idx = k + torch.cummax(idx - k, dim=1).values
-    idx = torch.minimum(idx, lengths.unsqueeze(1) - n_keep.unsqueeze(1) + k)
-    idx = idx.clamp(0, T - 1)
-
+    k = torch.arange(idx.size(1), device=memory.device).unsqueeze(0)
     packed_pad = k >= n_keep.unsqueeze(1)
-    packed = memory.gather(1, idx.unsqueeze(-1).expand(B, N, D))
+    packed = memory.gather(1, idx.unsqueeze(-1).expand(B, idx.size(1), D))
     packed = packed.masked_fill(packed_pad.unsqueeze(-1), 0)
     return packed, packed_pad
+
+
+def segment_mean(memory: torch.Tensor, weights: torch.Tensor, segment: torch.Tensor,
+                 n_seg: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    """Weighted mean of the frames in each segment. segment (B, T) holds each frame's
+    segment id in [0, n_seg); frames with weight 0 (pads) contribute nothing."""
+    B, T, D = memory.shape
+    N = int(n_seg.max().item())
+    segment = segment.clamp(0, N - 1)
+    # float32 accumulation: Δ is ~1e-2, so bf16 sums of it lose most of their precision.
+    mem32, w = memory.float(), weights.float()
+    num = mem32.new_zeros(B, N, D).scatter_add(1, segment.unsqueeze(-1).expand(B, T, D),
+                                               mem32 * w.unsqueeze(-1))
+    den = w.new_zeros(B, N).scatter_add(1, segment, w)
+    seg_pad = torch.arange(N, device=memory.device).unsqueeze(0) >= n_seg.unsqueeze(1)
+    pooled = num / den.clamp_min(1e-12).unsqueeze(-1)
+    return pooled.masked_fill(seg_pad.unsqueeze(-1), 0).to(memory.dtype), seg_pad
+
+
+def uniform_avg_pool(memory: torch.Tensor, pad_mask: torch.Tensor | None,
+                     stride: int) -> tuple[torch.Tensor, torch.Tensor]:
+    """Plain average of every `stride` consecutive frames: the no-Δ control for delta_avg_pool."""
+    B, T, _ = memory.shape
+    if pad_mask is None:
+        pad_mask = torch.zeros(B, T, dtype=torch.bool, device=memory.device)
+    valid = ~pad_mask
+    stride = max(1, stride)
+    n_seg = (valid.sum(dim=1).clamp_min(1) + stride - 1) // stride
+    segment = (torch.arange(T, device=memory.device) // stride).unsqueeze(0).expand(B, T)
+    return segment_mean(memory, valid.to(memory.dtype), segment, n_seg)
+
+
+def delta_avg_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Tensor | None,
+                   stride: int) -> tuple[torch.Tensor, torch.Tensor]:
+    """CIF-style pooling driven by the SSM's own Δ, same segment count as uniform_avg_pool.
+
+    Segment boundaries sit at equal quantiles of cumulative Δ (as in matched_delta_pool),
+    and each memory token is the Δ-weighted mean of its segment. Boundaries are discrete,
+    but the weights are Δ itself, so the decoder loss trains Δ (unlike the pick-one-frame
+    arms, where Δ only receives gradient through the scan). Pass `delta` with grad.
+    """
+    B, T, _ = memory.shape
+    if pad_mask is None:
+        pad_mask = torch.zeros(B, T, dtype=torch.bool, device=memory.device)
+    valid = ~pad_mask
+    stride = max(1, stride)
+    n_seg = (valid.sum(dim=1).clamp_min(1) + stride - 1) // stride
+    with torch.no_grad():
+        ends = delta_quantile_ends(delta.detach(), valid, n_seg)
+        # Frame t belongs to the first segment whose end is >= t.
+        t = torch.arange(T, device=memory.device).unsqueeze(0).expand(B, T).contiguous()
+        segment = torch.searchsorted(ends.contiguous(), t)
+    weights = delta.float().masked_fill(~valid, 0)
+    return segment_mean(memory, weights, segment, n_seg)
 
 
 def uniform_pool(memory: torch.Tensor, pad_mask: torch.Tensor | None,

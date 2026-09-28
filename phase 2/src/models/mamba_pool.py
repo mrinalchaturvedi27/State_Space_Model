@@ -12,6 +12,10 @@ The phase-2 gate arms all use this module (see configs/model/ and scripts/run_ph
 - mamba_pool: banks on, keeps a frame whenever cumulative Δ crosses a fixed threshold
   (one sign at init). Free rate: the frame count drifts with Δ during training, so it is
   not matched to the uniform control. Watch the logged kept_frac.
+- mamba_uniform_avg: banks on, each memory token is the plain mean of 16 consecutive frames.
+- mamba_pool_avg: banks on, CIF-style. Segments end at equal quantiles of cumulative Δ (same
+  count as uniform_avg) and each token is the Δ-weighted mean of its segment. Δ is the weight,
+  so the decoder loss trains it directly; the pick-one-frame arms cannot.
 
 The backward scan is reversed inside each clip's own length. The phase-1 encoder
 is unchanged and remains the baseline.
@@ -24,10 +28,12 @@ from mamba_ssm import Mamba2
 
 from .scope import (
     apply_horizon_banks,
+    delta_avg_pool,
     delta_pool,
     flip_valid,
     matched_delta_pool,
     short_head_delta,
+    uniform_avg_pool,
     uniform_pool,
 )
 
@@ -70,7 +76,7 @@ class ScopePoolEncoder(nn.Module):
                  short_heads: int = 8, mid_heads: int = 4, dt_weight_scale: float = 0.05,
                  horizon_banks: bool = True):
         super().__init__()
-        if pool_mode not in ("delta", "delta_matched", "uniform", "none"):
+        if pool_mode not in ("delta", "delta_matched", "delta_avg", "uniform", "uniform_avg", "none"):
             raise ValueError(f"unknown pool_mode: {pool_mode!r}")
         if pool_mode.startswith("delta") and not horizon_banks:
             raise ValueError("Δ pooling reads the short bank, so it needs horizon_banks=True")
@@ -131,6 +137,12 @@ class ScopePoolEncoder(nn.Module):
             memory, mem_pad = x, pad
         elif self.pool_mode == "uniform":
             memory, mem_pad = uniform_pool(x, pad, self.pool_every_frames)
+        elif self.pool_mode == "uniform_avg":
+            memory, mem_pad = uniform_avg_pool(x, pad, self.pool_every_frames)
+        elif self.pool_mode == "delta_avg":
+            # With grad: Δ is the averaging weight, so the loss reaches the dt projection.
+            delta = short_head_delta(last_layer.fwd, last_hidden, self.short_heads)
+            memory, mem_pad = delta_avg_pool(x, delta, pad, self.pool_every_frames)
         else:
             with torch.no_grad():
                 delta = short_head_delta(last_layer.fwd, last_hidden, self.short_heads)

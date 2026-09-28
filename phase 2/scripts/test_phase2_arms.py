@@ -106,6 +106,24 @@ def test_uniform_and_matched_keep_the_same_count():
     assert torch.equal(counts["mamba_uniform"], counts["mamba_pool_matched"])
 
 
+def test_avg_arms_keep_the_same_count_and_train_delta():
+    src, pad = batch([37, 5, 64, 16])
+    counts = {}
+    for arm in ("mamba_uniform_avg", "mamba_pool_avg"):
+        _, mem_pad = make(arm).encode(src, pad)
+        counts[arm] = (~mem_pad).sum(1)
+    assert torch.equal(counts["mamba_uniform_avg"], counts["mamba_pool_avg"])
+    # Only the Δ-weighted arm sends the decoder loss into the last layer's dt parameters.
+    for arm, expect in (("mamba_pool_avg", True), ("mamba_pool_matched", False)):
+        model = make(arm).train()
+        tgt = torch.randint(3, 30, (4, 6))
+        model.compute_loss(src, tgt[:, :-1], tgt[:, 1:], pad, torch.zeros(4, 5, dtype=torch.bool)).backward()
+        fwd = model.encoder.layers[-1].fwd
+        dt_rows = fwd.in_proj.weight.grad[-fwd.nheads:]
+        # The stand-in's scan ignores dt, so any gradient there comes from pooling alone.
+        assert bool(dt_rows.abs().sum() > 0) == expect, arm
+
+
 def test_pool_stats():
     src, pad = batch([37, 5, 64, 16])
     real = int((~pad).sum())

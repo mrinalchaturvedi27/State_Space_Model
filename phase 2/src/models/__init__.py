@@ -9,6 +9,8 @@ PHASE2_ARMS = {
     "mamba_uniform": ("uniform", True),
     "mamba_pool_matched": ("delta_matched", True),
     "mamba_pool": ("delta", True),
+    "mamba_uniform_avg": ("uniform_avg", True),
+    "mamba_pool_avg": ("delta_avg", True),
 }
 
 

@@ -34,7 +34,8 @@ def main():
     args = ap.parse_args()
 
     rows = []
-    phase2 = ("mamba_padfix", "mamba_banks", "mamba_uniform", "mamba_pool_matched", "mamba_pool")
+    phase2 = ("mamba_padfix", "mamba_banks", "mamba_uniform", "mamba_pool_matched", "mamba_pool",
+              "mamba_uniform_avg", "mamba_pool_avg")
     for name in ("transformer", "mamba", "mamba_depth", *phase2):
         cfg = load(name)
         model = build_model(cfg, vocab_size=args.vocab_size)
