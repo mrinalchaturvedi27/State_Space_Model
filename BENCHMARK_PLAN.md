@@ -296,7 +296,7 @@ rough planning shape, not a commitment, until it's redone against H200.
 | Efficiency benchmarking (idle GPU required) | — | ~2 |
 
 ≈ 120 GPU-hours, hardware TBD after remeasuring on H200 (see §10 — this used to say "2 dedicated A100s,
-GPUs 0/4 free" which doesn't correspond to this cluster's actual single 4×H200 node `t3ihpc07`). Check
+GPUs 0/4 free" which doesn't correspond to this cluster's actual single 4×H200 node `i`). Check
 `squeue`/node state before claiming a GPU, pin with `CUDA_VISIBLE_DEVICES`, and never share a GPU when
 collecting the efficiency numbers, or they are meaningless.
 

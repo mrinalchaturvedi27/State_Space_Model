@@ -6,6 +6,8 @@ __pycache__/
 # Models and checkpoints
 checkpoints/
 
+mlchal/
+
 # Caches
 caches/
 cache/
