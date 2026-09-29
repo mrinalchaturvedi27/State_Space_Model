@@ -22,6 +22,7 @@ GPU="${GPU:-0}"
 MAX_CLIPS="${MAX_CLIPS:-0}"
 LOG="${PROJECT_DIR}/logs/phase2_quant.log"
 mkdir -p "${PROJECT_DIR}/logs"
+cd "${PHASE2_DIR}"  # run_dir paths below are relative to phase 2, whatever the caller's directory
 
 SWEEP="fp16,turbo:8,turbo:4,turbo:3,turbo:2,naive:8,naive:4,naive:3,naive:2,turbo_prod:4,turbo_prod:3,turbo_prod:2"
 BEAM="fp16,turbo:3,naive:3"
