@@ -1,0 +1,24 @@
+# C1: the 8 previous clips of the same video as encoder-only context.
+# Encoder = mamba_padfix over [context..., current]; the decoder sees the current clip only.
+# Train with configs/train/base_ctx_long.yaml (half budget, grad_accum 2: same sentences
+# per step). Context capped at 2,048 frames (~9 iSign clips).
+# Adds 1,024 parameters (context-type and clip-boundary embeddings) over mamba_padfix.
+#
+arm: mamba_ctx
+tag: mamba_ctx_k8
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+context_clips: 8
+context_mode: prev
+max_context_frames: 2048

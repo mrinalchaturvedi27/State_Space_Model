@@ -1,0 +1,15 @@
+# base.yaml + the F3 fix (PHASE2_PLAN.md): warmup capped at 10% of the run, and early-stopping
+# patience counted only after warmup. Used for How2Sign / PHOENIX; base.yaml is unchanged.
+t_max: 512
+max_tokens: 24576       # ~64 clips at mean length; equal frames/step across arms, not equal clips
+grad_accum: 1
+max_epochs: 40
+warmup_steps: 4000
+weight_decay: 0.01
+betas: [0.9, 0.98]
+eps: 1.0e-8
+grad_clip: 1.0
+patience: 8              # early stopping, on val corpus_chrF2
+min_lr_ratio: 0.1         # cosine decays to 10% of peak lr
+num_workers: 8
+warmup_ratio: 0.1

@@ -25,6 +25,9 @@ The phase-2 gate arms all use this module (see configs/model/ and scripts/run_ph
   from "uneven spacing" as the reason random spacing beats a fixed stride.
 - mamba_pool_random_avg: mamba_pool_avg with content-blind log-normal weights for both the
   segment boundaries and the averaging -- the control that decides the Δ-averaging claim.
+- mamba_pool_avg_jitter: mamba_pool_avg with the segment ends shifted by a random phase along
+  cumulative Δ in training (phase 0 at eval). Round 4 showed a training-time shift is what made
+  single-frame pooling beat the fixed stride; this tests whether it also adds to Δ averaging.
 
 The backward scan is reversed inside each clip's own length. The phase-1 encoder
 is unchanged and remains the baseline.
@@ -88,7 +91,7 @@ class ScopePoolEncoder(nn.Module):
                  horizon_banks: bool = True, random_sigma: float = 1.0):
         super().__init__()
         if pool_mode not in ("delta", "delta_matched", "delta_avg", "random_matched", "random_avg", "uniform", "uniform_avg",
-                             "uniform_jitter", "none"):
+                             "uniform_jitter", "delta_avg_jitter", "none"):
             raise ValueError(f"unknown pool_mode: {pool_mode!r}")
         if pool_mode.startswith("delta") and not horizon_banks:
             raise ValueError("Δ pooling reads the short bank, so it needs horizon_banks=True")
@@ -175,10 +178,13 @@ class ScopePoolEncoder(nn.Module):
             ones = torch.ones(B, T, device=x.device)
             phase = torch.rand(B, device=x.device) if self.training else None
             memory, mem_pad = matched_delta_pool(x, ones, pad, self.pool_every_frames, phase)
-        elif self.pool_mode == "delta_avg":
+        elif self.pool_mode in ("delta_avg", "delta_avg_jitter"):
             # With grad: Δ is the averaging weight, so the loss reaches the dt projection.
             delta = short_head_delta(last_layer.fwd, last_hidden, self.short_heads)
-            memory, mem_pad = delta_avg_pool(x, delta, pad, self.pool_every_frames)
+            phase = None
+            if self.pool_mode == "delta_avg_jitter" and self.training:
+                phase = torch.rand(B, device=x.device)
+            memory, mem_pad = delta_avg_pool(x, delta, pad, self.pool_every_frames, phase)
         else:
             with torch.no_grad():
                 delta = short_head_delta(last_layer.fwd, last_hidden, self.short_heads)

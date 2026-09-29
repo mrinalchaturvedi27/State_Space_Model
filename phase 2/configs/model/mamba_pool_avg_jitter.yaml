@@ -1,0 +1,22 @@
+# mamba_pool_avg + a training-time random phase on the Δ segment ends (phase 0 at eval).
+# Round 4: a training-time shift is what made single-frame pooling beat the fixed stride
+# (uniform 19.87 -> jitter 20.67 test chrF2). Does it add to Δ-weighted averaging (20.93)?
+#
+arm: mamba_pool_avg_jitter
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+pool_every_frames: 16
+short_heads: 8
+mid_heads: 4
+dt_weight_scale: 0.05

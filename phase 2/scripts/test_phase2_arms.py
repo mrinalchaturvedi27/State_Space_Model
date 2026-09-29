@@ -164,6 +164,20 @@ def test_random_avg_and_jitter_controls():
     assert float(fwd.in_proj.weight.grad[-fwd.nheads:].abs().sum()) == 0.0
 
 
+def test_delta_avg_jitter():
+    src, pad = batch([37, 5, 64, 16])
+    base, jit = make("mamba_pool_avg"), make("mamba_pool_avg_jitter")
+    jit.load_state_dict(base.state_dict())
+    a, a_pad = base.encode(src, pad)
+    b, b_pad = jit.encode(src, pad)
+    assert torch.equal(a_pad, b_pad) and torch.allclose(a, b), "phase 0 at eval: identical to pool_avg"
+    jit.train()
+    torch.manual_seed(3)
+    c, c_pad = jit.encode(src, pad)
+    assert torch.equal(c_pad, a_pad), "jitter keeps the segment count"
+    assert not torch.allclose(c, a), "training shifts the segment ends"
+
+
 def test_pool_stats():
     src, pad = batch([37, 5, 64, 16])
     real = int((~pad).sum())

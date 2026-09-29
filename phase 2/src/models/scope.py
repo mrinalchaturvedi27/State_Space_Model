@@ -231,13 +231,14 @@ def uniform_avg_pool(memory: torch.Tensor, pad_mask: torch.Tensor | None,
 
 
 def delta_avg_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Tensor | None,
-                   stride: int) -> tuple[torch.Tensor, torch.Tensor]:
+                   stride: int, phase: torch.Tensor | None = None) -> tuple[torch.Tensor, torch.Tensor]:
     """CIF-style pooling driven by the SSM's own Δ, same segment count as uniform_avg_pool.
 
     Segment boundaries sit at equal quantiles of cumulative Δ (as in matched_delta_pool),
     and each memory token is the Δ-weighted mean of its segment. Boundaries are discrete,
     but the weights are Δ itself, so the decoder loss trains Δ (unlike the pick-one-frame
     arms, where Δ only receives gradient through the scan). Pass `delta` with grad.
+    `phase` (B,) in [0, 1) shifts the segment ends along cumulative Δ (training-time jitter).
     """
     B, T, _ = memory.shape
     if pad_mask is None:
@@ -246,7 +247,7 @@ def delta_avg_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Te
     stride = max(1, stride)
     n_seg = (valid.sum(dim=1).clamp_min(1) + stride - 1) // stride
     with torch.no_grad():
-        ends = delta_quantile_ends(delta.detach(), valid, n_seg)
+        ends = delta_quantile_ends(delta.detach(), valid, n_seg, phase)
         # Frame t belongs to the first segment whose end is >= t.
         t = torch.arange(T, device=memory.device).unsqueeze(0).expand(B, T).contiguous()
         segment = torch.searchsorted(ends.contiguous(), t)

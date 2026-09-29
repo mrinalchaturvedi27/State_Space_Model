@@ -238,6 +238,20 @@ Round 4 (`scripts/run_phase2_round4.sh`):
 3. `mamba_uniform_jitter` × 3 seeds: random-phase stride in training only — regularisation vs
    uneven spacing as the reason random beats uniform.
 
+### Round 4 result and round 5 (2026-09-30)
+Test chrF2, beam 5:
+
+| question | result |
+|---|---|
+| Δ-weighted averaging vs content-blind random segments (3 seeds) | pool_avg **20.93** vs random_avg 19.97 vs uniform_avg 20.48; p = 0.001 every seed — **Δ is informative when trained as the averaging weight** |
+| why random single-frame spacing beat the stride (3 seeds) | jitter 20.67 > random 20.46 > uniform 19.87 — training-time variety, not uneven spacing |
+| C1, 2 previous clips (s42) | k2 21.54 vs k0 21.16 (p = 0.003) vs wrong-video k2 21.29 (p = 0.008); val gap +0.29 (< 0.5 bar); recurring-name recall unchanged; k2 also +1.4 on first clips (no context) → part may be run variance |
+
+Round 5 (`scripts/run_phase2_round5.sh`, 37 jobs): C1 seeds 13/1337 + k = 4/8; Δ-averaging vs
+random vs plain averaging on How2Sign and PHOENIX (3 seeds, F3); full-memory padfix on all three
+datasets (3 seeds); pool_avg + training-time jitter. Phase-2 train.py now has the same opt-in
+F3 `warmup_ratio` as phase 1 (`configs/train/base_f3.yaml`).
+
 ## Backup — C3: articulator-factored scanning
 Separate scans for hands / face / body with light cross-stream fusion (manual and non-manual channels are
 asynchronous in sign languages). Plausible, but multi-stream designs are common in sign recognition, so

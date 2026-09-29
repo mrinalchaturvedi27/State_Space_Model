@@ -14,6 +14,7 @@ PHASE2_ARMS = {
     "mamba_pool_random": ("random_matched", True),
     "mamba_pool_random_avg": ("random_avg", True),
     "mamba_uniform_jitter": ("uniform_jitter", True),
+    "mamba_pool_avg_jitter": ("delta_avg_jitter", True),
 }
 
 

@@ -1,0 +1,15 @@
+# base.yaml for C1 with 4-8 context clips: the token budget counts only current-clip frames, so
+# a batch carries up to ~9x as many frames through the encoder. Half the budget with grad_accum 2
+# keeps the same current-clip frames (and sentences) per optimizer step as base.yaml.
+t_max: 512
+max_tokens: 12288       # current-clip frames per micro-batch; x grad_accum 2 = base.yaml per step
+grad_accum: 2
+max_epochs: 40
+warmup_steps: 4000
+weight_decay: 0.01
+betas: [0.9, 0.98]
+eps: 1.0e-8
+grad_clip: 1.0
+patience: 8              # early stopping, on val corpus_chrF2
+min_lr_ratio: 0.1         # cosine decays to 10% of peak lr
+num_workers: 8
