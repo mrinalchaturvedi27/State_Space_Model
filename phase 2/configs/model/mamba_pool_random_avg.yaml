@@ -1,0 +1,24 @@
+# Control for mamba_pool_avg (Δ-weighted averaging, the best compressed arm): identical code
+# path, but segment boundaries and averaging weights both come from content-blind log-normal
+# noise (frame hash, sigma=1 as in mamba_pool_random). pool_avg > this arm => Δ is informative
+# for averaging; equal => the pool_avg gain is random segmentation, not Δ.
+#
+arm: mamba_pool_random_avg
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+pool_every_frames: 16
+short_heads: 8
+mid_heads: 4
+dt_weight_scale: 0.05
+random_sigma: 1.0

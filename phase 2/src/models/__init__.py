@@ -12,6 +12,8 @@ PHASE2_ARMS = {
     "mamba_uniform_avg": ("uniform_avg", True),
     "mamba_pool_avg": ("delta_avg", True),
     "mamba_pool_random": ("random_matched", True),
+    "mamba_pool_random_avg": ("random_avg", True),
+    "mamba_uniform_jitter": ("uniform_jitter", True),
 }
 
 
@@ -22,6 +24,7 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
     src/models/mamba_pool.py for what each one isolates.
     """
     arm = model_cfg["arm"]
+    model_cls = PoseToTextModel
     d_model = model_cfg["d_model"]
     dropout = model_cfg.get("dropout", 0.1)
 
@@ -53,10 +56,20 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
             dt_weight_scale=model_cfg.get("dt_weight_scale", 0.05),
             random_sigma=model_cfg.get("random_sigma", 1.0),
         )
+    elif arm == "mamba_ctx":
+        # C1: padfix encoder (phase-1 init, per-clip reversal, no pooling) over [context, current].
+        from .context import ContextPoseToTextModel
+        from .mamba_pool import ScopePoolEncoder
+        encoder = ScopePoolEncoder(
+            d_model=d_model, n_layers=model_cfg["enc_layers"], d_state=model_cfg["d_state"],
+            expand=model_cfg["expand"], headdim=model_cfg["headdim"], d_conv=model_cfg["d_conv"],
+            dropout=dropout, pool_mode="none", horizon_banks=False,
+        )
+        model_cls = ContextPoseToTextModel
     else:
         raise ValueError(f"unknown arm: {arm!r}")
 
-    return PoseToTextModel(
+    return model_cls(
         encoder=encoder, d_model=d_model, vocab_size=vocab_size, d_in=model_cfg.get("d_in", 356),
         n_dec_layers=model_cfg["dec_layers"], n_heads=model_cfg["n_heads"],
         dim_feedforward=model_cfg["dim_feedforward"], dropout=dropout, pad_id=pad_id,

@@ -217,6 +217,27 @@ Round 3 (`scripts/run_phase2_round3.sh`, one shared queue over the GPUs):
 3. How2Sign phase-1 rerun with the F3 fix (`configs/train/base_f3.yaml`: warmup ≤ 10% of the run,
    patience only after warmup), into `results_f3/`.
 
+### Round 3 result and round 4 (2026-09-29)
+Test chrF2, beam 5, mean of seeds 13/42/1337, same memory-token count within each row:
+
+| pooling | uniform | random spacing | Δ-chosen |
+|---|---|---|---|
+| keep frames, 1/16 | 19.87 | 20.46 | 20.55 (vs random p = 0.006 / 0.12 / 0.13) |
+| keep frames, 1/32 | 18.81 | 19.68 | 19.65 (vs random p = 0.09–0.15) |
+| average, 1/16 | 20.48 | — (round 4) | **20.93** (best compressed; full memory 21.26) |
+
+**The pick-one-frame Δ claim is dead**: content-blind random spacing does as well as Δ and beats
+the fixed stride on every seed (p = 0.001). Δ-weighted averaging still leads plain averaging
+on all seeds but needs its random control. How2Sign with F3: Mamba 19.61±0.53 vs TF 16.75±1.88,
+p = 0.001 every seed (TF s42 still stalls at epoch 13 even with F3 — reported as is).
+
+Round 4 (`scripts/run_phase2_round4.sh`):
+1. **C1 go/no-go**: `mamba_ctx_k2` vs `mamba_ctx_k2_random` vs `mamba_ctx_k0` (iSign, s42). Go if
+   k2 beats both by more than ~0.5 val chrF2.
+2. `mamba_pool_random_avg` × 3 seeds: decides the Δ-averaging claim.
+3. `mamba_uniform_jitter` × 3 seeds: random-phase stride in training only — regularisation vs
+   uneven spacing as the reason random beats uniform.
+
 ## Backup — C3: articulator-factored scanning
 Separate scans for hands / face / body with light cross-stream fusion (manual and non-manual channels are
 asynchronous in sign languages). Plausible, but multi-stream designs are common in sign recognition, so

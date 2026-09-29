@@ -1,0 +1,23 @@
+# C1 control: 2 consecutive clips from a random OTHER video. Must lose to
+# mamba_ctx_k2 for the gain to be discourse context rather than extra frames.
+# Encoder = mamba_padfix over [context..., current]; the decoder sees the current clip only.
+# Adds 1,024 parameters (context-type and clip-boundary embeddings) over mamba_padfix.
+#
+arm: mamba_ctx
+tag: mamba_ctx_k2_random
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+context_clips: 2
+context_mode: random
+max_context_frames: 1024

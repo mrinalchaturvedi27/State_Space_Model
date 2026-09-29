@@ -20,6 +20,11 @@ The phase-2 gate arms all use this module (see configs/model/ and scripts/run_ph
   weights are content-blind log-normal noise (random_sigma=1.0 reproduces Δ's measured spacing
   irregularity, CV≈0.31 at 1/16). If it matches mamba_pool_matched, Δ carries no information
   and the gain comes from uneven spacing alone.
+- mamba_uniform_jitter: evenly spaced frames, same count, with a random phase per clip in
+  training and phase 0 at eval. Separates "the kept frames change every epoch" (regularisation)
+  from "uneven spacing" as the reason random spacing beats a fixed stride.
+- mamba_pool_random_avg: mamba_pool_avg with content-blind log-normal weights for both the
+  segment boundaries and the averaging -- the control that decides the Δ-averaging claim.
 
 The backward scan is reversed inside each clip's own length. The phase-1 encoder
 is unchanged and remains the baseline.
@@ -37,6 +42,7 @@ from .scope import (
     flip_valid,
     frame_hash_weights,
     matched_delta_pool,
+    position_hash_weights,
     short_head_delta,
     uniform_avg_pool,
     uniform_pool,
@@ -81,7 +87,8 @@ class ScopePoolEncoder(nn.Module):
                  short_heads: int = 8, mid_heads: int = 4, dt_weight_scale: float = 0.05,
                  horizon_banks: bool = True, random_sigma: float = 1.0):
         super().__init__()
-        if pool_mode not in ("delta", "delta_matched", "delta_avg", "random_matched", "uniform", "uniform_avg", "none"):
+        if pool_mode not in ("delta", "delta_matched", "delta_avg", "random_matched", "random_avg", "uniform", "uniform_avg",
+                             "uniform_jitter", "none"):
             raise ValueError(f"unknown pool_mode: {pool_mode!r}")
         if pool_mode.startswith("delta") and not horizon_banks:
             raise ValueError("Δ pooling reads the short bank, so it needs horizon_banks=True")
@@ -157,6 +164,17 @@ class ScopePoolEncoder(nn.Module):
             with torch.no_grad():
                 weights = frame_hash_weights(encoder_input, self.hash_direction, self.random_sigma)
             memory, mem_pad = matched_delta_pool(x, weights, pad, self.pool_every_frames)
+        elif self.pool_mode == "random_avg":
+            # Position hash, not the content hash: with averaging every weight matters, and the
+            # content hash shifts with float rounding across batch shapes (see scope.py).
+            with torch.no_grad():
+                valid = torch.ones(B, T, dtype=torch.bool, device=x.device) if pad is None else ~pad
+                weights = position_hash_weights(valid, self.random_sigma)
+            memory, mem_pad = delta_avg_pool(x, weights, pad, self.pool_every_frames)
+        elif self.pool_mode == "uniform_jitter":
+            ones = torch.ones(B, T, device=x.device)
+            phase = torch.rand(B, device=x.device) if self.training else None
+            memory, mem_pad = matched_delta_pool(x, ones, pad, self.pool_every_frames, phase)
         elif self.pool_mode == "delta_avg":
             # With grad: Δ is the averaging weight, so the loss reaches the dt projection.
             delta = short_head_delta(last_layer.fwd, last_hidden, self.short_heads)

@@ -141,6 +141,29 @@ def test_random_arm_matches_count_is_reproducible_and_checkpoint_compatible():
     make("mamba_pool_matched").load_state_dict(model.state_dict())
 
 
+def test_random_avg_and_jitter_controls():
+    src, pad = batch([37, 5, 64, 16])
+    count = lambda arm, train=False: (~(make(arm).train(train)).encode(src, pad)[1]).sum(1)
+    assert torch.equal(count("mamba_pool_random_avg"), count("mamba_uniform_avg"))
+    assert torch.equal(count("mamba_uniform_jitter"), count("mamba_uniform"))
+    assert torch.equal(count("mamba_uniform_jitter", train=True), count("mamba_uniform"))
+    # Jitter: fixed grid at eval, a new random phase per call in training.
+    model = make("mamba_uniform_jitter")
+    assert torch.equal(model.encode(src, pad)[0], model.encode(src, pad)[0])
+    model.train()
+    torch.manual_seed(1)
+    a = model.encode(src, pad)[0]
+    torch.manual_seed(2)
+    b = model.encode(src, pad)[0]
+    assert not torch.equal(a, b)
+    # random_avg must not train the dt projection (its weights are noise, not Δ).
+    m = make("mamba_pool_random_avg").train()
+    tgt = torch.randint(3, 30, (4, 6))
+    m.compute_loss(src, tgt[:, :-1], tgt[:, 1:], pad, torch.zeros(4, 5, dtype=torch.bool)).backward()
+    fwd = m.encoder.layers[-1].fwd
+    assert float(fwd.in_proj.weight.grad[-fwd.nheads:].abs().sum()) == 0.0
+
+
 def test_pool_stats():
     src, pad = batch([37, 5, 64, 16])
     real = int((~pad).sum())

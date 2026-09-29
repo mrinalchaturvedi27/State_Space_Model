@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from dataclasses import dataclass
 from typing import Iterator, List
 
@@ -138,7 +139,7 @@ def make_collate(pad_id: int):
             T = b["feat"].shape[0]
             src[i, :T] = torch.from_numpy(b["feat"])
             src_pad[i, :T] = False
-            n_frames[i] = T
+            n_frames[i] = b.get("n_cur", T)  # context datasets: the current clip's length only
             uids.append(b["uid"])
 
             ids = b["ids"]
@@ -201,3 +202,110 @@ class TokenBudgetBatchSampler(Sampler[List[int]]):
     def __len__(self) -> int:
         total_frames = self.n_frames.sum()
         return max(1, int(np.ceil(total_frames / self.max_tokens)))
+
+
+_SEGMENT_UID = re.compile(r"^(.*?)-+(\d+)$")
+
+
+class ContextPoseTextDataset(PoseTextDataset):
+    """C1 (PHASE2_PLAN.md): each item is [previous clips of the same video ..., current clip].
+
+    Only pose frames of earlier clips are added -- never their text, which would leak labels;
+    val/test context comes from the same split, which is video-disjoint from train. Two flag
+    channels are appended to every frame so the model can find the parts without any change
+    to the train/eval loops: is_context (1 on context frames) and is_start (1 on each clip's
+    first frame). Feature width becomes D + 2.
+
+    mode="prev": the k clips just before this one in its video (nearest first until
+    max_context_frames is used up; the oldest is cut from its start if needed).
+    mode="random": k consecutive clips from a different, random video -- the control that
+    separates discourse context from "more frames". Fixed per item at eval; redrawn per epoch
+    in training. k=0 gives the plain clip with the flag channels (the C1 code-path baseline).
+    Clips whose uid has no numeric segment suffix get no context.
+    """
+
+    def __init__(self, *args, context_clips: int = 2, context_mode: str = "prev",
+                 max_context_frames: int = 1024, **kwargs):
+        super().__init__(*args, **kwargs)
+        if context_mode not in ("prev", "random"):
+            raise ValueError(f"unknown context_mode: {context_mode!r}")
+        self.k = context_clips
+        self.mode = context_mode
+        self.max_context_frames = max_context_frames
+        videos: dict[str, list[tuple[int, int]]] = {}
+        self.video_of = [None] * len(self.index)
+        for i, uid in enumerate(self.index["uid"].astype(str)):
+            m = _SEGMENT_UID.match(uid)
+            if m:
+                videos.setdefault(m.group(1), []).append((int(m.group(2)), i))
+                self.video_of[i] = m.group(1)
+        self.prev: list[list[int]] = [[] for _ in range(len(self.index))]
+        self.video_clips: dict[str, list[int]] = {}
+        for vid, segs in videos.items():
+            order = [i for _, i in sorted(segs)]
+            self.video_clips[vid] = order
+            for pos, i in enumerate(order):
+                self.prev[i] = order[max(0, pos - self.k):pos][::-1]  # nearest first
+        self.video_ids = sorted(self.video_clips)
+
+    def _context_indices(self, idx: int) -> list[int]:
+        if self.k == 0 or self.video_of[idx] is None:
+            return []
+        if self.mode == "prev":
+            return self.prev[idx]
+        rng = np.random.default_rng([self.seed, self.epoch if self.augment else 0, int(idx), 7])
+        own = self.video_of[idx]
+        for _ in range(10):
+            vid = self.video_ids[int(rng.integers(len(self.video_ids)))]
+            if vid != own:
+                break
+        clips = self.video_clips[vid]
+        end = int(rng.integers(len(clips))) + 1
+        return clips[max(0, end - self.k):end][::-1]
+
+    def _clip(self, idx: int, rng: np.random.Generator | None) -> np.ndarray:
+        row = self.index.iloc[idx]
+        feat = np.asarray(self.memmap[row.offset: row.offset + row.n_frames], dtype=np.float32)
+        if rng is not None:
+            feat = augment_clip(feat, rng, self.t_max)
+        elif feat.shape[0] > self.t_max:
+            keep = np.linspace(0, feat.shape[0] - 1, self.t_max).round().astype(int)
+            feat = feat[keep]
+        return feat
+
+    def __getitem__(self, idx: int) -> dict:
+        item = super().__getitem__(idx)
+        cur = item["feat"]
+        parts, budget = [], self.max_context_frames
+        for j, c in enumerate(self._context_indices(idx)):
+            if budget <= 0:
+                break
+            rng = np.random.default_rng([self.seed, self.epoch, int(idx), j + 1]) if self.augment else None
+            clip = self._clip(c, rng)[-budget:]
+            parts.append(clip)
+            budget -= clip.shape[0]
+        parts = parts[::-1] + [cur]  # oldest first, current clip last
+        feat = np.concatenate(parts, axis=0)
+        flags = np.zeros((feat.shape[0], 2), dtype=np.float32)
+        start = 0
+        for p in parts:
+            flags[start, 1] = 1.0
+            start += p.shape[0]
+        flags[: feat.shape[0] - cur.shape[0], 0] = 1.0
+        item["feat"] = np.concatenate([feat, flags], axis=1)
+        item["n_cur"] = cur.shape[0]
+        return item
+
+
+def make_dataset(cache_dir: str, dataset: str, split: str, spm_model: str, max_tgt_len: int,
+                 t_max: int, augment: bool = False, seed: int = 0,
+                 model_cfg: dict | None = None) -> PoseTextDataset:
+    """ContextPoseTextDataset when the model config sets context_clips, else PoseTextDataset."""
+    if model_cfg is not None and model_cfg.get("context_clips") is not None:
+        return ContextPoseTextDataset(
+            cache_dir, dataset, split, spm_model, max_tgt_len, t_max, augment=augment, seed=seed,
+            context_clips=model_cfg["context_clips"],
+            context_mode=model_cfg.get("context_mode", "prev"),
+            max_context_frames=model_cfg.get("max_context_frames", 1024))
+    return PoseTextDataset(cache_dir, dataset, split, spm_model, max_tgt_len, t_max,
+                           augment=augment, seed=seed)

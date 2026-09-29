@@ -16,6 +16,7 @@ from src.models.scope import (  # noqa: E402
     flip_valid,
     frame_hash_weights,
     horizon_specs,
+    position_hash_weights,
     matched_delta_pool,
     softplus_inv,
     uniform_avg_pool,
@@ -174,6 +175,38 @@ def test_frame_hash_weights_are_lognormal_noise():
     assert abs(ac) < 0.05
     # A hash, not a sampler: the same frame always gets the same weight.
     assert torch.equal(w, frame_hash_weights(x, direction, sigma=1.0))
+
+
+def test_matched_pool_phase_keeps_count_and_shifts_positions():
+    T, stride = 64, 8
+    memory = torch.arange(T, dtype=torch.float32).view(1, T, 1).repeat(3, 1, 1)
+    ones = torch.ones(3, T)
+    base, base_pad = matched_delta_pool(memory, ones, None, stride)
+    shifted, shifted_pad = matched_delta_pool(memory, ones, None, stride, torch.tensor([0.0, 0.3, 0.9]))
+    _, uni_pad = uniform_pool(memory, None, stride)
+    assert torch.equal((~shifted_pad).sum(1), (~uni_pad).sum(1))
+    assert torch.equal(shifted[0], base[0]), "phase 0 is the unshifted grid"
+    assert not torch.equal(shifted[2], base[2])
+    for row in range(3):
+        kept = shifted[row, ~shifted_pad[row], 0]
+        assert torch.all(kept[1:] > kept[:-1]) and int(kept[-1]) == T - 1
+
+
+def test_position_hash_weights_are_lognormal_and_batch_invariant():
+    lengths = torch.arange(100, 512, 7)
+    valid = torch.arange(512).unsqueeze(0) < lengths.unsqueeze(1)
+    w = position_hash_weights(valid, sigma=1.0)
+    z = torch.log(w[valid])
+    assert abs(float(z.mean())) < 0.05 and abs(float(z.std()) - 1.0) < 0.05
+    zz = torch.log(w[:, :100])
+    ac = float(((zz[:, 1:] - zz.mean()) * (zz[:, :-1] - zz.mean())).mean() / zz.var())
+    assert abs(ac) < 0.05
+    # Same clip, different batch width and batch-mates: identical weights on its real frames.
+    alone = position_hash_weights(valid[3:4, :200], sigma=1.0)
+    n = int(lengths[3])
+    assert torch.equal(alone[0, :n], w[3, :n])
+    # Different lengths give different noise (augmentation changes it every epoch).
+    assert not torch.equal(w[0, :100], w[1, :100])
 
 
 def test_encode_uses_pooled_mask():

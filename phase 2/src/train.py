@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import slt_reporting as R  # noqa: E402
-from src.data import PoseTextDataset, TokenBudgetBatchSampler, make_collate  # noqa: E402
+from src.data import TokenBudgetBatchSampler, make_collate, make_dataset  # noqa: E402
 from src.models import build_model  # noqa: E402
 
 
@@ -101,10 +101,10 @@ def build_loaders(args, data_cfg, model_cfg, train_cfg, seed):
     spm_model = os.path.join(args.cache_dir, dataset_name, "spm.model")
     max_tgt_len = model_cfg.get("max_tgt_len", 64)
 
-    train_ds = PoseTextDataset(args.cache_dir, dataset_name, "train", spm_model, max_tgt_len,
-                              train_cfg["t_max"], augment=True, seed=seed)
-    val_ds = PoseTextDataset(args.cache_dir, dataset_name, "val", spm_model, max_tgt_len,
-                            train_cfg["t_max"], augment=False)
+    train_ds = make_dataset(args.cache_dir, dataset_name, "train", spm_model, max_tgt_len,
+                            train_cfg["t_max"], augment=True, seed=seed, model_cfg=model_cfg)
+    val_ds = make_dataset(args.cache_dir, dataset_name, "val", spm_model, max_tgt_len,
+                          train_cfg["t_max"], augment=False, model_cfg=model_cfg)
 
     collate = make_collate(train_ds.pad_id)
     train_sampler = TokenBudgetBatchSampler(train_ds.n_frames_array(), train_cfg["max_tokens"],

@@ -19,7 +19,7 @@ from torch.utils.data import DataLoader
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import slt_reporting as R  # noqa: E402
-from src.data import PoseTextDataset, make_collate  # noqa: E402
+from src.data import make_collate, make_dataset  # noqa: E402
 from src.models import build_model  # noqa: E402
 
 
@@ -223,7 +223,8 @@ def main():
     max_tgt_len = model_cfg.get("max_tgt_len", 64)
     spm_model = os.path.join(args.cache_dir, dataset_name, "spm.model")
 
-    probe_ds = PoseTextDataset(args.cache_dir, dataset_name, "val", spm_model, max_tgt_len, args.t_max, augment=False)
+    probe_ds = make_dataset(args.cache_dir, dataset_name, "val", spm_model, max_tgt_len, args.t_max,
+                            augment=False, model_cfg=model_cfg)
 
     ckpt_paths = [p.strip() for p in args.checkpoint.split(",")]
     if len(ckpt_paths) > 1:
@@ -255,8 +256,9 @@ def main():
     xl.n_samples = args.n_samples
 
     for split in args.splits:
-        ds = probe_ds if split == "val" else PoseTextDataset(
-            args.cache_dir, dataset_name, split, spm_model, max_tgt_len, args.t_max, augment=False)
+        ds = probe_ds if split == "val" else make_dataset(
+            args.cache_dir, dataset_name, split, spm_model, max_tgt_len, args.t_max,
+            augment=False, model_cfg=model_cfg)
         uids, preds, refs, n_frames = run_split(model, ds, device, args.beam_size, args.length_penalty, max_tgt_len)
         metrics = R.compute_metrics(preds, refs)
 

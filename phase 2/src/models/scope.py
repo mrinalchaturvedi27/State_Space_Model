@@ -149,10 +149,10 @@ def uniform_keep_count(lengths: torch.Tensor, stride: int) -> torch.Tensor:
 
 
 def delta_quantile_ends(delta: torch.Tensor, valid: torch.Tensor,
-                        n_keep: torch.Tensor) -> torch.Tensor:
-    """Frame indices (B, N) where each clip's cumulative Δ reaches k/n of its total,
-    k = 1..n. Strictly increasing within a clip, the n-th is always the last real frame.
-    Entries past a clip's n are filler (non-decreasing, clamped into range)."""
+                        n_keep: torch.Tensor, phase: torch.Tensor | None = None) -> torch.Tensor:
+    """Frame indices (B, N) where each clip's cumulative Δ reaches (k - phase)/n of its total,
+    k = 1..n (phase in [0, 1) per clip, default 0). Strictly increasing within a clip, the n-th
+    is always the last real frame. Entries past a clip's n are filler (non-decreasing)."""
     B, T = delta.shape
     lengths = valid.sum(dim=1).clamp_min(1)
     N = int(n_keep.max().item())
@@ -164,7 +164,8 @@ def delta_quantile_ends(delta: torch.Tensor, valid: torch.Tensor,
     total = csum.gather(1, last)
 
     k = torch.arange(N, device=delta.device).unsqueeze(0)
-    q = total * (k + 1).float() / n_keep.unsqueeze(1).float()
+    shift = 0.0 if phase is None else phase.float().unsqueeze(1)
+    q = total * ((k + 1).float() - shift) / n_keep.unsqueeze(1).float()
     idx = torch.searchsorted(csum.contiguous(), q.contiguous())
     idx = torch.minimum(idx, last)
     idx = idx.scatter(1, (n_keep - 1).unsqueeze(1), last)  # float rounding must not drop the last frame
@@ -176,7 +177,7 @@ def delta_quantile_ends(delta: torch.Tensor, valid: torch.Tensor,
 
 
 def matched_delta_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torch.Tensor | None,
-                       stride: int) -> tuple[torch.Tensor, torch.Tensor]:
+                       stride: int, phase: torch.Tensor | None = None) -> tuple[torch.Tensor, torch.Tensor]:
     """Δ-timed pooling that keeps exactly as many frames per clip as uniform_pool.
 
     Each clip's cumulative Δ is split into n equal quantiles, n = uniform_keep_count(length),
@@ -190,7 +191,7 @@ def matched_delta_pool(memory: torch.Tensor, delta: torch.Tensor, pad_mask: torc
         pad_mask = torch.zeros(B, T, dtype=torch.bool, device=memory.device)
     valid = ~pad_mask
     n_keep = uniform_keep_count(valid.sum(dim=1).clamp_min(1), stride)
-    idx = delta_quantile_ends(delta, valid, n_keep)
+    idx = delta_quantile_ends(delta, valid, n_keep, phase)
 
     k = torch.arange(idx.size(1), device=memory.device).unsqueeze(0)
     packed_pad = k >= n_keep.unsqueeze(1)
@@ -260,10 +261,39 @@ def frame_hash_weights(x: torch.Tensor, direction: torch.Tensor, sigma: float) -
     projection) pushed through the normal inverse CDF. It carries no usable information,
     yet eval is reproducible per clip and train-time noise changes with augmentation --
     the control for "Δ helps only by spacing frames unevenly".
+
+    Caveat: the sin-fract hash amplifies float rounding (~1e-7 differences between batch shapes
+    flip it), so weights are exactly reproducible only for identical batches (e.g. batch-1 beam
+    decoding). Kept for mamba_pool_random's finished runs; new arms use position_hash_weights.
     """
     h = torch.sin((x.float() * direction.float()).sum(-1)) * 43758.5453
     u = (h - torch.floor(h)).clamp(1e-6, 1 - 1e-6)
     return torch.exp(sigma * torch.special.ndtri(u))
+
+
+def _mix32(x: torch.Tensor) -> torch.Tensor:
+    """32-bit integer avalanche hash (xorshift-multiply). Inputs/outputs in [0, 2^32) as int64;
+    both multipliers are < 2^31, so no product overflows int64."""
+    mask = 0xFFFFFFFF
+    x = x & mask
+    x = x ^ (x >> 16)
+    x = (x * 0x7FEB352D) & mask
+    x = x ^ (x >> 15)
+    x = (x * 0x5BD1E995) & mask
+    return x ^ (x >> 16)
+
+
+def position_hash_weights(valid: torch.Tensor, sigma: float, salt: int = 12345) -> torch.Tensor:
+    """Content-blind log-normal weights (B, T) from an exact integer hash of (frame index,
+    clip length). Unlike frame_hash_weights, float rounding cannot change them, so a clip's
+    weights never depend on its batch-mates; augmentation changes clip lengths, so training
+    still sees new noise each epoch."""
+    B, T = valid.shape
+    t = torch.arange(T, device=valid.device, dtype=torch.long).unsqueeze(0).expand(B, T)
+    L = valid.sum(dim=1, keepdim=True).long()
+    h = _mix32(_mix32(t * 1000003 + L * 7919 + salt) ^ (L * 2654435761 & 0xFFFFFFFF))
+    u = (h.double() + 0.5) / 4294967296.0
+    return torch.exp(sigma * torch.special.ndtri(u)).float()
 
 
 def uniform_pool(memory: torch.Tensor, pad_mask: torch.Tensor | None,
