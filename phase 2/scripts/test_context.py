@@ -23,6 +23,9 @@ class FakeSP:
     def encode(self, text, out_type=int):
         return [5 + (len(w) % 20) for w in text.split()]
 
+    def decode(self, ids):
+        return " ".join(f"w{i}" for i in ids)
+
     def bos_id(self): return 1
     def eos_id(self): return 2
     def pad_id(self): return 0
