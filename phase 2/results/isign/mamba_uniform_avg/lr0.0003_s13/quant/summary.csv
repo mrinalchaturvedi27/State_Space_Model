@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,fp16,16.0,12.57,12876.4,0.0,1.0,20.391,3.228,39.2
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,turbo:8,8.0312,12.57,6463.4,0.000131,0.999935,20.424,3.233,24.8
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,turbo:4,4.0312,12.57,3244.3,0.00949,0.995266,20.418,3.278,24.4
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,turbo:3,3.0312,12.57,2439.5,0.034479,0.982664,20.317,3.131,24.9
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,turbo:2,2.0312,12.57,1634.7,0.117187,0.939688,20.174,3.059,24.9
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,naive:8,8.0625,12.57,6488.5,8.1e-05,0.99995,20.44,3.221,19.1
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,naive:4,4.0625,12.57,3269.4,0.023653,0.98618,20.325,3.18,24.4
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,naive:3,3.0625,12.57,2464.6,0.096832,0.94705,20.387,3.064,24.3
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,naive:2,2.0625,12.57,1659.9,0.628766,0.804061,19.378,2.702,27.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,turbo_prod:4,4.0625,12.57,3269.4,0.054284,0.973939,20.341,3.188,25.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,turbo_prod:3,3.0625,12.57,2464.6,0.184523,0.918755,20.2,3.141,20.2
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s13/checkpoints/best.pt,test,6068,greedy,turbo_prod:2,2.0625,12.57,1659.9,0.570748,0.797374,19.881,2.957,26.5

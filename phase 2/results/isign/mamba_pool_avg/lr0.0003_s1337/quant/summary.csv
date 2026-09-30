@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,fp16,16.0,12.57,12876.4,0.0,1.0,20.534,3.303,39.4
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:8,8.0312,12.57,6463.4,0.000129,0.999937,20.516,3.338,18.4
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:4,4.0312,12.57,3244.3,0.00946,0.995311,20.594,3.337,17.3
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:3,3.0312,12.57,2439.5,0.034382,0.982844,20.559,3.388,19.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:2,2.0312,12.57,1634.7,0.117043,0.940103,20.333,3.209,19.0
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:8,8.0625,12.57,6488.5,6.9e-05,0.999941,20.543,3.325,19.2
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:4,4.0625,12.57,3269.4,0.020164,0.984122,20.504,3.327,15.2
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:3,3.0625,12.57,2464.6,0.10534,0.938829,20.105,3.212,19.0
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:2,2.0625,12.57,1659.9,0.676951,0.815537,16.678,1.642,30.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:4,4.0625,12.57,3269.4,0.054161,0.974217,20.474,3.33,19.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:3,3.0625,12.57,2464.6,0.184393,0.919627,20.366,3.261,17.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:2,2.0625,12.57,1659.9,0.57013,0.80074,20.066,2.979,20.5

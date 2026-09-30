@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,fp16,16.0,12.57,12876.4,0.0,1.0,19.92,2.698,37.3
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:8,8.0312,12.57,6463.4,0.00013,0.999937,19.934,2.702,18.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:4,4.0312,12.57,3244.3,0.009445,0.995304,19.893,2.765,19.9
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:3,3.0312,12.57,2439.5,0.034353,0.982792,19.895,2.754,20.5
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo:2,2.0312,12.57,1634.7,0.116959,0.939988,19.762,2.543,19.8
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:8,8.0625,12.57,6488.5,6.6e-05,0.999953,19.895,2.669,19.1
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:4,4.0625,12.57,3269.4,0.019264,0.987201,19.954,2.747,15.3
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:3,3.0625,12.57,2464.6,0.080655,0.951594,19.889,2.677,20.3
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,naive:2,2.0625,12.57,1659.9,0.508738,0.816558,18.789,2.381,21.9
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:4,4.0625,12.57,3269.4,0.054104,0.974137,19.794,2.701,20.2
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:3,3.0625,12.57,2464.6,0.184227,0.919288,19.649,2.527,17.4
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:2,2.0625,12.57,1659.9,0.570699,0.798672,19.208,2.194,22.2
