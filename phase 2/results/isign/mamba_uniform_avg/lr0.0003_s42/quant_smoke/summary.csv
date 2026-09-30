@@ -1,0 +1,16 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,fp16,16.0,12.75,13056.0,0.0,1.0,19.605,3.227,17.4
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:8,8.0312,12.75,6553.5,0.00013,0.999936,19.391,3.079,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:4,4.0312,12.75,3289.5,0.009462,0.995287,19.447,3.243,1.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:3,3.0312,12.75,2473.5,0.034368,0.982722,19.376,3.103,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:2,2.0312,12.75,1657.5,0.117084,0.93973,19.799,3.195,1.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:8,8.0625,12.75,6579.0,7.2e-05,0.999949,19.515,3.24,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:4,4.0625,12.75,3315.0,0.020537,0.986141,19.354,3.109,1.5
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:3,3.0625,12.75,2499.0,0.095677,0.944973,19.353,3.109,1.5
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:2,2.0625,12.75,1683.0,0.64505,0.81974,17.876,2.259,2.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo_prod:4,4.0625,12.75,3315.0,0.054115,0.974035,19.621,3.22,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo_prod:3,3.0625,12.75,2499.0,0.184631,0.918797,19.594,3.506,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo_prod:2,2.0625,12.75,1683.0,0.571381,0.798454,19.308,3.317,1.5
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,beam5,fp16,16.0,12.75,13056.0,0.0,1.0,19.736,3.617,57.1
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,beam5,turbo:3,3.0312,12.75,2473.5,0.034369,0.982721,19.724,3.565,56.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,300,beam5,naive:3,3.0625,12.75,2499.0,0.095683,0.944966,20.245,4.067,41.1

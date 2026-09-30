@@ -1,0 +1,301 @@
+video_id,prediction,ground_truth,sent_chrF2,sent_ROUGE-L,ref_words,pred_words
+ed5590797795-8,The shopkeeper took a bus and,"When Bobby made her, she smiled at him.",11.626416241530391,0.0,8,6
+ed5590797795-41,"Then, I'm going to play a game.",Let's read. I feel dizzy.,7.64525993883792,0.14285714285714288,5,7
+ed5590797795-81,To the right side of the page we see a picture of a girl.,to make it into a story on the left page.,16.69607808544075,0.25,10,14
+43a0131cb836-10,when it comes to embryo.,Page 92 The mosquito flew off.,11.926361859437408,0.0,6,5
+43a0131cb836-56,"On the left side, there is a picture of a tree.",1. A dash was dozing.,7.936507936507938,0.12500000000000003,5,11
+2c7d130870a8-15,The last one is a kid.,So many items are given.,10.3559793203767,0.0,5,6
+77e29639c256-22,What are the things that are they?,How many kinds of creatures are there in the poem?,17.873321260088794,0.23529411764705882,10,7
+77e29639c256-49,He was very disheartened. He was just a little.,"Yes, now you can see a rat.",12.312934185566606,0.125,7,9
+77e29639c256-84,The Brahmi compliession of the panchayats made by the teacher.,B-U-T But. C-A-N can. C-A-T-Cat. C-R-Y-Cry. D-A-Y-Day. D-O-G-Dog. F-A-T-Fat. L-E,4.709492764324654,0.0,10,10
+d80b02f1b480-31,3. Have you seen your own animals to take care?,1. Who do you think your shadow looks like?,15.684377550049506,0.2105263157894737,9,10
+d80b02f1b480-65,"And the parts on the right side, you can see the picture on the right. 4.",Use the hints given in the box.,19.39787418529189,0.17391304347826086,7,16
+d80b02f1b480-125,The pots on the right side.,"When I walk, my shadow walks.",7.093396901905311,0.0,6,6
+533abb879383-28,Turned into another boat.,Soon the porridge started spilling on the floor.,10.840192186361122,0.0,8,4
+533abb879383-74,The Saida stored the rays of the elephant.,did not like children to play in Dash garden.,13.282577970875037,0.0,9,8
+533abb879383-108,"First, the old man's name was unknown.","Ever since grandpa fell down and sprained his arm, he has changed.",10.649288767566786,0.0,12,7
+533abb879383-150,"After a while, I went for a walk.","After he fell, now he does not.",19.129762908538442,0.13333333333333333,7,8
+4c10721611b2-65,"This is because, there's a mood in which the person is going to play.",treat people who are ill.,15.038002732195732,0.0,5,14
+4c10721611b2-100,What is the first person to do? Question number,What do doctors do? The answer is...,19.774668767148178,0.25,7,9
+d098223e6757-35,What were the people people who did not wrong? Let's see.,Let them talk about. What people look like?,23.338066112401986,0.2,8,11
+08f145493328-7,The stickers will be shocked to see their child's footprint.,I picked it up and took it home.,19.7658488344469,0.0,8,10
+08f145493328-89,There are two columns. One.,See the other side 4,12.75216788162809,0.0,5,5
+uukiGvQ8CgQ--24,How many food items would you eat?,and was amazed when he tasted it.,12.420469957293088,0.0,7,7
+uukiGvQ8CgQ--50,Visit archaeologists.,known as the Aryabhatiyam. He stated,8.743063932448733,0.0,6,2
+uukiGvQ8CgQ--78,and transparent materials. They are obtained by the Sanskrit.,Sushrutth speaks about elaborate surgical procedures.,15.044238246376842,0.0,6,9
+uukiGvQ8CgQ--121,This is the number of people in India.,Place in temples where people could assemble.,19.702889372261122,0.13333333333333333,7,8
+zoBP39jyRMs--4,These were composed in the Brahmi script.,The Gulf is very narrow at Barygaza.,11.39910084729439,0.14285714285714285,7,7
+zoBP39jyRMs--41,It would be difficult to move from place to place.,using dyes or punches. Hence...,9.587011400441959,0.0,5,10
+zoBP39jyRMs--70,You may have seen in Mauritius with a tribute to Mapsjid.,Mathura was also a center where some extremely fine sculptor was produced.,13.156108678515926,0.08695652173913043,12,11
+zoBP39jyRMs--105,These were also known as the Greece.,such as Varanasi in the North.,14.312021281343215,0.30769230769230765,6,7
+zoBP39jyRMs--133,"A husband, a son and his wife are aged life.",Women who have retired from service in temples may be used for processing wool.,8.93285230308522,0.0,14,10
+zoBP39jyRMs--165,The Raja is known as the ruler of the land.,which means tall double-hander jars that contained liquids.,13.861968002672425,0.0,8,10
+zoBP39jyRMs--192,Some kingdoms who lived in the subcontinent of the subcontinent.,one of the most important emperors who ruled about 2000 years ago said,17.024862786657465,0.17391304347826086,13,10
+zoBP39jyRMs--228,There are so many things that you live.,"Gram Bhojak, why do you think?",15.512170300260006,0.14285714285714288,6,8
+zoBP39jyRMs--289,"2,500 years ago.","increase in the use of iron, cities.",4.99931339901816,0.0,7,3
+1-YUm865HA0--18,Do you find out about some of these activities?,There were also taxes on goods that were brought and sold.,11.607868639245652,0.0,11,9
+1-YUm865HA0--60,Harsh was one of the subcontinents in the subcontinent.,Parts of Magadha were forested. Elephants.,12.483761137516442,0.13333333333333333,6,9
+1-YUm865HA0--90,"In the first part of the list, we discussed in different ways in which we discussed in different ways.",in what ways were these armies different from those described in the Rigveda?,30.8204476324159,0.18749999999999997,13,19
+1-YUm865HA0--129,"On the other hand, the horse was found.",wanted to attack the Virgis. He sent his minister named...,12.5342566884235,0.11111111111111112,10,8
+1-YUm865HA0--175,All the Deaf in India will be provided.,which was called a democracy.,10.806912137318779,0.0,5,8
+1-YUm865HA0--204,These kingdoms were built for monsoons in the Jhanpadas.,archaeologists have found palaces in the settlements of the Jhanpadhas.,28.022882557912155,0.2105263157894737,10,9
+1Kus_VFkXlk_e1,The uncle wasn't at the age of 30 and frustration.,"If the pain persists, consult a doctor.",14.55212514737283,0.1111111111111111,7,10
+Fwfx0nVgcFk_e3,We urge the barricade from the house.,The roof collapsed under a heavy load of snow,10.787910902721467,0.125,9,7
+r-ROZtYJq7A_d,the ability to find a person or group of people,Disciplinary bodies or actions are concerned with making sure that people obey rules or regulations and that they are punished if they do not.,10.61943386436459,0.11764705882352941,24,10
+y_zV7Qkiyeo_e1,The cops take a long distance from their homes.,I had to have a medical examination when I joined the pension,13.324495360198274,0.09523809523809525,12,9
+zMC0dTOVeUA--36,Paheli is made up of leaves.,Plants which are much taller than you.,8.848933070086137,0.0,7,6
+zMC0dTOVeUA--93,How many plants are there in your surroundings?,"Later, after studying the section.",15.274499993103879,0.0,5,8
+zMC0dTOVeUA--145,Figure 7.14 shows a leaf.,Some of them need support.,6.8807339449541285,0.0,5,5
+zMC0dTOVeUA--199,Compare your observations with the different parts of the stem and the roots shown in figure 7.16.,Figure 7.6 shows STEM in a glass with coloured water.,26.442263635349118,0.13793103448275862,10,17
+zMC0dTOVeUA--232,Figure 7.5 shows direction in which you find out.,"Hold your pencil tip sideways and rub it on the portion of the paper, having the leaf below it.",11.766740014561625,0.0,19,9
+9ezqwvdzW90--12,Here is a picture of a boy.,He earns Ruby 1 every day for one goat.,10.960624739156955,0.0,9,7
+9ezqwvdzW90--40,Can you make a profit on this page?,"If the milk is sold at rubies 9 per litter,",9.702416256221152,0.0,10,8
+9ezqwvdzW90--69,The width of a year.,In one month he sells 210 litres of milk.,7.379028126440904,0.14285714285714285,9,5
+9ezqwvdzW90--112,The part of the plant is totally divided into three groups.,Multiply again that answer by 11.,15.695195802138395,0.0,6,11
+9ezqwvdzW90--171,The carbon dioxide is 6.4,976 children are going on a picnic.,10.386740836977804,0.0,7,5
+9ezqwvdzW90--199,"However, it was only 18 years old.",Littles of petrol she can buy is equal to Rupi's 1000.,9.017742200422498,0.0,11,7
+9ezqwvdzW90--228,What part of the circle do you think?,I know that I have to divide 969 with 4.,13.115384812551756,0.0,10,8
+2PDVqrc3eU4--18,How do you think the footprints of the camels were used to grow in the footprint?,even if they cannot read them correctly.,17.529466438924064,0.0,7,16
+2PDVqrc3eU4--50,Below this we have two different shapes.,It is larger than half of 100?,12.948795256400592,0.0,7,7
+2PDVqrc3eU4--87,Rohini and Mohini are monsoons.,Add the number you took first to the answer.,9.790639987439658,0.0,9,5
+oupqf-bGuVA--16,"The governement also urged the government to experience this, as soon as possible.","He threatened that if it is not immediately demolished, he will make a Ganpati temple in the same place.",13.958224723042065,0.0625,19,13
+EmijgosEFik--11,"If the car was caught, it was abandoned by them. Let me tell you.",Russia denounced the warrants as outrageous. Let me explain you the reason.,19.731990033325904,0.30769230769230765,12,14
+CV2miJRalz4--3,The police are shocked by this. They are now shocked by the Mumbai Police.,Nagpur Police Control was shocked by this call and immediately informed the Mumbai Police.,40.858483938335574,0.5,14,14
+bIczZ9I1vVI--2,?There is a lot of foldolder.,Did you like the movie with ISL interpretation?,8.190165282625266,0.0,8,6
+8vJ4u8m8lnQ--13,Her husband and mother-in-law found him a lot of money.,Adil mishandled all my money and jewellery and assaulted me.,17.931264813772078,0.0909090909090909,10,10
+8vJ4u8m8lnQ--34,His wife was extremely happy as she wasn't happy. The family was very happy as she wasn't happy.,It is clear that Adil thinks he can kill Rakhi and take away all her property.,13.405434196447954,0.0,16,18
+jGktD9J5q7w--16,"Bella was in the 1st hearing, when the girl got her into a wheelchair.",two foreign nationals allegedly misbehaved with a woman cabin crew member.,14.145333874841532,0.08,11,14
+XbmzeoaxYgw--3,"Countries in Malisa, USA, Canada, USA, China, etc.","In Monterey Park in California, USA there are many Asian people from Thailand, China, India, etc.",20.802983602835415,0.3333333333333333,16,8
+XbmzeoaxYgw--23,and sent an inquiry into the matter. This is why they found an inquiry.,to take charge of the situation and investigate the matter.,27.219764620691617,0.25,10,14
+qkeJ3qUxyqw--14,That's when the pilots got stuck in the scorching space.,She piloted flights all by herself.,21.818580301106152,0.11764705882352942,6,10
+qkeJ3qUxyqw--34,but he is still not doing this and will continue to shut down. The Union Territory has been blocked by the Union Territory.,All of this led to the crash. This is why their flights have been banned by Europe.,23.71662211101909,0.25,17,23
+ANVFMTGa7DI--19,This is why the production of Employees will not be allowed to enter the temple.,they would unplug or disconnect from the compnay's work.,17.22154392139228,0.08,9,15
+ow5ID89VilI--8,The video went viral on social media.,She then shared a post about the food on Twitter.,11.83876098243579,0.23529411764705882,10,7
+gqHQW6OSqtA--0,"In Udhampur, Jalandhar district, people surrounded Jalakots.",Joshimath is a big and beautiful town in the Chamoli district of Uttarakhand.,19.981048830312638,0.2,13,7
+gqHQW6OSqtA--22,"However, the Indians have refused to comment on the match.",According to the residents they are not at fault.,19.360550795893126,0.2105263157894737,9,10
+SX-itGUpLSE--10,"along with different types of luggages like zero, spectators, etc.",Many even had funny messages and various designs printed on the back of their underwear.,13.281583356506408,0.08,15,10
+SX-itGUpLSE--30,"However, an officialatist at IMK Steel Masood Azhar said,","The founder of The Stiff Upper Lip Society, Ivan Markovic said",15.694194823544638,0.09999999999999999,11,9
+K6lzHWwftvk--9,Indians are protesting against the National Policy for India.,"Even though India was not playing in the tournament, people cheering means India is present at the event.",18.690848815736626,0.14814814814814814,18,9
+Z5r6PdrJrxM--8,They can use their mobiles as well.,"If you wish to chat without showing anyone that you are online, you can do so.",8.34715660340487,0.08695652173913043,16,7
+Z5r6PdrJrxM--30,"Following this, many other safety norms.",The news about WhatsApp's new features went viral.,10.496887587154431,0.0,8,6
+XcOy1PzYoyo--12,The man then decided to start the doctor again at the hospital.,She went to multiple doctors but never found the reason.,22.691692256746233,0.2727272727272727,10,12
+ww8_nZtJiFo--6,We don't want this. We all know that this is completely wrong. You all know this.,"In 2022, we respect each individual and there is hardly any oppression. There is a lot of awareness about it.",12.757060979046292,0.1081081081081081,20,16
+ww8_nZtJiFo--27,"Transport Authority of Transport Authority (TET) said,","The officials of the Tehsildar Office were upset with the incident,",9.991623756926051,0.1111111111111111,11,7
+7TeYKQU2KfQ--10,"However, there was a school practical school in Madurai, a school in Madurai since he was a fourthletic school.","Amazing! Pankaj Yadav, a Class 8 student said when he was in the class 3,",17.109658000319282,0.17647058823529413,15,19
+OvWpUXBaQPc--5,there have been many reports about this. You all know about this. You all know this.,"This is major problem for people who are tall as for short people, it is easier.",14.50450848592954,0.0625,16,16
+OvWpUXBaQPc--25,She went to the USA for a better life.,Gelgi said she works in the technology sector and will be in the US for six months to find more opportunities.,10.999071230068566,0.2,21,9
+1L7eqOq5w2I--17,So what do you think? Do you think it is a positivity? Let us know in the comments.,Do you think war will stop or will it continue? Let us know in the comments.,54.00872132588243,0.5882352941176471,16,18
+yTiemQRFWXE--19,"You all are aware that on 10th November 2022, India is going to play against Floyd.","Now on the 10th November 2022, India is set to play England in the semi-final.",47.75643961627876,0.5,15,16
+h5iItrjQPl8--12,She insisted that her husband was running away with her husband.,Kyong followed Young Sook into the bedroom where she had gone to change and punched her.,14.047301833997643,0.14814814814814814,16,11
+h5iItrjQPl8--33,A home on the internet was occupied.,She hid behind the shed in the front of a house.,17.192562178899948,0.1111111111111111,11,7
+y2AvvQNqzUc--2,States around the world have been punished and strict action will be taken against them.,"While they have informed the world that thye only lecture the women, however, in reality the women are brutally beaten.",21.146762943140875,0.1142857142857143,20,15
+lgPdDcFv8cw--0,"Uttar Pradesh's largest cricket team, Cyberabad and Australian Enforcement Director Mary Yuvraj Singh.",Mulayam Singh Yadav is Uttar Pradesh most prominent political leaders. He is the founder and chief of the Samajwadi Party.,25.359697129192483,0.1764705882352941,20,13
+lgPdDcFv8cw--20,He was elected as the Chief Minister in 1967.,Mulayam Singh was elected MLA for the first time in 1967.,35.79479762022223,0.5,11,9
+KzSSEvdvKRU--12,They had to wait for a long time but now they have lost their lives. The world is ecstatic.,Crackers are enjoyed by children and adults alike. The aim is to celebrate success and has always been a part of our culture.,13.622407798394084,0.09523809523809525,23,19
+yCrNgJsOS6A--8,Some even wondered that the company has the power to regulate the university of the university evils.,Now his bio only mentions - founder of IPL. His profile now features his solo picture with a national flag filter.,15.605643648857987,0.05405405405405405,21,17
+v59Zpd6ZoXE--10,"On 3rd September, the locals were waiting for the food for the locals.","On 3rd September at around 8pm when other hostel students were going to the mess for dinner,",30.812181544641533,0.4000000000000001,17,13
+v59Zpd6ZoXE--32,The victim was taken to the hospital where his family filed a complaint with his family.,“The body was sent for postmortem. The girl’s family has not submitted any complaint.,28.20827874192065,0.3225806451612903,14,16
+LcYABxEpbyo--12,It was asleep as well.,and in 1999 it finally vanished from the markets.,5.965355940847139,0.14285714285714285,9,5
+oampXC8MSu4--1,A man's name was Amini and his son Abhishek Bachchan.,a mother and daughter duo teamed up to fly the same airlines flight.,10.320779520503987,0.16666666666666669,13,10
+oampXC8MSu4--22,"In 2011, Kathia has been on flights and now it has to be followed.",Keely started as an flying intern in 2017.,20.11915204449656,0.09090909090909091,8,14
+lLF4F5tcd9s--12,"However, many of you may have wondered if you haven't heard about the wedding and are on the other side.",It is not clear whether it was the same snake or if it was another snake. Investigations are on.,20.77817736845751,0.15,19,20
+oNdnVu48VAQ--17,"As per the AIGNIAI, there is no need to understand what is happening.","So when Bobby was smoking, why didn't the cabin crew catch him?",12.972174529276401,0.07692307692307693,12,13
+WB9ALmwBWQc--10,Shockingly Harvinder Singh was very relieved by this.,It was later found that they got infected with HIV due to the roadside tattoo shop. Shocking!,16.742691462293628,0.07999999999999999,17,8
+V_n2jXCFNI8--6,They tried to negligence and there was no response from him.,Police reprimanded the driver for speeding and asked the passengers to deboard.,18.514617519367054,0.08695652173913043,12,11
+7Mo9_TrU48A--8,and told his father that his mother was severely taken to the hospital.,They were stunned and when Sanjeev's father saw the bill he fell sick and had to be taken to the hospital.,36.163603851895346,0.3428571428571428,21,13
+FI3MQppcF_w--9,The DED has been given to all the members of the Persons and union territories.,All these demand drafts of the profit money and the application letters have been handed over to the court.,21.19707187103518,0.23529411764705882,19,15
+FI3MQppcF_w--30,"We do not know how to behave like a gown, google, etc.","They don't hold high positions like officers, businessman, etc.",16.386028655116437,0.1818181818181818,9,12
+FI3MQppcF_w--50,This was a very strange incident.,You need to understand that money were never invested in the share market.,10.327296341375302,0.0,13,6
+Wz4lBuZSpAQ--13,The Deaf Community did not know what to do. They knew about this and wanted to know about their love.,Similarly there is no accessibility for the Deaf. They yearn for this knowledge but nothing is available,21.147615064129848,0.2162162162162162,17,20
+Wz4lBuZSpAQ--34,Pappammal's UTs is a form of government in India.,"Now out of all the Union Territories, I will take Pondicherry as an example.",11.71055588341066,0.08333333333333333,14,9
+Wz4lBuZSpAQ--56,"PM Modi's official residence of 28,733 voted in the Vice-President of Madhya Pradesh.","Droupadi Murmu secured 2824 votes from MPs and MLAS which has a value of which is 6,76,803.",15.042079767169113,0.11428571428571428,17,13
+Wz4lBuZSpAQ--77,This is the first time I am going to tell you about India's on Twitter.,"A huge congratulations, to the first Tribal woman to become the President.'",22.16281503709107,0.21428571428571427,12,15
+v1Zt9_nWDNs--15,The woman told her that her mother-in-law depressed with her grandmother and mother.,"Following this, Upasana replied, ""I would make you speak with my mother and mother-in-law very soon.",34.33451360790521,0.1818181818181818,16,13
+2naAtE7Z9WA--7,The Prime Minister's Relief Fund (PMC) has said that,"A statement from the PMO stated,",15.538888740011647,0.125,6,9
+B7xiv78puWg--4,She did not have to face any difficulties.,You may think its impossible because of the difficulty.,25.486465190714103,0.11764705882352941,9,8
+B7xiv78puWg--24,The doctors gave him a speech and shared it on him.,These are the types of questions Swiggy wants to ask the man and have asked people to help them find him.,14.097973478330946,0.18749999999999997,21,11
+xX1lNikjP4M--19,"Ravindra said, ""It is going to be a part of West Bengal.","Rebecca said that she is from a small town where not much happens,",15.810942239137834,0.24000000000000002,13,12
+RhybhFKTc34--14,and the money can be reunited with the 3rd batch.,After a lot of buttering Fadnavis finally agreed.,11.658062092070494,0.0,8,10
+RhybhFKTc34--35,"The Elephant Dee, his wife's family, Safoora Desert, is also known as Sukesh Chandi.",Shinde had 3 children. The first was Shrikant Shinde a doctor and a MP in the Lok Sabha.,15.580633559812984,0.0606060606060606,18,14
+vgJDyzAZdVA--4,"Since 1955, the Sydneys collapsed and came to India indefinitely.","In 1995, people used bulky desktops with a keyboard, mouse and a CPU.",15.950625389695174,0.08695652173913043,13,10
+dw9P4zjvfoE--6,and a half of the United Arab Emirates.,"They will be taken into the three services of the Army, The Navy & The Airforce",11.415673560091733,0.1739130434782609,16,8
+yD4MJtwmQMk--1,"He is an actor and musician. He is also an actor, musician and musician.","She predominantly appears in Malayalam, Tamil & Telugu films.",11.412517505069504,0.0,9,14
+yD4MJtwmQMk--21,This is why he works in the midnight of his movie.,"Once they finish their film work, they will go somewhere abroad for honeymoon.",14.082137518082801,0.08333333333333334,13,11
+zX4xckX07ik--20,"However, the BCCI said that the CBI and the ICC did not have an investigation on the matter.",The Archaeological Survey of India or any other official government department has not confirmed it till now. Investigation is going on.,20.79757321775898,0.20512820512820512,21,18
+rzBvYRWNdHs--17,"Following this, both of them have been jailed and they can be jailed.","Now the court has imposed life imprisonment on Yasin Mallik,",14.442899606804463,0.0,10,13
+kPukjM0u0hg--14,Let us know in the comments.,Let us know in the comments below.,80.11217216204787,0.923076923076923,7,6
+5WDMJL9seJM--19,She has to follow these rules.,Maybe this is how he got infected?,11.626304181864452,0.0,7,6
+grQtTE2xwSU--17,After this they met Amarnath Yameen and discussed a lot.,"He then met famous industrialist Gautam Adani who greeted him with flowers. After their meeting,",19.569845283324387,0.08,15,10
+Yg8oO-p41pQ--2,"One person named Irfan Paul, who was working in HIV,","This Deaf person works as a teacher at NIHH in Bandra, Mumbai.",18.565480867469645,0.2727272727272727,12,10
+Yg8oO-p41pQ--22,"Out of these 4,00,000 votes were made in academic film from the British Empire Games.","The person then decided to transfer Rs 49,900 from their SBI account to the woman's acquaintance account.",17.132435195660804,0.1111111111111111,17,15
+Yg8oO-p41pQ--43,"If India wins, it will be better.",The Deaf man transfered the amount to her. She thanked him.,7.908014424936353,0.0,11,7
+ESUSOgCaBhI--3,Even after winning the elections he got the German when he got the post and got the money back.,They did not consumate the wedding. Even later it never happened as she kept refusing his advances.,18.642658767010506,0.05555555555555555,17,19
+ESUSOgCaBhI--25,"Morcha had filed a case in the court, however it wasn't a case of interrogation.",The man later filed a complaint with the police and approached the court seeking a divorce.,27.686693434832073,0.3125,16,15
+6PzVdCh7cjk--10,Switzerland - Shetty is the 2 year old Switzerland - She is the youngest.,The Indian car swift has one V4 engine in the front and it is a basic engine. The V8 engine is very powerful and helps the car run smoothly.,13.357997103981619,0.1951219512195122,29,14
+RYiixbE75ck--2,He also said that Russia would travel to Europe and East Africa as the European countries.,"Many countries, including European nations, remain heavily dependent on fuel from Russia.",30.490813724710016,0.07142857142857144,12,16
+RYiixbE75ck--22,India is now independence for the last 20 years. This is the first time that the Russia-Ukraine war was going on.,"10-20 years later when they write about this in history books,",24.46694458743029,0.1764705882352941,11,21
+a5FzG5AIReo--9,"Across India, Bennettt is a very good person and he is very active.",Mike Webb was interpreting very efficiently and professionally.,17.76560341143903,0.1904761904761905,8,13
+A40x1Xle7IQ--10,there is no boycott who is sexually assaulted by children.,and it is illegal for children below the age of 18.,25.753539804116503,0.1904761904761905,11,10
+VjAiLhptViA--5,It is now for the first time that they have completed one year with a wheelchair.,He is himself wheel-chair bound for decades now and is running this school.,19.901869637391346,0.13333333333333333,13,16
+EMBw_Q-RZCQ--7,"However in Chennai, a Deaf man named Mahendra Azad.",Yes this person is from Nigeria. His name is Muhammed Awal Mustapha.,12.399984494002966,0.09523809523809525,12,9
+Ibo2_BWLi5I--4,The High Court agreed and asked the Deaf High Court to give the right to stay in the UK.,and had filed a case in the UK High Court demanding that Mallya be sent back to India.,26.04427893369275,0.27027027027027023,18,19
+ZhsZgOU2dco--4,Western India’s Civil Aviation Project in September 2015.,A tigress was popularly known as Collarwali. She was born in September 2005.,24.921412258892932,0.18181818181818185,13,8
+dFovecsqCHg--0,Prime Minister Narendra Modi is extremely important.,PM Narendra Modi is a very important person and is equivalent to gold.,41.634641005660114,0.4,13,7
+dFovecsqCHg--20,which was then taken from the BEST-Presidential Palace.,and was to be flown to Ferozepur for a BJP rally by a helicopter.,14.10248476943118,0.08695652173913043,14,8
+dFovecsqCHg--41,He said that he respects PM Modi's future and respectfully.,"‘As a Punjabi, I would die to protect Pm Modi but there was no danger to his life.",17.10613200601721,0.13793103448275862,18,10
+iFABwqY1f2I--16,"Before the pandemic, we will make surely speculations of Coronavirus and it will lead to a rise in cases.",there can be newer and more dangerous variants of the Coronavirus. So care needs to be taken!,27.190230221914984,0.16666666666666669,17,19
+Wxdy5D0VrgM--20,"When the bank defrauded the call for a few months, it was confirmed.",You will be shocked to know the date that the court has given him.,18.17832116326863,0.14814814814814817,14,13
+U96KzZf5U-Q--6,"She went to Raipur, Rohtak's Central Railway on 26th December 2021.",filed an FIR with the Raipur police on 26th December against Kalicharan Maharaj.,30.937249091074076,0.32,13,11
+ZvZt8rnmfus--0,All over India people were shocked by the 3 Deaf individuals in Maharashtra.,"Deaf individuals across India are shocked over an incident in Pune, Maharashtra where 4 Deaf individuals were arrested.",37.677863049981234,0.2580645161290323,18,13
+ZvZt8rnmfus--20,?????There are enough to stay in the university rates and other modes of transport.,section 406 - criminal breach of trust and 20 B - criminal conspiracy by promising people to double their money.,16.303187653868225,0.0625,20,14
+ZvZt8rnmfus--40,The police were shocked and couldn't believe that he is 5 lakhs of people.,Gupta was shocked and felt that there were many others who were duped like Pinjan.,26.800237505964287,0.20000000000000004,15,14
+ZvZt8rnmfus--61,She will have to wait for 3 months to learn.,After making a killing in the share market he was able to double people's investments.,12.731779398826895,0.07692307692307693,15,10
+ZvZt8rnmfus--81,This is why the investigation is going on.,The investigation is going to take a while.,63.1447102358829,0.5,8,8
+UTFcrFiaA1I--1,This game will be held at Starbucks.,take part in various pageant shows.,11.724137931034482,0.0,6,7
+UTFcrFiaA1I--22,So what was the first time he won. Let me tell you.,Let me tell you how she won.,58.7875380405799,0.4210526315789474,7,12
+CFlb53fwMBo--0,The farmers have been protesting against the 3 laws.,It has been almost 1 year 3 months since farmers have been protesting over the 3 farm laws.,44.28832571283273,0.5185185185185185,18,9
+CFlb53fwMBo--20,"On 11th December 2020, everyone was allowed to leave their homes.",Tomorrow on 11 December 2021 the protests will end and farmers will return home.,27.926863331354607,0.23999999999999996,14,11
+-BJZvEAOuUM--18,He will have to wait for 3 years.,There is no information about the updated rent after 3 years.,17.978163580603418,0.2105263157894737,11,8
+97W_atGIDAE--20,A district in Madhya Pradesh had been on the same day and has been married for 2 years.,A boy from Madhya Pradesh’s Hoshangabad and a girl from Kanpur had been in a live in relationship for 3 years.,30.983978462393473,0.35000000000000003,21,18
+CVQZdziucOI--2,We don't have any irritation when there are some resources that may not cause death.,A person suffering from heart failure can not use any random heart for a transplant.,19.414205007116404,0.06451612903225808,15,15
+CVQZdziucOI--22,This is because in the USA's attitude. They are tortured by the USA for their suffering.,but the body is unable to breathe on its own. This is why she was hooked to a ventilator to help her breathe.,20.173184661537746,0.09999999999999999,23,16
+6J0grCPyEao--13,Sikri had been arrested for allegedly involved in a money laundering case from a police encounter in Maharashtra.,"And in 2020, another pani puri seller in Maharashtra’s Kolhapur was caught mixing toilet water in pani puri.",28.148000108030384,0.16216216216216214,18,18
+eRrXt_zUIj8--19,The CPI(M) Act was filed under the POCSO Act.,The police have filed a complaint under a very strict law called Protection of Children from Sexual Offences (POCSO) Act.,14.595079595934122,0.3333333333333333,20,9
+FDhzjiPZGGA--16,Have a look at the viral video.,Have a look at these celebrities dancing at events.,35.26294234897134,0.5,9,7
+FDhzjiPZGGA--37,"But don't buy it, but you don't get the money back. They do this for the next 5 years.",In the future who knows I may not remain as wealthy as I am today.,13.637313650196582,0.05555555555555555,15,19
+Ovd14oplc_E--17,You will be able to watch the movie for the next 3 days.,They would spend 3 days looking at the earth's orbit. Isn't that amazing!,16.38078947616841,0.14285714285714288,13,13
+Ovd14oplc_E--37,Let me tell you about one of them.,Now you may wonder who the other 3 individuals are. Let me tell you.,26.956971799079454,0.36363636363636365,14,8
+nU44vbXJO-0--3,"If the autorickshaw has been relocated for the upcoming 2 days, he will not be in the afternoon.",They said anyone who takes up arms aginst them would be their enemy and have to face the consequences.,18.141037967589117,0.10810810810810811,19,18
+nU44vbXJO-0--24,"teachers, children, adulterates and girls.","All female students, teachers, and staff must wear an Islamic abaya robe and niqab",19.2356726001372,0.21052631578947364,14,5
+YrzF8hnpGt4--14,"If the bookings are not available, temples or depression, etc. are depressed.","Now that temples are shut, their fasts maybe affected.",23.508769096328606,0.1904761904761905,9,12
+4Cg_x-Ao4T8--2,A 8-year-old man was found that the car had been leaked from the car.,A Rolls-Royce Phantom car bearing a Maharashtra registration number was stopped for checking.,16.093986878558848,0.13333333333333333,13,14
+SN9Bg_67qhI--4,"Politicians, the Government of India also contributed to many demands.",They had prepared a list of Dos & Don'ts for their wedding guests.,14.51827362687875,0.08695652173913043,13,10
+0_D2t46WwwY--7,He is a part of the Tokyo Paralympics Vice President from Odisha.,The duo then travelled to Tokyo from Hungary for the Olympics.,27.948750354276346,0.2608695652173913,11,12
+0_D2t46WwwY--28,We will have to wait and see what happens in the next few days.,If she does not respond then the ban will be lifelong.,19.061091644130112,0.08,11,14
+0_D2t46WwwY--48,"He then decided to leave and go to the airport. However, he took a tractor to the airport.","Thankfully, he got the passport collected from the WFI office and Sonam received it at the airport on the day of her departure.",23.75516701504399,0.24390243902439024,23,18
+OvRR1K83Wjw--20,Varun was hit by a strong competition with the Indian team and the 3rd-match Test series against each other.,"recently during the India vs South Africa match, Vandana scored a hatrick.",25.23309097962048,0.125,12,19
+SxFGKq90vlQ--16,The Olympics gold medals were given a two-wheeler ride in the Olympics.,"The Prime Minister had told her then that if she returned with a medal, he would have ice cream with her.",17.213963091481173,0.11764705882352941,21,12
+5rMqOloTXb4--13,Restaurants are the most powerful man in the Olympics.,"As per the Olympics rules, if Hou has been found to be using such substances,",24.08155471179487,0.16666666666666669,15,9
+CHTqOiqOlwA--9,"So I decided that 480-70 days prior to 980 people, including a package of 480 people.","She said, “I remembered that I had spent over 480 days in the mountain, years ago.",19.234450438326288,0.24242424242424243,16,16
+16d50cwIpoQ--11,"However, he has been working with his 28 marriages as well.",Chana stayed separately while his wives shared a dormitory.,16.89830381750947,0.09999999999999999,9,11
+fi6uZrYapvk--11,"According to them, they were asked to investigate the matter.","When asked how he reached India he said,",21.74469518352374,0.11111111111111112,8,10
+O_XIlEhuo9Q--9,"According to him, the business was again in January 2021 and the company announced that it would not be able to OTP.","However after opening in December 2020, the restaurant shut down on 15th feb 2021.",17.407124036660132,0.1111111111111111,14,22
+3kgTNrNE-4Q--9,"Due to the law, he was detained and depressed.","He was arrested for allegedly entering the island nation ""illegally"".",14.832747126276727,0.2105263157894737,10,9
+3kgTNrNE-4Q--30,The other two will be jailed and jailed.,It's a good thing he was arrested. Now he can be deported back to India.,11.714139680067227,0.08333333333333333,15,8
+d3w01byvcOQ--10,This is a conspiracy and they are stressed by the government.,and students should not be forced to appear for exams in such a stressful situation,18.041637764693146,0.15384615384615383,15,11
+SRVk4X8dmjE--17,The Supreme Court rejected the death of the victim's death as she wasn't suicide.,"However, the Judge refused the plea as the allegations were against a crime of a serious nature.",18.1630173549797,0.1818181818181818,17,14
+OU4OSCDZWuo--8,Police should not be jailed for spreading the virus.,"However due to spike in infection, her request was denied.",14.287826783841767,0.0,10,9
+YCMMT8dLBQc--13,Farmers in Afghanistan also truly fought against the Indian cough syrup.,"Following this, the DM faced major backlash from politicians and locals,",14.860303190551734,0.09090909090909091,11,11
+73LDeKDT7ks--0,"In Delhi, the Supreme Court of Delhi High Court, there were four judges",4 petitions were filed in the Delhi High Court.,40.901515490231816,0.4545454545454546,9,13
+A5-CaaAkfvE--4,"When the Executive virus emerged, the Executive virus entered the body.",But this ‘Eek’ strain is so strong that it weakens the immunity post vaccination and attacks the body.,15.16209915536972,0.20689655172413793,18,11
+BN-13d0lFZ8--10,A fire broke out in the Rashtrapati Bhavan.,a fire broke out in the engine of a static train at the Ranchi station.,38.70031512876659,0.5217391304347827,15,8
+xXiuuUoi4GA--11,He is only a 15-year-old man.,The wickets kept falling but Curran remained strong.,7.792273145136725,0.0,8,6
+65t4fdYwJPY--12,The laws were implemented in India in 1960. Now they have laid down with the use of condoms.,The PCA law is extremely old. We will made amendments and create a draft.,18.110037375372467,0.125,14,18
+S5-V_BdO-HA--5,"Additionally, the group of four men to be named ""Please"" into two groups","They have said that a hacking group called ‘APT10’ or ‘Stone Panda’,",16.075836370509656,0.08,12,13
+5zXcMU4FQZA--3,The GRS Symonds mentioned that he is 1 year.,"A 'Grand Slam’ title is where in one calender year,",16.56944289160146,0.2105263157894737,10,9
+PhBtRMOHdnw--13,There have been many such incidents.,This was a surprise for many.,16.109650894628952,0.16666666666666666,6,6
+PhBtRMOHdnw--34,"Also, sailors, electricity ration cards, and refrigerators will not be given.","LED lamps, solar lanterns, etc. will become expensive due to an increase in customs duty.",17.809017906934642,0.07692307692307691,15,11
+3x8WOxySLKk--14,Recently Farhan's house had announced that,Pope Francis in his Christmas speech said that,16.249682833002435,0.13333333333333333,8,6
+eVTs1G637-M--12,"Marvel Studios, Javelin throw, Ekta Kapoor, Ekta Kapoor and Naga Chaitanya.","5 people were arrested including Munawar. The four others were Edwin Anthony, Prakhar Vyas, Priyam Vyas and Nalin Yadav.",13.994322489357975,0.06666666666666667,19,11
+sGPnJlPSXjs--9,against the new parliament buildings in Environmental projects.,argued the project will be detrimental to the environment.,39.0297470497294,0.23529411764705882,9,8
+sGPnJlPSXjs--29,Those outside their offices will be held and the rules will be enforced.,These should be an integral part of the project and there must be no mistakes later.,21.09475172287996,0.20689655172413793,16,13
+ZUOZhni2AHo--0,"Earlier, farmers protested against the 3 accused in Delhi.",Amid intense protests by the agricultural community over the government's new farm laws,20.030818637476365,0.17391304347826086,13,9
+6QvnKtjm468--7,as the Indian government is trying to control the spread of the virus.,then it is very much possible to control COVID-19.,27.74197537112163,0.2608695652173913,9,13
+2rKO-ZRUyKg--14,5 State Disability Commissioner (GSLC) and all forms of banks will not be allowed.,All exams scheduled by the GPSC and other bodies have been postponed.,14.481124297444115,0.07692307692307691,12,14
+R4XnB75nCS8--15,"A company called Anil Gaikwad was the owner of Adani Group,",Adani Group owned by Gautam Adani,38.706117267347125,0.23529411764705885,6,11
+gd3Gu5lY8qw--18,"No, without a discrimination, you will be able to work well.",She said that being a transgender is a part of me but I have other skills.,12.300169876915728,0.07407407407407407,16,11
+F2Fa8cNNdts--7,"During the lockdown, many companies are now waiting for the hotel to see the cleanliness of the hotel.","Due to the COVID pandemic, tourists are hesitant to travel and companies have no idea how to market their services in such stressful times.",21.737129814630034,0.14285714285714288,24,18
+kRdl1XVibFY--0,The Central Government's new committee,The Central Government set up a committee which consisted of,54.764671205178125,0.5,10,5
+kRdl1XVibFY--20,"If the cases are increasing, it will be better to contain the virus.",then the infection rate will increase. People need to practise these measures.,25.577611046396452,0.24000000000000002,12,13
+kx6yqChkpxg--18,as he is now a big gift to people.,She has won accolades for her achievements.,9.606898654646143,0.0,7,9
+GNj1_zqA6fc--20,"I felt very difficult. If I do not know,",But for people like us it is difficult.,30.918292027394727,0.11764705882352941,8,9
+GpRzoLjVHdo--10,Videos of this went viral on social media and many shared it on social media.,There were many pictures and videos of the damage caused by rains on social media.,39.81777799592299,0.3333333333333333,15,15
+9ePCpdtDf00--8,Let me tell you about it.,Let me tell you the recommendations.,41.1502761119907,0.6666666666666666,6,6
+HIDXd5V9weA--9,The drains will be parked at the polling booth.,One of the tunnels will be around 27 km long!,23.52892852928067,0.3157894736842105,10,9
+JNGWOgwNRDs--9,"and after the image, the image went viral.",has clicked images of the Lander.,22.166851020745817,0.28571428571428575,6,8
+biNhkNBkUDU--3,Javed played for the first time in 1984.,Jones made his ODI debut in 1984.,25.43932078415404,0.26666666666666666,7,8
+1T5OFLJFwuY--13,and actor Shilpa Shetty will be questioned by the NCB on 26th September.,Sara Ali Khan and Shraddha Kapoor have been summoned on Saturday 26th September.,28.805089858426246,0.3076923076923077,13,13
+QFpFmNObOIo--6,The CPID is affiliated with the help of therapy.,It is a type of oil made from the Hemp plant,16.72594938169474,0.19999999999999998,11,9
+nAJmYNrmrv8--1,They had even heard about 25 people who did not know how to manage the germs.,Also officials fear that 25 people are stuck under the debris.,24.015281829800543,0.2222222222222222,11,16
+vPXTTy7bobk--7,They also owns a lot of funds from Pakistan.,Since Pakistan was involved in money laundering for terror financing.,18.52875688491011,0.10526315789473685,10,9
+N1sroaLVVI0--7,They were shocked to learn the signs of the traumatised style and created the sign.,"Since Casey was able to buy such an expensive car, he became very confident and made another fake cheque.",15.85552211834326,0.11764705882352941,19,15
+i9kxPV4Ys1s--10,Elizabeth I was on to 12th May. All passengers were not allowed to go to the airport and were evacuated to it.,112 have been injured and many are still stuck inside the debris.,16.758266683362862,0.05882352941176471,12,22
+XQ-kB-SerIg--2,"In the German party, more than 200 people have been members of the devotees.",and 200 high profile guests have been invited for the ceremony.,26.554636674499466,0.32,11,14
+C_Rvqqd0uls--6,"44, including more than 44 people were rescued.","More than 44,000 have been moved to state relief camps.",24.606035095145696,0.3157894736842105,10,8
+glkhRQ5o7Do--12,The video has gone viral on social media.,Video clips of his arrest have gone viral on social media.,54.29007258230055,0.631578947368421,11,8
+lZJqw_atMwg--10,"America, inclusivity and other problems in the world",and reveal racial discrimination in the USA and across the world.,25.736162132001457,0.4210526315789474,11,8
+oR0g8DMqwqQ--10,The virus spreads in Africa in 196.,Ebola was first discovered in Congo in 1976.,15.732584027732099,0.26666666666666666,8,7
+dE-BehOIoGI--14,It was scheduled to start from 31st June 2020.,They waited. Then on 1st June 2020 the government ordered the relaxation of the lockdown.,19.93110326172875,0.16666666666666669,15,9
+DseQHlIbj_Y--12,They did not wear masks at the SAF's sanctions.,but Saif was not wearing a mask.,28.178791423753335,0.3529411764705882,7,9
+K9BApkzONso--18,Sameer Wankhede said that India does not want China to encroach its territory,"Mr Wangchuk said that, if India wants to defeat China,",37.486773633502196,0.4347826086956522,10,13
+K9BApkzONso--39,"In the last week, India has failed to pay crores of rupees like Firoz, AIDS, and IAF.","He appealed that, in one week we must remove all Chinese Apps such as TikTok, CS Scanner, MI Apps, etc.",15.92922781888631,0.1081081081081081,20,17
+lX92AV9BW6Q--5,"The Indian government said that,","According to Indian government officials,",43.96623881612959,0.4000000000000001,5,5
+lX92AV9BW6Q--25,Similarly many Deaf people in India have gathered here.,However in India there is a huge demand for cheap phones.,29.496013800221792,0.19999999999999998,11,9
+K7UgfR76VRA--19,The committee then discussed that the staff who were part of the hotel.,he talks to the housekeeping and security staff and eats at the airport’s fast food outlets.,21.123126537300596,0.20000000000000004,16,13
+5Ucq9jiBTWI--8,"In one day, the calculators will be paid Rs 1.5 lakhs to 4 lakh COVID-19 cases.",were charging Rs 1 lakh/day for the treatment of COVID-19 patients.,25.591722263598115,0.3225806451612903,11,16
+d1Viesltr6Y--10,She wanted to watch her movie on social media.,These huge screens are such a wonderful idea!,12.339971550497868,0.0,8,9
+ResLKKMl-0A--11,They will also be used to provide customers to the explosives.,All medical facilities for COVID-19 patients.,11.858929782667955,0.0,6,11
+hdArUV4jmEA--16,and it has been made to make sure the candidates were made.,They will make ventilators for patients.,15.687308833914711,0.1111111111111111,6,12
+g8BwDwPRFOI--11,The solar panel is 100km.,There was a blockage in heart. Her heart rate was 20 beats per minute,7.518883626934319,0.0,14,5
+b7qjo_Yuliw--12,"Mohammed Shami wanted to move a 1.5km away from Karachi, Gujarat.","Mohinder Singh then offered to help and started moving them from Gokalpuri to Kardampuri, which is one kilometer away.",16.051064264321145,0.1935483870967742,19,11
+4-BrQM711fw--3,British footballer Ke Biswas is now under the Liberation of India’s Limited (LCB).,Kobe Bryant - sign name - played for the Los Angeles Lakers basketball team.,19.36333317021911,0.07692307692307691,14,13
+YBXFp0tI62I--1,"In these factories, where more than 600 people were hired.",there were 60 Indians employed in a factory.,31.317925295350808,0.22222222222222224,8,10
+5gXrpshJ_yU--6,"LTD's Customer Tourism, Terrorism, etc.","LGBTQIA+ stands for Lesbians, Gays and 'T' stands for Transgender.",8.902712441822159,0.0,10,5
+7eHHrGZZufs--2,I will now tell you about the incidents of violence in the country.,There was a huge crowd of angry protestors. Let me give you all the details,15.717595286760972,0.14285714285714288,15,13
+zidF3zdphXk--6,"If you want to book a ticket, you can invest Rs 1,500 in one month.","To avail this, customers will have to pay a refundable security deposit of Rs 1500",13.389686696724103,0.19354838709677422,15,15
+bgAhZLTLRfs--0,"A 25-year-old Deaf boy from Madurai, USA.","Grant David Whitaker (Sign Name) is a 25-year-old Deaf man from Mackinaw, Illinois.",28.32326742391343,0.5,13,7
+bgAhZLTLRfs--20,They then asked them to be careful.,The second individual also repeated the same story of Mavrick smashing Grant's skull with a rock.,11.546003320502287,0.0,16,7
+bgAhZLTLRfs--42,He will not be bail and bail has been granted.,"Now that Mavrick is jailed, he will not be released on bail.",28.82058909798651,0.45454545454545453,12,10
+kUZOrMLxSNg--2,The court has only focusses on raising POCSO Act.,These courts will focus and work on cases related to children the POCSO Act.,30.042828544151224,0.34782608695652173,14,9
+-hpbvSjpEiY--7,I was very excited for the Deaf.,What is the aim of Clin d'Oeil?,10.721016125779064,0.13333333333333333,7,7
+-hpbvSjpEiY--29,Deaf will help you achieve your goals. It will help you achieve your goals.,Why? It is because performances keep taking place at the blink of an eye.,11.61263115399247,0.07142857142857142,14,14
+-hpbvSjpEiY--57,and on the right side of the page.,Why have you come to Clin d'Oeil? What do you like about it?,8.00866990694686,0.0,13,8
+-hpbvSjpEiY--81,I am very happy to see that Deaf people are very happy.,I saw it in the afternoon. It was very good! I had goosebumps!,13.813414372165376,0.16,13,12
+-hpbvSjpEiY--107,I did not want to look like this.,This is because my parents are hearing.,7.99876786722356,0.13333333333333333,7,8
+-hpbvSjpEiY--133,I will never be able to work at home.,Do you come to Clin d'Oeil often?,12.37645125071411,0.11764705882352941,7,9
+XACXD3KH_Bw--5,"Across the world, he will be a part of the country.",People from different ethnicities from across the world will also be hired to work with them.,23.923159767874704,0.3703703703703703,16,11
+VeOiXUzDaKY--0,in Tamil Nadu’s Spanish village.,"Near a farm in Sulur Tamil Nadu, there is an Air base of the Indian Air Force.",17.700874623140795,0.2608695652173913,17,5
+q89HAo46ZRI--3,Earlier there were lots of cases.,they will be given two kits.,12.68395828005327,0.0,6,6
+q89HAo46ZRI--24,Many people said that it is very difficult to make ends meet.,Many are not at all happy with the orange and blue color of the jerseys.,15.167934969019537,0.07407407407407407,15,12
+RTQRPbRxL8U--17,it can be handed over to important documents.,"For example if the restaurant want to play music, they need to get approval for that as well.",11.757649649168203,0.07692307692307691,18,8
+XTtbEFC3QDU--3,Their lucky colours are Adil and Ediso.,and an infection of the brain called Acute Encephalitis (AE).,10.071972512032875,0.11764705882352941,10,7
+NvutO4nr6Gk--1,He was at the foothills of the polling booth.,"They have named it ""Air India One"".",7.099016401491854,0.0,7,9
+NvutO4nr6Gk--22,PM Modi and the PM will talk about it.,and conference rooms where the PM can conduct meetings and interviews with the media.,10.876773177394352,0.2608695652173913,14,9
+89DRLAodtpQ--20,This is why they haven't met on Monday.,Seven to ten days is not enough time.,20.119145757917657,0.11764705882352941,8,8
+BpeHcLzZZnI--8,However the government completely ignored all of them and attacked them.,"militants who oppose the government, still attack the country.",35.821982547977186,0.3,9,11
+kwIaG4pZMDw--10,"In Gallaudet, Kerala's Ranjan Gogoi,","Congress Chief Rahul Gandhi, who is contesting from Wayanad.",10.113800147380742,0.0,9,5
+kwIaG4pZMDw--34,"After the intervention, no action was taken.",The voters were unable to place their votes.,16.80411948538095,0.13333333333333333,8,7
+YDRNx4MIFLI--11,will be punished and will be alerted.,He has ordered them to take the necessary action.,8.580756496054203,0.0,9,7
+Iih2wcpATA4--17,There is a India whopping Rs 5.70.,with a 4G download speed of 5.7 Mbps in India.,17.40563640718667,0.2105263157894737,10,7
+LjfKlW5GSbc--4,and took him to the court on 20th March 2019.,The next day on 20th March 2019 he was presented in court.,39.29360204252457,0.45454545454545453,12,10
+9IxGZ0mv3UU--8,Businesses have to do is only given to people.,He has a very good record and is the highest run scorer in IPL history.,13.224179045149926,0.08333333333333334,15,9
+LPs5PQ87mN8--3,Jammu & Kashmir (J&K) did not have funds.,Although in J&K the senior officers and board members were not paid.,11.200939705525334,0.2857142857142857,12,8
+wMk3tNUUv2E--5,"There are more than 30,000 Deaf people in the state.","This Deaf Festival was attended by more than 3,000 people.",36.32957068311405,0.36363636363636365,10,10
+wMk3tNUUv2E--26,"Earlier, at the Allahabad Deaf community,","Earlier the DAI was known as ""Deaf Awareness India"".",21.078160361014554,0.4,9,6
+QfbKBloaz9A--5,The roads were sold for ₹1118. This year the new start of the new year.,"During the checking they found 1.18 kg of cocaine, which was worth Rs 7 crore.",15.266913661988957,0.12903225806451615,15,15
+kLzR5KviwIw--4,The police and the airlines were named as well as the Mizoram.,The police carried out an investigation and realised that the brother was a permanent resident of Australia.,20.154361599845906,0.27586206896551724,17,12
+Jq6BM6SXYgc--11,They have the highest level of calculations in the city.,More than 70 birds were admitted because of manja injuries.,12.897485550695315,0.10000000000000002,10,10
+LoRoTolSRO0--16,I was never intended to prescription,machine helped me to breathe at night,12.455197132616487,0.15384615384615383,7,6
+LoRoTolSRO0--45,"If I'm going to do this, I'll see you",i'm also a father and a husband i've,11.55582922824302,0.28571428571428564,8,9
+LoRoTolSRO0--72,then it's not the case that I'm doing this.,and i started to lose my confidence in,13.170795963483497,0.10526315789473685,8,9
+LoRoTolSRO0--100,So what's the reason for this?,believe it at that moment,11.655434759747155,0.0,5,6
+LoRoTolSRO0--132,I want to be happy.,completely that doesn't mean it was a,8.460578210370155,0.0,7,5
+LoRoTolSRO0--158,will be presented in 5 rupees.,or five minutes at the most i could not,9.566101528812231,0.0,9,6
+LoRoTolSRO0--181,His life is because of his family's life,today siddharth's family too enjoys his,21.100237933602507,0.125,6,8
+LoRoTolSRO0--206,what are they going to happen in the,and people actually saw me continuing,13.923839591750497,0.0,6,8
+LoRoTolSRO0--230,He was very worried and had no problem.,whether i'll be able to sleep tonight,11.325290963979972,0.0,7,8
+LoRoTolSRO0--255,I am very happy. I am very happy!,and i am able to,6.838879064661444,0.3076923076923077,5,8
+eVgg7G3Aci8--3,and two family members were survived by a father.,"Out of the 4 dead, 3 were from the same family - a mother, her son and his wife.",21.398801674836637,0.14814814814814814,19,9
+eVgg7G3Aci8--24,When the police found that it was the mastermind of the garbage.,"After killing Nabin upstairs and the family downstairs, Bhandari escaped from the site.",17.349391008318747,0.16,13,12
+UaGlweA0NFA--15,"When they reached the spot,",There were other cars driving on the same road.,15.213876633364839,0.14285714285714285,9,5
+TBeGZP4TW90--10,It also gives you the benefits of acid reflux. So be careful.,Interest in cooking is a must for the students. Apply only if you are interested in cooking.,13.004922425388113,0.06896551724137931,17,12
+TBeGZP4TW90--33,There are 5G services in the state from Monday to Friday.,Calls can be made from 10.00am - 6.00pm from Monday - Friday.,29.813285491167736,0.2608695652173913,12,11
+dNgHqIXtHog--17,Laxmii has been selected by the British Museum for the Deaf.,5. The Lakhpati Didi scheme is focused on women.,15.989664244204823,0.09999999999999999,9,11
+dNgHqIXtHog--38,"Triple Talaq, is set up to 5177G-confids for the government.",Under the UDAN scheme 517 new routes will be introduced to connect tier-2 and tier-3 cities.,12.607646960647031,0.06896551724137931,16,10
+dNgHqIXtHog--58,As per the Indian government's aim is to launch in 2004.,The budget is with an aim of 2047.,16.958001472412406,0.2,8,11
+dNgHqIXtHog--83,Their aim is to set up a new scheme for men and women from a small amount of money.,The aim of this scheme is to encourage women to establish micro-enterprises and earn a minimum annual income of ₹1 lakh.,22.238519982351264,0.2926829268292683,21,19
+dNgHqIXtHog--104,"11. Earlier there are soils, cars, bikes, cars, etc. are used to protect the environment.",11. Green energy reduces air pollution and protects the environment.,37.75334665747332,0.32,10,15
+dNgHqIXtHog--125,"India has grown acent in the US. For the first time India is being growing in the US, India and the USA.","Like USA, Japan, European countries, which are Developed countries, India aims to be a Developed country by 2047.",16.197740804245125,0.09999999999999999,18,22
+RemZO077Lbo--0,The cops saw the couple's face with each other and it led to a huge backlash.,A young YouTube influencer couple jumped off from a high-rise building after arguing.,14.511733532979285,0.12903225806451615,13,16
+RemZO077Lbo--21,The police are not aware about whether it is true or not.,Police is investigating if someone murdered them by pushing them down or if they committed suicide. Shocking!,12.847145571309001,0.20689655172413793,17,12
+eFpnjUY4nrE--15,Have a look at the images and video clips.,Have a look at some image and videos.,63.14790423167979,0.823529411764706,8,9

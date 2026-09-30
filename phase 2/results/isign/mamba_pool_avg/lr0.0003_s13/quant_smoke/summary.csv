@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,fp16,16.0,12.75,13056.0,0.0,1.0,20.683,4.071,14.9
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,turbo:8,8.0312,12.75,6553.5,0.00013,0.999936,20.546,3.903,1.7
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,turbo:4,4.0312,12.75,3289.5,0.009471,0.995267,20.415,3.74,1.6
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,turbo:3,3.0312,12.75,2473.5,0.034384,0.982691,20.373,3.964,1.7
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,turbo:2,2.0312,12.75,1657.5,0.117067,0.939649,20.132,3.473,1.6
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,naive:8,8.0625,12.75,6579.0,6.1e-05,0.999956,20.634,4.069,1.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,naive:4,4.0625,12.75,3315.0,0.017449,0.988035,20.738,4.287,1.6
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,naive:3,3.0625,12.75,2499.0,0.084078,0.951774,20.338,3.963,1.6
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,naive:2,2.0625,12.75,1683.0,0.529908,0.835905,18.872,2.796,2.8
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,turbo_prod:4,4.0625,12.75,3315.0,0.05412,0.973993,19.89,3.263,1.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,turbo_prod:3,3.0625,12.75,2499.0,0.184206,0.918995,19.972,3.485,1.6
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,300,greedy,turbo_prod:2,2.0625,12.75,1683.0,0.570914,0.798051,19.82,3.494,1.7

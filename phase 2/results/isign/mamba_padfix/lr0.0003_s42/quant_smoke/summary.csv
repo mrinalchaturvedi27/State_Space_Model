@@ -1,0 +1,16 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,fp16,16.0,196.67,201386.7,0.0,1.0,20.658,3.835,17.4
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:8,8.0312,196.67,101086.7,0.000131,0.999935,20.831,3.886,1.7
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:4,4.0312,196.67,50740.0,0.009454,0.995286,20.517,3.777,1.6
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:3,3.0312,196.67,38153.3,0.03437,0.98272,20.438,3.678,1.6
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo:2,2.0312,196.67,25566.7,0.116964,0.939763,20.782,3.365,1.6
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:8,8.0625,196.67,101480.0,5.7e-05,0.999968,20.855,3.828,1.8
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:4,4.0625,196.67,51133.3,0.016471,0.990995,20.805,3.847,1.5
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:3,3.0625,196.67,38546.7,0.075408,0.961324,20.713,3.798,1.7
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,naive:2,2.0625,196.67,25960.0,0.390055,0.840946,20.958,4.1,1.8
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo_prod:4,4.0625,196.67,51133.3,0.054114,0.974045,20.371,3.596,1.6
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo_prod:3,3.0625,196.67,38546.7,0.18414,0.919093,20.553,3.497,1.6
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,greedy,turbo_prod:2,2.0625,196.67,25960.0,0.570771,0.798147,20.732,3.799,1.6
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,beam5,fp16,16.0,196.67,201386.7,0.0,1.0,21.193,4.522,61.0
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,beam5,turbo:3,3.0312,196.67,38153.3,0.03437,0.98272,21.354,4.713,55.1
+mamba_padfix,results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt,test,300,beam5,naive:3,3.0625,196.67,38546.7,0.075409,0.961323,21.532,4.738,39.6

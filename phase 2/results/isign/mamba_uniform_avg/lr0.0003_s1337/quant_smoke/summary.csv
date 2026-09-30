@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,fp16,16.0,12.75,13056.0,0.0,1.0,20.962,3.968,18.1
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,turbo:8,8.0312,12.75,6553.5,0.000129,0.999937,21.055,3.919,1.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,turbo:4,4.0312,12.75,3289.5,0.009445,0.995304,20.634,3.954,1.8
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,turbo:3,3.0312,12.75,2473.5,0.03434,0.98279,20.844,3.724,1.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,turbo:2,2.0312,12.75,1657.5,0.116977,0.93995,20.663,3.823,1.9
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,naive:8,8.0625,12.75,6579.0,6.6e-05,0.999954,20.903,3.864,1.7
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,naive:4,4.0625,12.75,3315.0,0.019173,0.987321,20.883,4.055,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,naive:3,3.0625,12.75,2499.0,0.080477,0.951973,20.514,3.623,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,naive:2,2.0625,12.75,1683.0,0.504699,0.817087,19.537,3.201,2.1
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,turbo_prod:4,4.0625,12.75,3315.0,0.054069,0.974149,20.502,3.796,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,turbo_prod:3,3.0625,12.75,2499.0,0.184022,0.919316,20.372,3.374,1.6
+mamba_uniform_avg,results/isign/mamba_uniform_avg/lr0.0003_s1337/checkpoints/best.pt,test,300,greedy,turbo_prod:2,2.0625,12.75,1683.0,0.571037,0.798625,20.011,3.152,1.7
