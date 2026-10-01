@@ -178,6 +178,27 @@ def test_delta_avg_jitter():
     assert not torch.allclose(c, a), "training shifts the segment ends"
 
 
+def test_transformer_uniform_avg_control():
+    tf_cfg = {**CFG, "arm": "transformer", "max_src_len": 128}
+    torch.manual_seed(0)
+    tf = build_model(tf_cfg, vocab_size=30).eval()
+    pooled = build_model({**tf_cfg, "arm": "transformer_uniform_avg"}, vocab_size=30).eval()
+    assert sum(p.numel() for p in pooled.parameters()) == sum(p.numel() for p in tf.parameters())
+    src, pad = batch([37, 5, 64, 16])
+    _, mem_pad = pooled.encode(src, pad)
+    _, uni_pad = make("mamba_uniform_avg").encode(src, pad)
+    assert torch.equal((~mem_pad).sum(1), (~uni_pad).sum(1)), "same token count as mamba_uniform_avg"
+    stats = pooled.encoder.pop_pool_stats()
+    assert abs(stats["kept_frac"] - int((~mem_pad).sum()) / int((~pad).sum())) < 1e-9
+    # padding from batch-mates must not change a clip's pooled memory
+    alone, _ = pooled.encode(src[1:2, :5], pad[1:2, :5])
+    together, _ = pooled.encode(src, pad)
+    assert torch.allclose(alone[0, :1], together[1, :1], atol=1e-5)
+    pooled.train()
+    tgt = torch.randint(3, 30, (4, 6))
+    pooled.compute_loss(src, tgt[:, :-1], tgt[:, 1:], pad, torch.zeros(4, 5, dtype=torch.bool)).backward()
+
+
 def test_pool_stats():
     src, pad = batch([37, 5, 64, 16])
     real = int((~pad).sum())

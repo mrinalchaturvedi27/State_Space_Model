@@ -252,6 +252,28 @@ random vs plain averaging on How2Sign and PHOENIX (3 seeds, F3); full-memory pad
 datasets (3 seeds); pool_avg + training-time jitter. Phase-2 train.py now has the same opt-in
 F3 `warmup_ratio` as phase 1 (`configs/train/base_f3.yaml`).
 
+### Round 5 result and round 6 (2026-10-01)
+Test chrF2, beam 5, mean of 3 seeds:
+
+| | full memory | plain avg | random avg | Δ-weighted avg |
+|---|---|---|---|---|
+| iSign | 21.36 | 20.48 | 19.97 | **20.93** (vs plain p ≤ 0.001 every seed) |
+| How2Sign (F3) | 19.92 | 19.65 | 19.25 | 19.86 (vs plain p ≈ 0.05, 0.05, 0.21) |
+| PHOENIX (F3) | 34.16 (s42) | **33.61** | 32.32 | 33.35 (vs plain n.s.) |
+
+Δ beats random segmentation on all three datasets; it beats plain averaging only on iSign
+(borderline How2Sign, not PHOENIX), and the gap is not a clean function of clip length.
+C1: 2 previous clips 21.45 vs no context 21.23 vs wrong-video context 21.19 (beats wrong-video on
+all seeds, 2/3 significant), but 4 and 8 clips (21.45, 21.53, s42) do not add more — a small
+topic-level effect, not long-range context. Δ-avg + training-time jitter: 20.78 (2 seeds), no gain.
+Quantization (iSign): Δ-avg + turbo 3-bit = 2,440 B/clip (81x smaller than full fp16) for about
+-0.6 chrF2 beam vs 3-seed full memory; naive 2-bit breaks pooled memory (-1.9), turbo 2-bit does not (-0.16).
+
+Direction: an analysis paper (benchmark + what Mamba's selection buys + tokens x bits + small
+context effect). Round 6 (`scripts/run_phase2_round6.sh`): transformer_uniform_avg x 3 seeds
+(is 15x compression SSM-specific?) + the 3 missing round-5 runs. `quant/run_quant.sh`:
+PART=greedy (How2Sign, PHOENIX sweeps), PART=beam (iSign beam-5 on 3 seeds).
+
 ## Backup — C3: articulator-factored scanning
 Separate scans for hands / face / body with light cross-stream fusion (manual and non-manual channels are
 asynchronous in sign languages). Plausible, but multi-stream designs are common in sign recognition, so

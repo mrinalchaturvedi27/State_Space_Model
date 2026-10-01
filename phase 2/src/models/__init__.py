@@ -36,6 +36,15 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
             dim_feedforward=model_cfg["dim_feedforward"], dropout=dropout,
             max_len=model_cfg.get("max_src_len", 1024),
         )
+    elif arm == "transformer_uniform_avg":
+        # Control: phase-1 Transformer encoder + the same plain 16-frame averaging as mamba_uniform_avg.
+        from .pooled import UniformAvgPooledEncoder
+        from .transformer import TransformerEncoder
+        encoder = UniformAvgPooledEncoder(TransformerEncoder(
+            d_model=d_model, n_layers=model_cfg["enc_layers"], n_heads=model_cfg["n_heads"],
+            dim_feedforward=model_cfg["dim_feedforward"], dropout=dropout,
+            max_len=model_cfg.get("max_src_len", 1024),
+        ), stride=model_cfg.get("pool_every_frames", 16))
     elif arm == "mamba":
         from .mamba import BiMambaEncoder
         encoder = BiMambaEncoder(

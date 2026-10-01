@@ -44,6 +44,9 @@ def main():
         rows.append((name, cfg["arm"], n))
         print(f"{name:16s} arm={cfg['arm']:14s} params={n:,} ({n / 1e6:.2f} M)")
 
+    tf_pool = count_params(build_model(load("transformer_uniform_avg"), vocab_size=args.vocab_size))
+    print(f"{'transformer_uniform_avg':16s} params={tf_pool:,} ({tf_pool / 1e6:.2f} M)")
+
     by_name = {name: n for name, _, n in rows}
     a1_n, a2_n = by_name["transformer"], by_name["mamba"]
     diff = abs(a1_n - a2_n) / a1_n
@@ -57,6 +60,9 @@ def main():
             print(f"ABORT: {name} has {by_name[name]:,} params, mamba has {a2_n:,}. "
                   "The phase-2 gate must not add parameters.")
             sys.exit(1)
+    if tf_pool != rows[0][2]:
+        print(f"ABORT: transformer_uniform_avg has {tf_pool:,} params, transformer has {rows[0][2]:,}.")
+        sys.exit(1)
     print("OK: primary pair is within tolerance, and every phase-2 arm matches mamba.")
 
 
