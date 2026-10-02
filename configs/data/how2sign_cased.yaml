@@ -1,0 +1,18 @@
+# How2Sign with ONE consistently formatted target column for train, val and test.
+# The original how2sign.yaml trains on `text` (lowercased, rare words replaced by <UNKNOWN>) while
+# its val/test references come out cased (ABLATION_AND_ERROR_ANALYSIS.md §2.6). Run
+# scripts/check_text_columns.py --data configs/data/how2sign.yaml first and set text_col below to a
+# column whose profile matches across all three splits (SENTENCE is the expected one).
+# A new dataset name = a new cache/ and results directory; nothing of the original is overwritten.
+dataset: how2sign_cased
+train_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/How2sign_csv/How2sign_train.csv
+val_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/How2sign_csv/How2sign_val.csv
+test_csv: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/csv_files/How2sign_csv/How2sign_test.csv
+pose_dir: /scratch/home/student1/Sign_Language/Projects/ARR-August-26/pose/pose_data/how2sign/
+pose_ext: .pose
+uid_col: uid
+text_col: SENTENCE        # original casing + punctuation; confirm with scripts/check_text_columns.py
+pose_id_col: SENTENCE_ID   # NOT uid -- pose files are named <SENTENCE_ID>.pose, verified 2026-08-24 (0 missing / 31,092 train rows)
+source_fps: 30              # actual fps read per-clip from pose.body.fps and resampled to target_fps=25
+vocab_size: 4000
+lang: en
