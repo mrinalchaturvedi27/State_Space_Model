@@ -133,6 +133,8 @@ def main():
     ap.add_argument("--max-steps", type=int, default=None, help="hard cap on optimizer steps, for smoke tests")
     ap.add_argument("--wandb-project", default="ARR-SSM-vs-TF-SLT")
     ap.add_argument("--no-wandb", action="store_true")
+    ap.add_argument("--init-encoder", default=None,
+                    help="phase 3: encoder_init.pt from phase 3/scripts/pretrain.py; loads front_end + encoder")
     args = ap.parse_args()
 
     with open(args.data) as f:
@@ -155,6 +157,15 @@ def main():
     vocab_size = train_ds.sp.vocab_size()
     model = build_model(model_cfg, vocab_size=vocab_size, pad_id=train_ds.pad_id).to(device)
     n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    if args.init_encoder:
+        # Self-supervised front end + encoder (phase 3). Every pretrained tensor must land; the
+        # decoder and embeddings stay at their fresh init.
+        init = torch.load(args.init_encoder, map_location="cpu", weights_only=False)["model"]
+        missing, unexpected = model.load_state_dict(init, strict=False)
+        if unexpected:
+            raise RuntimeError(f"--init-encoder keys not in this model: {unexpected[:5]} ...")
+        print(f"initialised {len(init)} front-end/encoder tensors from {args.init_encoder}; "
+              f"{len(missing)} tensors left at fresh init (decoder etc.)")
 
     decay, no_decay = model.no_decay_params()
     optimizer = AdamW(
@@ -180,7 +191,8 @@ def main():
     config = {**{f"data.{k}": v for k, v in data_cfg.items()},
              **{f"model.{k}": v for k, v in model_cfg.items()},
              **{f"train.{k}": v for k, v in train_cfg.items()},
-             "lr": args.lr, "seed": args.seed, "run_name": run_name, "params": n_params}
+             "lr": args.lr, "seed": args.seed, "run_name": run_name, "params": n_params,
+             "init_encoder": args.init_encoder or ""}
     xl = R.ExcelReporter(path=os.path.join(run_dir, "results", "metrics.xlsx"), config=config,
                          select_on="val_corpus_chrF2", select_mode="max")
 

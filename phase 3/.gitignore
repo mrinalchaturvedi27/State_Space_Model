@@ -1,0 +1,3 @@
+# Pretrained weights stay on the server; results keep only small text files.
+*.pt
+results/**/checkpoints/

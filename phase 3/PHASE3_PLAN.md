@@ -171,13 +171,20 @@ The **bidirectional Mamba-2 encoder** is kept as is: the same 5 layers and 34 M 
 
 **Either way, Stage 3.0** adds consensus decoding and selective translation.
 
-## 9. Code layout
-`phase 3/` holds only new code and **imports Phase 2's `src/`** (models, data, pooling, evaluation) by path, so nothing is copied twice:
-- `phase 3/src/stitch.py`: stitched-video dataset (train split, 4,096-frame windows, boundary flags)
-- `phase 3/src/pretrain.py`: masked-frame / next-segment pretraining loop and reconstruction head
-- `phase 3/scripts/finetune_from_pretrained.sh`: Phase 1 fine-tuning initialised from a pretrained encoder
-- `phase 3/scripts/mbr.py`: consensus decoding over n-best lists
-- `phase 3/scripts/selective.py`: confidence signals and coverage–quality curves
+## 9. Code layout (implemented 2 October 2026)
+`phase 3/` holds only new code and **imports phase 2's `src/`** (models, data, evaluation) through `p3/paths.py`, so nothing is copied twice. Phase 2's `src/train.py` gained one backward-compatible option, `--init-encoder`.
+
+| File | What it does |
+|---|---|
+| `p3/nbest.py`, `scripts/nbest_decode.py` | beam-5 n-best lists with raw scores (val + test), re-rankable at any length penalty; identical to the existing beam search (tested) |
+| `p3/chrf.py`, `p3/consensus.py`, `scripts/mbr.py` | consensus (MBR) decoding with a fast cached chrF utility; singles, MBR within one seed, over seeds' top-1, over the pooled n-best, oracle; paired bootstrap |
+| `scripts/selective.py` | 6 confidence signals + a combined one, directions fixed on validation; Spearman, failure AUROC, coverage–quality curves vs oracle and random |
+| `p3/stitch.py` | clips grouped into source videos by uid (iSign, How2Sign and PHOENIX formats), stitched in segment order; `clip` and `long` (4,096-frame windows, random phase) modes over exactly the same frames |
+| `p3/masking.py` | span masking (30% of frames, spans of 8–32), a share of spans hiding only the hand keypoints |
+| `p3/pretrain_model.py`, `scripts/pretrain.py` | masked-frame pretraining of the translation model's own front end + encoder; saves `encoder_init.pt` for `--init-encoder`; `--stats-only` prints the stitching statistics |
+| `scripts/run_stage30.sh` | `PART=decode` (GPU queue of n-best jobs) then `PART=analyze` (CPU: MBR + selective per dataset × encoder) |
+| `scripts/run_pretrain_gate.sh` | the go/no-go gate: P2, P1, P2-hand, each as pretrain → fine-tune → test decode → val-chosen length penalty |
+| `scripts/test_stage30.py`, `scripts/test_pretrain.py` | CPU tests (stand-ins for mamba_ssm and SentencePiece) |
 
 ## 10. Risks
 | Risk | Mitigation |
