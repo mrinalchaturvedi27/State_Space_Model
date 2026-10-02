@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,fp16,16.0,162.54,166438.6,0.0,1.0,21.183,2.269,60.3
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:8,8.0312,162.54,83544.4,0.00013,0.999936,21.173,2.331,28.4
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:4,4.0312,162.54,41934.7,0.009461,0.99528,21.096,2.301,26.2
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:3,3.0312,162.54,31532.3,0.034379,0.982719,21.069,2.273,27.7
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:2,2.0312,162.54,21129.9,0.116979,0.939794,21.352,2.263,27.2
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:8,8.0625,162.54,83869.4,5.3e-05,0.999974,21.123,2.276,27.7
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:4,4.0625,162.54,42259.8,0.015235,0.992446,21.088,2.211,27.8
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:3,3.0625,162.54,31857.4,0.07,0.966805,21.02,2.243,27.5
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:2,2.0625,162.54,21455.0,0.393416,0.857996,20.409,2.025,28.3
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo_prod:4,4.0625,162.54,42259.8,0.054134,0.974031,21.084,2.23,28.7
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo_prod:3,3.0625,162.54,31857.4,0.184161,0.91903,21.022,2.17,27.6
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo_prod:2,2.0625,162.54,21455.0,0.570512,0.797839,20.525,2.084,28.5

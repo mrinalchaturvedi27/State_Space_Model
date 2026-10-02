@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,fp16,16.0,10.62,10876.5,0.0,1.0,20.372,1.895,59.4
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:8,8.0312,10.62,5459.5,0.00013,0.999936,20.438,1.893,26.4
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:4,4.0312,10.62,2740.4,0.009457,0.995282,20.322,1.828,29.0
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:3,3.0312,10.62,2060.6,0.034372,0.982721,20.35,1.814,27.4
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:2,2.0312,10.62,1380.8,0.116927,0.939835,20.507,1.887,25.5
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:8,8.0625,10.62,5480.7,5.2e-05,0.999974,20.332,1.846,25.5
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:4,4.0625,10.62,2761.6,0.015085,0.992506,20.308,1.998,26.2
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:3,3.0625,10.62,2081.8,0.069251,0.967089,20.296,1.959,25.2
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:2,2.0625,10.62,1402.0,0.384287,0.857142,19.958,1.783,26.7
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo_prod:4,4.0625,10.62,2761.6,0.054143,0.974012,20.149,1.957,27.7
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo_prod:3,3.0625,10.62,2081.8,0.184067,0.918986,20.372,1.93,27.8
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo_prod:2,2.0625,10.62,1402.0,0.570749,0.797356,20.032,1.791,27.2

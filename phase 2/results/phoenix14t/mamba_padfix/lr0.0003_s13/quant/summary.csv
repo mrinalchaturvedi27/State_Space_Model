@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,fp16,16.0,100.67,103081.1,0.0,1.0,33.204,11.658,35.1
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,turbo:8,8.0312,100.67,51741.9,0.000128,0.999937,33.186,11.613,6.1
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,turbo:4,4.0312,100.67,25971.6,0.009419,0.9953,33.235,11.589,5.2
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,turbo:3,3.0312,100.67,19529.0,0.034249,0.982785,33.298,11.532,5.0
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,turbo:2,2.0312,100.67,13086.5,0.116736,0.939923,32.785,11.205,4.3
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,naive:8,8.0625,100.67,51943.2,4.9e-05,0.999976,33.23,11.689,5.6
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,naive:4,4.0625,100.67,26172.9,0.014138,0.993018,33.19,11.557,5.4
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,naive:3,3.0625,100.67,19730.4,0.064967,0.969141,32.944,11.523,5.0
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,naive:2,2.0625,100.67,13287.8,0.360955,0.863921,32.866,11.065,4.9
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,turbo_prod:4,4.0625,100.67,26172.9,0.053852,0.974164,33.286,11.498,4.5
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,turbo_prod:3,3.0625,100.67,19730.4,0.183491,0.91929,32.844,11.394,5.1
+mamba_padfix,results/phoenix14t/mamba_padfix/lr0.0003_s13/checkpoints/best.pt,test,642,greedy,turbo_prod:2,2.0625,100.67,13287.8,0.567861,0.798308,32.517,10.571,5.0

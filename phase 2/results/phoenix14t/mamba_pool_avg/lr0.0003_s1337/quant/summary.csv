@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,fp16,16.0,6.77,6928.7,0.0,1.0,32.506,10.108,32.1
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,turbo:8,8.0312,6.77,3477.9,0.000132,0.999934,32.49,10.113,4.7
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,turbo:4,4.0312,6.77,1745.7,0.009511,0.995256,32.587,9.754,4.4
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,turbo:3,3.0312,6.77,1312.7,0.034472,0.982672,32.541,10.13,4.2
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,turbo:2,2.0312,6.77,879.6,0.117161,0.939704,31.548,9.378,4.3
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,naive:8,8.0625,6.77,3491.4,4.8e-05,0.999976,32.461,10.099,4.3
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,naive:4,4.0625,6.77,1759.3,0.01379,0.993185,32.526,9.769,4.6
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,naive:3,3.0625,6.77,1326.2,0.063293,0.969895,32.443,9.798,4.7
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,naive:2,2.0625,6.77,893.2,0.349034,0.865453,32.24,9.407,4.3
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,turbo_prod:4,4.0625,6.77,1759.3,0.054384,0.973949,32.648,9.9,4.0
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,turbo_prod:3,3.0625,6.77,1326.2,0.184474,0.91903,32.339,9.633,4.9
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,642,greedy,turbo_prod:2,2.0625,6.77,893.2,0.569646,0.798974,32.13,9.157,5.1

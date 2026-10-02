@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,fp16,16.0,10.62,10876.5,0.0,1.0,20.644,2.139,59.1
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:8,8.0312,10.62,5459.5,0.00013,0.999936,20.581,2.164,24.7
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:4,4.0312,10.62,2740.4,0.009492,0.995264,20.526,2.102,26.2
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:3,3.0312,10.62,2060.6,0.034457,0.982678,20.465,2.035,26.4
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo:2,2.0312,10.62,1380.8,0.117245,0.939648,20.512,2.137,26.2
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:8,8.0625,10.62,5480.7,4.9e-05,0.999975,20.629,2.133,26.0
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:4,4.0625,10.62,2761.6,0.014282,0.992916,20.724,2.254,26.1
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:3,3.0625,10.62,2081.8,0.065598,0.968733,20.507,2.178,24.9
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,naive:2,2.0625,10.62,1402.0,0.363106,0.862564,20.315,1.925,24.2
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo_prod:4,4.0625,10.62,2761.6,0.054317,0.973957,20.477,2.074,26.2
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo_prod:3,3.0625,10.62,2081.8,0.184404,0.918976,20.236,1.928,24.4
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s13/checkpoints/best.pt,test,2098,greedy,turbo_prod:2,2.0625,10.62,1402.0,0.570652,0.797994,19.979,1.721,27.0

@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,fp16,16.0,162.54,166438.6,0.0,1.0,20.807,2.307,61.3
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:8,8.0312,162.54,83544.4,0.000129,0.999936,20.78,2.29,27.5
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:4,4.0312,162.54,41934.7,0.009444,0.995288,20.805,2.301,29.1
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:3,3.0312,162.54,31532.3,0.034358,0.98273,20.707,2.211,26.2
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo:2,2.0312,162.54,21129.9,0.116982,0.93979,20.893,2.207,28.9
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:8,8.0625,162.54,83869.4,5.1e-05,0.999974,20.83,2.302,26.9
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:4,4.0625,162.54,42259.8,0.014858,0.992649,20.785,2.202,28.5
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:3,3.0625,162.54,31857.4,0.068262,0.967634,20.637,2.204,28.1
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,naive:2,2.0625,162.54,21455.0,0.3725,0.857284,20.28,1.89,29.0
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo_prod:4,4.0625,162.54,42259.8,0.054125,0.974018,20.596,2.233,29.7
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo_prod:3,3.0625,162.54,31857.4,0.184186,0.918911,20.576,2.35,27.2
+mamba_padfix,results/how2sign/mamba_padfix/lr0.0003_s1337/checkpoints/best.pt,test,2098,greedy,turbo_prod:2,2.0625,162.54,21455.0,0.570236,0.797215,20.073,1.949,30.2

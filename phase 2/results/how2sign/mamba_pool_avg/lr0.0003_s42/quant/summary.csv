@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,fp16,16.0,10.62,10876.5,0.0,1.0,20.743,2.026,57.0
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:8,8.0312,10.62,5459.5,0.00013,0.999936,20.697,2.027,23.3
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:4,4.0312,10.62,2740.4,0.009458,0.995284,20.729,1.999,24.6
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:3,3.0312,10.62,2060.6,0.034416,0.982705,20.75,1.968,25.2
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:2,2.0312,10.62,1380.8,0.117076,0.939754,20.619,1.781,24.8
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:8,8.0625,10.62,5480.7,5e-05,0.999975,20.742,2.012,24.4
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:4,4.0625,10.62,2761.6,0.014528,0.992803,20.724,1.981,23.7
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:3,3.0625,10.62,2081.8,0.06672,0.968268,20.807,1.891,24.8
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:2,2.0625,10.62,1402.0,0.370249,0.861267,20.372,1.866,24.8
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo_prod:4,4.0625,10.62,2761.6,0.054195,0.97402,20.673,1.941,25.1
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo_prod:3,3.0625,10.62,2081.8,0.184444,0.919061,20.598,1.948,26.1
+mamba_pool_avg,results/how2sign/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo_prod:2,2.0625,10.62,1402.0,0.571639,0.798401,20.164,1.893,26.9

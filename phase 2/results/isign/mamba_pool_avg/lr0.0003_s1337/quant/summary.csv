@@ -11,3 +11,8 @@ mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,t
 mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:4,4.0625,12.57,3269.4,0.054161,0.974217,20.474,3.33,19.5
 mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:3,3.0625,12.57,2464.6,0.184393,0.919627,20.366,3.261,17.5
 mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,greedy,turbo_prod:2,2.0625,12.57,1659.9,0.57013,0.80074,20.066,2.979,20.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,beam5,fp16,16.0,12.57,12876.4,0.0,1.0,20.844,3.915,4615.6
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,beam5,turbo:3,3.0312,12.57,2439.5,0.034383,0.982844,20.758,3.851,4734.1
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,beam5,naive:3,3.0625,12.57,2464.6,0.105339,0.938829,20.568,3.74,4521.5
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,beam5,turbo:2,2.0312,12.57,1634.7,0.117044,0.940102,20.616,3.77,4656.2
+mamba_pool_avg,results/isign/mamba_pool_avg/lr0.0003_s1337/checkpoints/best.pt,test,6068,beam5,naive:2,2.0625,12.57,1659.9,0.676946,0.815544,17.276,2.186,4446.3

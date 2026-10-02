@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,fp16,16.0,10.62,10876.5,0.0,1.0,20.249,1.848,53.4
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:8,8.0312,10.62,5459.5,0.00013,0.999936,20.26,1.901,23.8
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:4,4.0312,10.62,2740.4,0.009449,0.995283,20.181,1.832,24.5
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:3,3.0312,10.62,2060.6,0.034368,0.982714,20.383,1.81,23.2
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo:2,2.0312,10.62,1380.8,0.117009,0.939757,20.111,1.664,21.8
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:8,8.0625,10.62,5480.7,5.2e-05,0.999974,20.254,1.891,23.8
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:4,4.0625,10.62,2761.6,0.015019,0.992686,20.095,1.842,22.8
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:3,3.0625,10.62,2081.8,0.068998,0.967802,20.211,1.875,22.6
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,naive:2,2.0625,10.62,1402.0,0.373357,0.857555,19.796,1.529,24.5
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo_prod:4,4.0625,10.62,2761.6,0.054122,0.974032,20.103,1.695,23.3
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo_prod:3,3.0625,10.62,2081.8,0.184436,0.918994,19.923,1.655,23.5
+mamba_uniform_avg,results/how2sign/mamba_uniform_avg/lr0.0003_s42/checkpoints/best.pt,test,2098,greedy,turbo_prod:2,2.0625,10.62,1402.0,0.572452,0.798032,19.342,1.392,26.3

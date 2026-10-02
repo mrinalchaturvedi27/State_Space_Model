@@ -1,0 +1,13 @@
+tag,checkpoint,split,n,decode,setting,bits_per_value,mem_tokens_per_clip,bytes_per_clip,rel_mse,mean_cos,chrF2,BLEU4,seconds
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,fp16,16.0,6.77,6928.7,0.0,1.0,32.597,10.265,35.1
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,turbo:8,8.0312,6.77,3477.9,0.000128,0.999937,32.587,10.32,3.9
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,turbo:4,4.0312,6.77,1745.7,0.009453,0.995288,32.643,10.371,4.5
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,turbo:3,3.0312,6.77,1312.7,0.034368,0.982737,32.471,10.574,4.7
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,turbo:2,2.0312,6.77,879.6,0.117122,0.939716,31.664,9.879,5.1
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,naive:8,8.0625,6.77,3491.4,4.7e-05,0.999977,32.61,10.355,5.1
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,naive:4,4.0625,6.77,1759.3,0.013619,0.993284,32.412,10.173,4.9
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,naive:3,3.0625,6.77,1326.2,0.062557,0.970286,32.341,10.04,4.4
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,naive:2,2.0625,6.77,893.2,0.343736,0.867062,32.147,9.544,5.3
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,turbo_prod:4,4.0625,6.77,1759.3,0.054069,0.974065,32.398,10.195,3.5
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,turbo_prod:3,3.0625,6.77,1326.2,0.18428,0.918959,32.27,9.896,4.6
+mamba_pool_avg,results/phoenix14t/mamba_pool_avg/lr0.0003_s42/checkpoints/best.pt,test,642,greedy,turbo_prod:2,2.0625,6.77,893.2,0.569252,0.797803,31.698,9.085,5.5
