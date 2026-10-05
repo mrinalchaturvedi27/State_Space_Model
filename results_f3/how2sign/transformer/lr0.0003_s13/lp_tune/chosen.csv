@@ -1,0 +1,3 @@
+criterion,lp,val_chrF2,val_BLEU4,test_chrF2,test_BLEU4,test_chrF2_lp1.0,test_BLEU4_lp1.0
+val_BLEU4,0.6,17.463,2.087,16.965,1.622,17.684,1.568
+val_chrF2,2.0,19.232,1.731,18.881,1.433,17.684,1.568

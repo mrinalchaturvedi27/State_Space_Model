@@ -1,0 +1,11 @@
+system,chrF2,BLEU4
+single:sys0,19.863,2.955
+single:sys1,19.518,3.081
+single:sys2,19.174,2.748
+mbr_self,20.301,2.836
+mbr_top1,21.311,3.079
+mbr_pool,21.622,2.9
+oracle,26.09,5.259
+p_mbr_pool_vs_single:sys0,0.001,0.1628
+p_mbr_pool_vs_single:sys1,0.001,0.015
+p_mbr_pool_vs_single:sys2,0.001,0.032
