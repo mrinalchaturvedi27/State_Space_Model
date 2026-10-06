@@ -119,6 +119,29 @@ The **bidirectional Mamba-2 encoder** is kept as is: the same 5 layers and 34 M 
 
 ---
 
+### 3.1.6 First gate result (iSign, Mamba, seed 42; 5 epochs of iSign-only pretraining, about 8 min)
+| | Test chrF2 | BLEU-4 | Content-word F1 | vs P0 |
+|---|---|---|---|---|
+| P0 no pretraining | 21.26 | 4.10 | 14.97 | — |
+| P1 clip pretraining | 21.74 | 4.19 | 15.18 | chrF2 p = 0.001, BLEU-4 n.s. |
+| P2 long-context pretraining | 21.69 | **4.32** | **15.50** | chrF2 p = 0.001, BLEU-4 p = 0.014 |
+| P2-hand | 21.70 | 4.23 | 15.42 | chrF2 p = 0.001, BLEU-4 n.s. |
+
+Pretraining helps modestly. P2 vs P1 is not significant (chrF2 p = 0.25, BLEU-4 p = 0.10). The run was far below the planned
+budget (loss still falling, no data beyond the fine-tuning set), so it cannot separate "long context doesn't help" from
+"pretraining was too small".
+
+### 3.1.7 Track A: pretraining at a realistic scale (`scripts/run_pretrain_large.sh`)
+- **Pretraining:** 50 epochs on the pooled train poses of iSign + How2Sign + PHOENIX (no text, so How2Sign's target-text
+  issue doesn't matter). About 1.5–2 h per run. One pretraining per seed.
+- **PART=gate:** P2L vs P1L (Mamba), seed 42. **Decide here:** P2L > P1L clearly → long-context headline;
+  P1L ≈ P2L > P0 → "pretraining helps"; both ≈ P0 → drop.
+- **PART=seeds:** P2L/P1L seeds 13/1337; Transformer controls T2L (long, or 2,048 frames if 4,096 runs out of memory) and
+  T1L, 3 seeds. Baselines: P0 (phase 2 mamba_padfix) and T0 (phase-1 Transformer), both 3 seeds.
+- **PART=ctx:** the 2-previous-clips context model fine-tuned from each P2L encoder, vs phase 2's mamba_ctx_k2 without
+  pretraining (3 seeds). Tests whether story-level pretraining makes context usable.
+- Length penalty fixed at 1.0 (validation tuning gave +0.01 BLEU-4 on average; choosing by chrF2 only lengthens outputs).
+
 ## 4. Stage 3.2: one encoder, three sign languages (secondary ablation; partly prior work, §11)
 | ID | Pretraining data | Fine-tuned on |
 |---|---|---|

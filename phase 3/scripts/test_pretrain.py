@@ -22,7 +22,8 @@ import yaml  # noqa: E402
 
 from p3.masking import HAND_DIMS, span_masks  # noqa: E402
 from p3.pretrain_model import MaskedPoseModel  # noqa: E402
-from p3.stitch import EpochTokenSampler, PretrainDataset, VideoIndex, collate, parse_uid  # noqa: E402
+from p3.stitch import (EpochTokenSampler, MultiPretrainDataset, PretrainDataset, VideoIndex,  # noqa: E402
+                       collate, parse_uid)
 from src.models import build_model  # noqa: E402
 
 D = 356
@@ -30,8 +31,8 @@ D = 356
 VIDEOS = {"vidA": [(3, 40), (1, 30), (2, 50), (7, 20)], "vidB": [(1, 60), (2, 45)], "x_solo": [(-1, 25)]}
 
 
-def make_cache(root, split="train"):
-    ds = os.path.join(root, "isign")
+def make_cache(root, split="train", name="isign"):
+    ds = os.path.join(root, name)
     os.makedirs(ds, exist_ok=True)
     rows, blocks, off = [], [], 0
     for vid, clips in VIDEOS.items():
@@ -154,6 +155,50 @@ def test_pretrain_script_end_to_end_both_modes():
             assert len(log) == 2 and np.isfinite(log.val_l1).all()
         sys.argv = ["pretrain", "--data", d_yaml, "--model", m_yaml, "--cache-dir", root, "--stats-only", "--out", root]
         pretrain.main()
+
+
+def test_padfix_pretraining_loads_into_context_model():
+    """Track A fine-tunes the 2-previous-clips model from a mamba_padfix-pretrained encoder."""
+    cfg = {**arms.CFG, "arm": "mamba_padfix", "d_in": D}
+    sd = MaskedPoseModel(cfg).encoder_state_dict()
+    ctx = build_model({**cfg, "arm": "mamba_ctx", "context_clips": 2}, vocab_size=30)
+    missing, unexpected = ctx.load_state_dict(sd, strict=False)
+    assert not unexpected, unexpected
+    assert all(not k.startswith(("front_end.", "encoder.")) for k in missing), missing
+    assert {"context_embed", "boundary_embed"} <= set(missing)
+
+
+def test_multi_dataset_pooling_and_pretrain():
+    import importlib
+    total = sum(n for c in VIDEOS.values() for _, n in c)
+    with tempfile.TemporaryDirectory() as root:
+        for name in ("isign", "phoenix14t"):
+            make_cache(root, "train", name)
+            make_cache(root, "val", name)
+        for mode in ("clip", "long"):
+            parts = [PretrainDataset(VideoIndex(root, n, "train"), mode, 64, seed=3, augment=False) for n in ("isign", "phoenix14t")]
+            multi = MultiPretrainDataset(parts)
+            for epoch in (0, 1):
+                multi.set_epoch(epoch)
+                assert multi.lengths().sum() == 2 * total and len(multi) == sum(len(p) for p in parts)
+                items = [multi[i] for i in range(len(multi))]
+                assert all(np.all(np.diff(it["feat"][:, 0]) == 1) for it in items)
+                assert sum(it["feat"].shape[0] for it in items) == 2 * total
+        cfg = {**arms.CFG, "arm": "mamba_padfix", "d_in": D}
+        m_yaml = os.path.join(root, "m.yaml")
+        yaml.safe_dump(cfg, open(m_yaml, "w"))
+        dys = []
+        for name in ("isign", "phoenix14t"):
+            dys.append(os.path.join(root, f"{name}.yaml"))
+            yaml.safe_dump({"dataset": name}, open(dys[-1], "w"))
+        sys.path.insert(0, HERE)
+        pretrain = importlib.import_module("pretrain")
+        out = os.path.join(root, "P_multi")
+        sys.argv = ["pretrain", "--data", *dys, "--model", m_yaml, "--cache-dir", root, "--mode", "long",
+                    "--window", "64", "--epochs", "2", "--max-tokens", "160", "--num-workers", "0", "--out", out]
+        pretrain.main()
+        assert os.path.exists(os.path.join(out, "encoder_init.pt"))
+        assert len(pd.read_csv(os.path.join(out, "log.csv"))) == 2
 
 
 if __name__ == "__main__":

@@ -176,3 +176,32 @@ def collate(batch: list[dict]) -> dict:
         pad[i, :L] = False
         starts[i, :L] = torch.from_numpy(b["is_start"])
     return {"feat": feat, "pad": pad, "is_start": starts}
+
+
+class MultiPretrainDataset(Dataset):
+    """Several PretrainDatasets (e.g. iSign + How2Sign + PHOENIX train poses) as one. Items keep
+    their own video and frames; lengths(), set_epoch() and indexing are delegated, so the token
+    sampler and both modes work unchanged. Pretraining needs no text, so a dataset's target-text
+    issues (How2Sign) do not matter here."""
+
+    def __init__(self, parts: list[PretrainDataset]):
+        self.parts = parts
+        self._offsets()
+
+    def _offsets(self) -> None:
+        self.bounds = np.cumsum([0] + [len(p) for p in self.parts])
+
+    def set_epoch(self, epoch: int) -> None:
+        for p in self.parts:
+            p.set_epoch(epoch)
+        self._offsets()  # long-mode window counts change with the epoch's phase
+
+    def lengths(self) -> np.ndarray:
+        return np.concatenate([p.lengths() for p in self.parts])
+
+    def __len__(self) -> int:
+        return int(self.bounds[-1])
+
+    def __getitem__(self, i: int) -> dict:
+        k = int(np.searchsorted(self.bounds, i, side="right") - 1)
+        return self.parts[k][i - int(self.bounds[k])]

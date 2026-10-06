@@ -33,7 +33,7 @@ from torch.utils.data import DataLoader  # noqa: E402
 
 from p3.masking import span_masks  # noqa: E402
 from p3.pretrain_model import MaskedPoseModel  # noqa: E402
-from p3.stitch import EpochTokenSampler, PretrainDataset, VideoIndex, collate  # noqa: E402
+from p3.stitch import EpochTokenSampler, MultiPretrainDataset, PretrainDataset, VideoIndex, collate  # noqa: E402
 from src.train import cosine_with_warmup  # noqa: E402
 
 NO_DECAY = ("bias", "A_log", "D", "dt_bias", "mask_token")
@@ -78,7 +78,8 @@ def run_epoch(model, loader, device, args, rng, train, opt=None, sched=None, ste
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data", required=True)
+    ap.add_argument("--data", nargs="+", required=True,
+                    help="one or more data configs; their train (and val) poses are pooled")
     ap.add_argument("--model", required=True)
     ap.add_argument("--cache-dir", default="cache")
     ap.add_argument("--mode", choices=("clip", "long"), default="long")
@@ -99,8 +100,10 @@ def main():
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
-    with open(resolve(args.data)) as f:
-        data_cfg = yaml.safe_load(f)
+    data_cfgs = []
+    for d in args.data:
+        with open(resolve(d)) as f:
+            data_cfgs.append(yaml.safe_load(f))
     with open(resolve(args.model)) as f:
         model_cfg = yaml.safe_load(f)
     if model_cfg["arm"] == "transformer" and args.mode == "long":
@@ -108,15 +111,18 @@ def main():
     torch.manual_seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    tr_index = VideoIndex(args.cache_dir, data_cfg["dataset"], "train")
-    va_index = VideoIndex(args.cache_dir, data_cfg["dataset"], "val")
-    print(f"[{data_cfg['dataset']}] train {json.dumps(tr_index.stats())}")
-    print(f"[{data_cfg['dataset']}] val   {json.dumps(va_index.stats())}")
+    tr_parts, va_parts = [], []
+    for dc in data_cfgs:
+        tr_index = VideoIndex(args.cache_dir, dc["dataset"], "train")
+        va_index = VideoIndex(args.cache_dir, dc["dataset"], "val")
+        print(f"[{dc['dataset']}] train {json.dumps(tr_index.stats())}")
+        print(f"[{dc['dataset']}] val   {json.dumps(va_index.stats())}")
+        tr_parts.append(PretrainDataset(tr_index, args.mode, args.window, seed=args.seed, augment=True))
+        va_parts.append(PretrainDataset(va_index, args.mode, args.window, seed=0, augment=False))
     if args.stats_only:
         return
-
-    tr = PretrainDataset(tr_index, args.mode, args.window, seed=args.seed, augment=True)
-    va = PretrainDataset(va_index, args.mode, args.window, seed=0, augment=False)
+    tr = tr_parts[0] if len(tr_parts) == 1 else MultiPretrainDataset(tr_parts)
+    va = va_parts[0] if len(va_parts) == 1 else MultiPretrainDataset(va_parts)
     tr_s = EpochTokenSampler(tr, args.max_tokens, seed=args.seed, shuffle=True)
     va_s = EpochTokenSampler(va, args.max_tokens, seed=0, shuffle=False)
     mk = lambda ds, s, w: DataLoader(ds, batch_sampler=s, collate_fn=collate, num_workers=w, pin_memory=True)
@@ -156,6 +162,8 @@ def main():
             w.writerows(log)
         if args.max_steps and step >= args.max_steps:
             break
+    with open(os.path.join(args.out, "done.json"), "w") as f:  # completion marker for the runners
+        json.dump({"epochs_run": len(log), "best_val_l1": best, "steps": step}, f)
     print(f"done; best val L1 {best:.4f} -> {os.path.join(args.out, 'encoder_init.pt')}")
 
 
