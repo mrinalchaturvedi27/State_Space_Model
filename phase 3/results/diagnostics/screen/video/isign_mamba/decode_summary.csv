@@ -1,0 +1,5 @@
+condition,n,corpus_chrF2,content_overlap_%,same_output_as_correct_%
+correct,200,20.72,48.5,100.0
+wrong_length,200,12.84,3.5,0.0
+wrong_topic,200,14.03,22.0,0.0
+zero,200,10.93,1.0,0.0
