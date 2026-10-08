@@ -1,0 +1,7 @@
+condition,n,mean_frames,token_nll,content_word_ll,greedy_chrF2,greedy_BLEU4,delta_chrF2_vs_d1,delta_token_nll_vs_d1
+d0.5,2000,75.9,,,17.52,2.31,-1.7,
+d1,2000,151.9,,,19.22,2.87,0.0,
+d2,2000,303.7,,,19.39,2.43,0.17,
+reverse,2000,151.9,,,19.27,2.88,0.05,
+shuffle_blocks16,2000,151.9,,,17.85,2.06,-1.37,
+shuffle_frames,2000,151.9,,,15.31,1.53,-3.91,
