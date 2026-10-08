@@ -23,6 +23,14 @@ class FakeSP:
     def encode(self, text, out_type=int):
         return [5 + (len(w) % 20) for w in text.split()]
 
+    def id_to_piece(self, i):
+        return "\u2581w" + str(i)
+
+    def get_piece_size(self):
+        return 30
+
+    def unk_id(self): return 0
+
     def decode(self, ids):
         return " ".join(f"w{i}" for i in ids)
 
