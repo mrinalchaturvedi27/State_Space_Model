@@ -59,6 +59,9 @@ def main():
     ap.add_argument("--checkpoint", required=True)
     ap.add_argument("--cache-dir", default="cache")
     ap.add_argument("--max-frames", type=int, default=256)
+    ap.add_argument("--min-frames", type=int, default=0,
+                    help="e.g. 257 with --max-frames 512: the long clips behind the length gap; density "
+                         "conditions that would exceed the 512-frame cap are skipped")
     ap.add_argument("--n", type=int, default=2000)
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--seed", type=int, default=0)
@@ -69,22 +72,24 @@ def main():
     model, ds, data_cfg, model_cfg = load(args.data, args.model, args.checkpoint, args.cache_dir, device)
     assert model_cfg.get("context_clips") is None, "context models are not supported here"
     lang = data_cfg.get("lang", "en")
-    sample_file = args.sample_file or os.path.join(os.path.dirname(args.out.rstrip("/")), f"sample_density_{data_cfg['dataset']}.csv")
+    sample_file = args.sample_file or os.path.join(os.path.dirname(args.out.rstrip("/")), f"sample_density_{data_cfg['dataset']}_{args.min_frames}-{args.max_frames}.csv")
     if os.path.exists(sample_file):
         S = pd.read_csv(sample_file)
         print(f"reusing fixed sample {sample_file} ({len(S)} clips)")
     else:
         nf = ds.n_frames_array()
-        pool = np.nonzero(nf <= args.max_frames)[0]
+        pool = np.nonzero((nf >= args.min_frames) & (nf <= args.max_frames))[0]
         pick = np.sort(np.random.default_rng(args.seed).choice(pool, size=min(args.n, len(pool)), replace=False))
         S = pd.DataFrame({"idx": pick, "uid": ds.index["uid"].astype(str).to_numpy()[pick], "frames": nf[pick]})
         os.makedirs(os.path.dirname(sample_file) or ".", exist_ok=True)
         S.to_csv(sample_file, index=False)
-        print(f"fixed sample written: {sample_file} ({len(S)} clips, <= {args.max_frames} frames)")
+        print(f"fixed sample written: {sample_file} ({len(S)} clips, {args.min_frames}-{args.max_frames} frames)")
 
     conds = list(BASE)
-    if model_cfg["arm"] in ("transformer", "transformer_bow"):
+    if hasattr(model.encoder, "pos"):  # absolute sinusoidal positions (transformer, convstem)
         conds += ["d0.5_timePE", "d2_timePE"]
+    longest = int(S.frames.max())
+    conds = [c for c in conds if not c.startswith("d") or float(c[1:].split("_")[0]) * longest <= 512]
     collate = make_collate(ds.pad_id)
     summ = []
     for cond in conds:

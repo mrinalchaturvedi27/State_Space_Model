@@ -1,0 +1,17 @@
+# Step-4 control: attention-free temporal conv network: residual depthwise dilated conv (kernel 5,
+# dilations 1,2,4,8 x2) + pointwise FFN per layer; receptive field 121 frames (4.8 s at 25 fps).
+# Tests whether local temporal dynamics alone match Mamba. enc_layers set for +-2% params vs transformer.
+#
+arm: tcn
+d_model: 512
+d_in: 356
+enc_layers: 8
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+max_src_len: 512
+max_tgt_len: 64
+tcn_kernel: 5
+tcn_dilations: [1, 2, 4, 8]

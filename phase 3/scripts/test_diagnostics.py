@@ -127,7 +127,7 @@ def test_video_and_density_end_to_end():
             assert s.loc["d2", "mean_frames"] > s.loc["d1", "mean_frames"] > s.loc["d0.5", "mean_frames"]
         # both models used the same fixed samples
         assert os.path.exists(os.path.join(root, "video", "sample_video_isign.csv"))
-        assert os.path.exists(os.path.join(root, "density", "sample_density_isign.csv"))
+        assert os.path.exists(os.path.join(root, "density", "sample_density_isign_0-256.csv"))
 
 
 if __name__ == "__main__":

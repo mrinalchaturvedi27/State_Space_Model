@@ -36,6 +36,20 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
             dim_feedforward=model_cfg["dim_feedforward"], dropout=dropout,
             max_len=model_cfg.get("max_src_len", 1024),
         )
+    elif arm in ("transformer_convstem", "transformer_relpos", "tcn"):
+        # Step-4 controls (src/models/controls.py): what explains Mamba's advantage?
+        from .controls import ConvStemTransformerEncoder, RelPosTransformerEncoder, TCNEncoder
+        common = dict(d_model=d_model, dim_feedforward=model_cfg["dim_feedforward"], dropout=dropout)
+        if arm == "transformer_convstem":
+            encoder = ConvStemTransformerEncoder(n_layers=model_cfg["enc_layers"], n_heads=model_cfg["n_heads"],
+                                                 max_len=model_cfg.get("max_src_len", 1024),
+                                                 stem_blocks=model_cfg.get("stem_blocks", 2),
+                                                 stem_kernel=model_cfg.get("stem_kernel", 5), **common)
+        elif arm == "transformer_relpos":
+            encoder = RelPosTransformerEncoder(n_layers=model_cfg["enc_layers"], n_heads=model_cfg["n_heads"], **common)
+        else:
+            encoder = TCNEncoder(n_layers=model_cfg["enc_layers"], kernel=model_cfg.get("tcn_kernel", 5),
+                                 dilations=tuple(model_cfg.get("tcn_dilations", [1, 2, 4, 8])), **common)
     elif arm == "transformer_uniform_avg":
         # Control: phase-1 Transformer encoder + the same plain 16-frame averaging as mamba_uniform_avg.
         from .pooled import UniformAvgPooledEncoder
@@ -84,4 +98,5 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
         n_dec_layers=model_cfg["dec_layers"], n_heads=model_cfg["n_heads"],
         dim_feedforward=model_cfg["dim_feedforward"], dropout=dropout, pad_id=pad_id,
         max_tgt_len=model_cfg.get("max_tgt_len", 64), label_smoothing=model_cfg.get("label_smoothing", 0.1),
+        bow_weight=model_cfg.get("bow_weight", 0.0),
     )

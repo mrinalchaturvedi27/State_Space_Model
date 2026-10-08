@@ -73,7 +73,7 @@ class PoseToTextModel(nn.Module):
     def __init__(self, encoder: nn.Module, d_model: int, vocab_size: int, d_in: int = 356,
                 n_dec_layers: int = 3, n_heads: int = 8, dim_feedforward: int = 2048,
                 dropout: float = 0.1, pad_id: int = 0, max_tgt_len: int = 64,
-                label_smoothing: float = 0.1):
+                label_smoothing: float = 0.1, bow_weight: float = 0.0):
         super().__init__()
         self.front_end = FrontEnd(d_in, d_model, dropout)
         self.encoder = encoder
@@ -92,6 +92,13 @@ class PoseToTextModel(nn.Module):
         self.pad_id = pad_id
         self.d_model = d_model
         self.loss_fn = nn.CrossEntropyLoss(ignore_index=pad_id, label_smoothing=label_smoothing)
+        # Lexical grounding (phase 3, Track E): a training-only head predicts, from the encoder's
+        # pooled states, which target tokens the sentence contains (multi-label). Forces word
+        # identity into the encoder. Off by default: no parameters, identical state dicts.
+        self.bow_weight = bow_weight
+        if bow_weight > 0:
+            self.bow_head = nn.Linear(d_model, vocab_size)
+            self.register_buffer("bow_ignore", torch.zeros(vocab_size, dtype=torch.bool), persistent=False)
 
     def encode(self, src: torch.Tensor, src_key_padding_mask: torch.Tensor | None = None):
         x = self.front_end(src)
@@ -116,9 +123,32 @@ class PoseToTextModel(nn.Module):
         memory, mem_pad = self.encode(src, src_key_padding_mask)
         return self.decode(tgt_in, memory, tgt_key_padding_mask, mem_pad)
 
+    def set_bow_ignore(self, token_ids) -> None:
+        """Token ids the bag-of-words head neither predicts nor is scored on (function words,
+        punctuation, specials); set by train.py from the SentencePiece model."""
+        if self.bow_weight > 0:
+            self.bow_ignore.zero_()
+            self.bow_ignore[torch.as_tensor(list(token_ids), dtype=torch.long)] = True
+
+    def bow_loss(self, memory, mem_pad, tgt_out):
+        valid = torch.ones(memory.shape[:2], device=memory.device) if mem_pad is None else (~mem_pad).float()
+        pooled = (memory.float() * valid.unsqueeze(-1)).sum(1) / valid.sum(1, keepdim=True).clamp_min(1)
+        logits = self.bow_head(pooled)
+        target = torch.zeros_like(logits)
+        target.scatter_(1, tgt_out.clamp_min(0), 1.0)
+        keep = ~self.bow_ignore
+        keep[self.pad_id] = False
+        target = target * keep
+        bce = nn.functional.binary_cross_entropy_with_logits(logits, target, reduction="none") * keep
+        return bce.sum() / target.sum().clamp_min(1.0)
+
     def compute_loss(self, src, tgt_in, tgt_out, src_key_padding_mask=None, tgt_key_padding_mask=None):
-        logits = self.forward(src, tgt_in, src_key_padding_mask, tgt_key_padding_mask)
-        return self.loss_fn(logits.reshape(-1, logits.size(-1)), tgt_out.reshape(-1))
+        memory, mem_pad = self.encode(src, src_key_padding_mask)
+        logits = self.decode(tgt_in, memory, tgt_key_padding_mask, mem_pad)
+        loss = self.loss_fn(logits.reshape(-1, logits.size(-1)), tgt_out.reshape(-1))
+        if self.bow_weight > 0 and self.training:
+            loss = loss + self.bow_weight * self.bow_loss(memory, mem_pad, tgt_out)
+        return loss
 
     def no_decay_params(self) -> tuple[list[nn.Parameter], list[nn.Parameter]]:
         """Split params into (decay, no_decay) for AdamW per §4: no weight decay on biases,

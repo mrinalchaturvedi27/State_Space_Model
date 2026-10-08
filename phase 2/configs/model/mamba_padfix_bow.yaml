@@ -1,0 +1,19 @@
+# Track E (phase 3): mamba_padfix + the lexical grounding loss (bag of target content tokens predicted from
+# the pooled encoder states, weight 0.3). The head is training-only; inference is unchanged.
+#
+arm: mamba_padfix
+tag: mamba_padfix_bow
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+bow_weight: 0.3

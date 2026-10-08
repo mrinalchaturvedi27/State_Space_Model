@@ -26,6 +26,25 @@ from src.data import TokenBudgetBatchSampler, make_collate, make_dataset  # noqa
 from src.models import build_model  # noqa: E402
 
 
+_BOW_STOP = set("a an the and or but if of to in on at by for with from is are was were be been being it its this that "
+                "these those he she they we you i me him her them us my his their our your not no so as do does did have "
+                "has had will would can could should may might must there here then than when what which who how all any "
+                "some just also very up out into over about am der die das den dem des ein eine einen einem einer eines "
+                "und oder aber ist sind war es sie er wir ihr ich du im an am auf aus bei mit nach von vor zu zum zur "
+                "für über um auch nicht noch nur so wie als da dann dass sich hat haben".split())
+
+
+def bow_ignore_ids(sp) -> list[int]:
+    """SentencePiece ids the bag-of-words head skips: specials, function words, punctuation-only
+    pieces and the <UNKNOWN> marker pieces, so it is trained on content-bearing tokens."""
+    ids = {sp.bos_id(), sp.eos_id(), sp.pad_id(), sp.unk_id()}
+    for i in range(sp.get_piece_size()):
+        piece = sp.id_to_piece(i).replace("\u2581", "").lower()
+        if not any(ch.isalnum() for ch in piece) or piece in _BOW_STOP or piece in ("unknown", "<unknown>"):
+            ids.add(i)
+    return sorted(x for x in ids if x >= 0)
+
+
 def cosine_with_warmup(step: int, warmup_steps: int, total_steps: int, min_lr_ratio: float = 0.1) -> float:
     if step < warmup_steps:
         return (step + 1) / max(1, warmup_steps)
@@ -157,6 +176,8 @@ def main():
     vocab_size = train_ds.sp.vocab_size()
     model = build_model(model_cfg, vocab_size=vocab_size, pad_id=train_ds.pad_id).to(device)
     n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    if model_cfg.get("bow_weight", 0) > 0:
+        model.set_bow_ignore(bow_ignore_ids(train_ds.sp))
     if args.init_encoder:
         # Self-supervised front end + encoder (phase 3). Every pretrained tensor must land; the
         # decoder and embeddings stay at their fresh init.
