@@ -131,16 +131,17 @@ Pretraining is on whole stitched story videos (4,096-frame windows) vs the same 
 - **Over the seeds' best outputs only:** +1.5–2.3 chrF2 and +0.03–0.3 BLEU-4.
 - **Oracle candidate (upper bound):** iSign 28.8 chrF2 / 6.9 BLEU-4 vs 21.4 / 4.0 single. **The right answer is often among the candidates.**
 
-**Selective translation, using agreement across seeds as confidence:**
+**Selective translation.** Confidence = **candidate consensus** (mean chrF of the chosen output against all pooled candidates); seed agreement (pairwise agreement of the seeds' best outputs) is a close second:
 
-| Model (test) | Failure-detection AUROC | chrF2, all → most confident 40% | Failure rate, all → 40% |
+| Model (test) | Failure-detection AUROC (consensus / seed agreement) | chrF2, all → most confident 40% | Failure rate, all → 40% |
 |---|---|---|---|
-| iSign Mamba | 0.778 | 23.7 → **29.0** | 49.5% → **24.9%** |
-| PHOENIX Mamba | 0.766 | 37.2 → **48.4** | 27.7% → **10.5%** |
-| How2Sign Mamba | 0.711 | 22.3 → 25.0 | 47.5% → 29.9% |
+| iSign Mamba | 0.778 / 0.760 | 23.7 → **29.0** | 49.5% → **24.9%** |
+| PHOENIX Mamba | 0.766 / 0.742 | 37.2 → **48.4** | 27.7% → **10.5%** |
+| How2Sign Mamba | 0.711 / 0.673 | 22.3 → 25.0 | 47.5% → 29.9% |
 
 - **The model's own log-probability is a weaker signal,** and on How2Sign it's useless (AUROC 0.46).
-- **Mamba's confidence is more reliable than the Transformer's** (iSign 0.778 vs 0.758; How2Sign 0.711 vs 0.596).
+- **Mamba's confidence is more reliable than the Transformer's** (consensus AUROC: iSign 0.778 vs 0.758; How2Sign 0.711 vs 0.596).
+- **"Failure" here means no shared content word** (a lexical-overlap proxy: the filter excludes digits and negation such as *not*, *no*, *nicht*). It is not a semantic-correctness label.
 
 ---
 
