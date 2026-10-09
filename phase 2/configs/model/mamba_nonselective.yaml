@@ -1,0 +1,17 @@
+# Selectivity control: mamba_padfix with B, C and Δ input-independent (learned constants): an LTI
+# recurrence with the same state size. If Mamba's long-clip lead over the TCN disappears, selectivity matters.
+#
+arm: mamba_nonselective
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64

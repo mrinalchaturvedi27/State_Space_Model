@@ -1,0 +1,3 @@
+metric,long_minus_short_gap,ci95,share_of_draws_>0
+chrF2,0.67,"[+0.00, +1.40]",0.975
+BLEU4,0.74,"[+0.11, +1.40]",0.99

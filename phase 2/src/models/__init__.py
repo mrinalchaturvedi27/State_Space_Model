@@ -50,6 +50,28 @@ def build_model(model_cfg: dict, vocab_size: int, pad_id: int = 0) -> PoseToText
         else:
             encoder = TCNEncoder(n_layers=model_cfg["enc_layers"], kernel=model_cfg.get("tcn_kernel", 5),
                                  dilations=tuple(model_cfg.get("tcn_dilations", [1, 2, 4, 8])), **common)
+    elif arm == "transformer_local":
+        from .controls import LocalAttnTransformerEncoder
+        encoder = LocalAttnTransformerEncoder(
+            d_model=d_model, n_layers=model_cfg["enc_layers"], n_heads=model_cfg["n_heads"],
+            dim_feedforward=model_cfg["dim_feedforward"], dropout=dropout,
+            max_len=model_cfg.get("max_src_len", 1024), half_width=model_cfg.get("local_half_width", 10),
+        )
+    elif arm in ("mamba_nonselective", "mamba_window"):
+        # Selectivity controls (src/models/selectivity.py): the padfix encoder, LTI or windowed.
+        from .mamba_pool import ScopePoolEncoder
+        from .selectivity import WindowedEncoder, make_nonselective
+        encoder = ScopePoolEncoder(
+            d_model=d_model, n_layers=model_cfg["enc_layers"], d_state=model_cfg["d_state"],
+            expand=model_cfg["expand"], headdim=model_cfg["headdim"], d_conv=model_cfg["d_conv"],
+            dropout=dropout, pool_mode="none", horizon_banks=False,
+        )
+        if arm == "mamba_nonselective":
+            for layer in encoder.layers:
+                make_nonselective(layer.fwd)
+                make_nonselective(layer.bwd)
+        else:
+            encoder = WindowedEncoder(encoder, window=model_cfg.get("window_frames", 128))
     elif arm == "transformer_uniform_avg":
         # Control: phase-1 Transformer encoder + the same plain 16-frame averaging as mamba_uniform_avg.
         from .pooled import UniformAvgPooledEncoder

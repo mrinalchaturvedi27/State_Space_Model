@@ -13,6 +13,10 @@ ingredient explains Mamba's advantage. Each is parameter-matched to the Transfor
   tcn                   no attention: residual blocks of a depthwise dilated temporal conv
                         (kernel 5, dilations 1,2,4,8 repeated) + a pointwise FFN. Receptive field
                         1 + sum((k - 1) * d) frames (121 frames for 8 layers), printed by receptive_field().
+                        tcn_wide (config only): dilations 1,2,...,64,1 -> 513 frames, the whole clip.
+  transformer_local     the phase-1 Transformer with attention restricted to |i - j| <= local_half_width
+                        (default 10) in every layer: receptive field 1 + 2 * 10 * 6 = 121 frames,
+                        matched to the TCN, with no convolution.
 Padded frames are zeroed before every convolution, so a clip's encoding does not depend on padding.
 """
 from __future__ import annotations
@@ -124,4 +128,36 @@ class TCNEncoder(nn.Module):
         for conv, ffn in zip(self.convs, self.ffns):
             x = _zero_pad(conv(x, pad), pad)
             x = _zero_pad(x + ffn(x), pad)
+        return self.norm(x)
+
+
+class LocalAttnTransformerEncoder(nn.Module):
+    def __init__(self, d_model=512, n_layers=6, n_heads=8, dim_feedforward=2048, dropout=0.1, max_len=1024,
+                 half_width=10):
+        super().__init__()
+        self.n_heads, self.half_width = n_heads, half_width
+        self.pos = SinusoidalPositionalEncoding(d_model, max_len)
+        self.pos_dropout = nn.Dropout(dropout)
+        self.layers = nn.ModuleList([_layer(d_model, n_heads, dim_feedforward, dropout) for _ in range(n_layers)])
+        self.norm = nn.LayerNorm(d_model)
+
+    def receptive_field(self) -> int:
+        return 1 + 2 * self.half_width * len(self.layers)
+
+    def mask(self, B, T, pad, device):
+        pos = torch.arange(T, device=device)
+        far = (pos[None, :] - pos[:, None]).abs() > self.half_width                     # (T, T)
+        m = far.unsqueeze(0).expand(B, -1, -1)
+        if pad is not None:
+            m = m | pad[:, None, :]
+        m = m & ~torch.eye(T, dtype=torch.bool, device=device)  # every query sees itself: no empty rows
+        bias = torch.zeros(B, T, T, device=device).masked_fill(m, float("-inf"))
+        return bias.repeat_interleave(self.n_heads, dim=0)
+
+    def forward(self, x, src_key_padding_mask=None):
+        B, T, _ = x.shape
+        mask = self.mask(B, T, src_key_padding_mask, x.device)
+        x = self.pos_dropout(self.pos(x))
+        for layer in self.layers:
+            x = layer(x, src_mask=mask)
         return self.norm(x)
