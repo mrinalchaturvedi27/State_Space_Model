@@ -1,0 +1,16 @@
+# base_f3 with a longer budget: on PHOENIX the Transformer and TCN were still improving at the 40-epoch
+# cap (best epochs 36-39) while Mamba converged by ~30. Early stopping (patience 8 after warmup) still
+# ends converged runs early, so every encoder gets the same budget and stops when it has converged.
+t_max: 512
+max_tokens: 24576       # ~64 clips at mean length; equal frames/step across arms, not equal clips
+grad_accum: 1
+max_epochs: 80
+warmup_steps: 4000
+weight_decay: 0.01
+betas: [0.9, 0.98]
+eps: 1.0e-8
+grad_clip: 1.0
+patience: 8              # early stopping, on val corpus_chrF2
+min_lr_ratio: 0.1         # cosine decays to 10% of peak lr
+num_workers: 8
+warmup_ratio: 0.1

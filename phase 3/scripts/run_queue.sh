@@ -8,8 +8,9 @@
 #   P3 phoenix      PHOENIX (base_f3) tcn seeds 42/13/1337; order diagnostics for tcn, Transformer, Mamba
 #   P4 profile      parameters, training step time/memory, batch-1 encoder latency (one job, minutes)
 #   P6 bow          E6 on PHOENIX seed 42: Transformer and Mamba, each with the lexical (bag-of-words) loss
-#   P7 select3      conditional, only after P2 says so: seeds 13/1337 for ARMS7 (default mamba_window
-#                   mamba_nonselective) on iSign
+#   P7 select3      seeds 13/1337 for ARMS7 (default mamba_window mamba_nonselective) on iSign
+#   P8 phoenix_long PHOENIX with an 80-epoch budget (base_f3_long; results in "phase 2/results_long"):
+#                   transformer, tcn, mamba_padfix, mamba_nonselective, seeds 42/13/1337
 # P5 (How2Sign target check + retrain) is manual; see EXPERIMENT_QUEUE.md.
 # Each iSign seed-42 training job also runs the order/density diagnostic on short and long clips.
 #
@@ -38,6 +39,7 @@ if [ "${SMOKE}" = "1" ]; then
   QUEUE="${LOG_DIR}/queue_smoke_jobs.txt"; LOCK="${LOG_DIR}/queue_smoke_jobs.lock"
 fi
 DIAG="results/diagnostics/queue"
+LONG_RESULTS="${PHASE2_DIR}/results_long"; [ "${SMOKE}" = "1" ] && LONG_RESULTS="${PHASE2_DIR}/results_long_smoke"
 
 density_cmd() {  # data cfg checkpoint tag range(short|long) n [sample_file]
   local data="$1" cfg="$2" ck="$3" tag="$4" range="$5" n="$6" sample="${7:-}"
@@ -48,8 +50,9 @@ density_cmd() {  # data cfg checkpoint tag range(short|long) n [sample_file]
 --out ${DIAG}/density_${range}/${data}_${tag}"
 }
 
-job() {  # cfg seed data train diag(none|both|short) -> one queue line, or nothing if already done
+job() {  # cfg seed data train diag(none|both|short) [results root] -> one queue line, or nothing if done
   local cfg="$1" seed="$2" data="$3" train="$4" diag="$5"
+  local RESULTS="${6:-${RESULTS}}"
   local y="${PHASE2_DIR}/configs/model/${cfg}.yaml" tag
   [ -f "${y}" ] || { echo "missing model config ${y}" >&2; exit 1; }
   tag="$(awk '$1 == "tag:" {print $2}' "${y}")"; tag="${tag:-$(awk '$1 == "arm:" {print $2}' "${y}")}"
@@ -98,6 +101,9 @@ build() {
       bow)
         job transformer 42 phoenix14t base_f3 none   # phase-2 harness baseline cell (skipped if present)
         for a in transformer_bow mamba_padfix_bow; do job "$a" 42 phoenix14t base_f3 none; done ;;
+      phoenix_long)
+        for s in 42 13 1337; do for a in mamba_nonselective tcn transformer mamba_padfix; do
+          job "$a" "$s" phoenix14t base_f3_long none "${LONG_RESULTS}"; done; done ;;
       select3)
         for s in 13 1337; do for a in ${ARMS7}; do job "$a" "$s" isign base none; done; done ;;
       *) echo "unknown part ${part}" >&2; exit 1 ;;
