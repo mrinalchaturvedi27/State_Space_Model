@@ -56,9 +56,11 @@ A time-invariant SSM is equivalent to a long learned convolution. **The winning 
 - [x] P8 `phoenix_long`: converged comparison on PHOENIX.
 
 ### Now
-#### P5 How2Sign target validity (manual; needed before any How2Sign claim)
-- [ ] `python scripts/check_text_columns.py --data configs/data/how2sign.yaml`. Paste the output so the correct target column can be confirmed.
-- [ ] If confirmed: retrain Transformer, TCN, Mamba and non-selective Mamba on the corrected targets. This is the third dataset, and the longest clips.
+#### P9 `how2sign`: the third dataset, with corrected targets (12 runs)
+The original How2Sign runs trained on lowercased text with `<UNKNOWN>` tokens but were scored against cased references. `how2sign_cased` uses one consistently formatted column for train, val and test.
+- [ ] **Step 1 (you, minutes):** run `check_text_columns.py` and paste the output. I'll confirm the column, or change `text_col` in both `configs/data/how2sign_cased.yaml` and `phase 2/configs/data/how2sign_cased.yaml`.
+- [ ] **Step 2:** `H2S_TEXT_CHECKED=1 PARTS="how2sign"`. It builds the cache once (CPU, about 40 min), then trains Transformer, TCN, Mamba and non-selective Mamba, 3 seeds each, with the 80-epoch budget. Seed 42 also gets order diagnostics on short and long clips.
+- **What it decides:** How2Sign has the longest clips, so it's the strongest test of point 2 (context beyond ~5 s) and a third-language check of points 1 and 3.
 
 ### My side (CPU, after each push)
 - [x] `length_gap.py` for the P7 arms (3 seeds); `compare_encoders.py` headline tables.
@@ -77,19 +79,21 @@ A time-invariant SSM is equivalent to a long learned convolution. **The winning 
 
 ## Commands
 
+Step 1, the target check (no GPU, minutes). Paste me the whole output:
+
 ```bash
 cd /scratch/home/student1/Sign_Language/Projects/State_Space_Model
 git pull --ff-only
 conda activate ssm-slt
+python scripts/check_text_columns.py --data configs/data/how2sign.yaml --cache-dir cache
 ```
+
+Step 2, only after I've confirmed the column:
 
 ```bash
 rm -f logs/queue.log logs/queue_jobs.txt
-```
-
-```bash
 tmux new -s queue
-PARTS="select3 phoenix_long" GPUS="0 1 2 3" bash "phase 3/scripts/run_queue.sh"
+H2S_TEXT_CHECKED=1 PARTS="how2sign" GPUS="0 1 2 3" bash "phase 3/scripts/run_queue.sh"
 ```
 
 Progress: `tail -f logs/queue.log`. Pending jobs: `cut -f1 logs/queue_jobs.txt`.
@@ -97,9 +101,9 @@ Progress: `tail -f logs/queue.log`. Pending jobs: `cut -f1 logs/queue_jobs.txt`.
 To push results (as many times as you like while the queue runs):
 
 ```bash
-git add "phase 2/results" "phase 2/results_long" "phase 3/results"
-git commit -m "Queue results"
+git add "phase 2/results_long" "phase 3/results"
+git commit -m "How2Sign results"
 git push
 ```
 
-**Expected time:** 16 jobs on 4 GPUs. The 4 iSign runs take about 4–6 h each. The 12 PHOENIX runs are shorter, but up to twice as long as before because of the 80-epoch budget. About 1 day in total.
+**Expected time:** about 40 min for the cache, then 12 runs on 4 GPUs, roughly 1–1.5 days.

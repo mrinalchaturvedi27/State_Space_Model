@@ -11,6 +11,11 @@
 #   P7 select3      seeds 13/1337 for ARMS7 (default mamba_window mamba_nonselective) on iSign
 #   P8 phoenix_long PHOENIX with an 80-epoch budget (base_f3_long; results in "phase 2/results_long"):
 #                   transformer, tcn, mamba_padfix, mamba_nonselective, seeds 42/13/1337
+#   P9 how2sign     How2Sign with one consistently cased target (configs/data/how2sign_cased.yaml), the third
+#                   dataset and the longest clips: builds that cache first (CPU, ~40 min, once), then the same
+#                   four encoders x 3 seeds with the 80-epoch budget into "phase 2/results_long"; seed 42 also
+#                   gets the order diagnostic on short and long clips. Refuses to run unless
+#                   H2S_TEXT_CHECKED=1, i.e. after scripts/check_text_columns.py confirmed text_col.
 # P5 (How2Sign target check + retrain) is manual; see EXPERIMENT_QUEUE.md.
 # Each iSign seed-42 training job also runs the order/density diagnostic on short and long clips.
 #
@@ -104,12 +109,30 @@ build() {
       phoenix_long)
         for s in 42 13 1337; do for a in mamba_nonselective tcn transformer mamba_padfix; do
           job "$a" "$s" phoenix14t base_f3_long none "${LONG_RESULTS}"; done; done ;;
+      how2sign)
+        for s in 42 13 1337; do for a in mamba_nonselective tcn transformer mamba_padfix; do
+          job "$a" "$s" how2sign_cased base_f3_long "$([ "$s" = 42 ] && echo both || echo none)" "${LONG_RESULTS}"; done; done ;;
       select3)
         for s in 13 1337; do for a in ${ARMS7}; do job "$a" "$s" isign base none; done; done ;;
       *) echo "unknown part ${part}" >&2; exit 1 ;;
     esac
   done
 }
+
+case " ${PARTS} " in *" how2sign "*)
+  if [ "${H2S_TEXT_CHECKED:-0}" != "1" ]; then
+    echo "Run first: python scripts/check_text_columns.py --data configs/data/how2sign.yaml --cache-dir cache" >&2
+    echo "then confirm text_col in configs/data/how2sign_cased.yaml and rerun with H2S_TEXT_CHECKED=1." >&2
+    exit 1
+  fi
+  if [ "${SMOKE}" != "1" ] && [ ! -f "${PROJECT_DIR}/cache/how2sign_cased/cache_manifest.json" ]; then
+    echo "=== building cache/how2sign_cased $(date) (CPU, ~40 min) ===" | tee -a "${LOG_DIR}/queue.log"
+    (cd "${PROJECT_DIR}" && conda run --no-capture-output -n "${CONDA_ENV}" \
+      python scripts/build_cache.py --data configs/data/how2sign_cased.yaml --out-dir cache --workers 32) \
+      > "${LOG_DIR}/queue_build_cache_how2sign_cased.log" 2>&1
+    echo "=== cache built $(date) ===" | tee -a "${LOG_DIR}/queue.log"
+  fi ;;
+esac
 
 if [ -s "${QUEUE}" ]; then
   echo "resuming: $(wc -l < "${QUEUE}") jobs left in ${QUEUE} (delete it to rebuild from PARTS)"
