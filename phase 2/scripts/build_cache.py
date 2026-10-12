@@ -58,9 +58,15 @@ class DataConfig:
     source_fps: int
     vocab_size: int
     lang: str = "en"
+    # Optional train-only target column, for CSVs whose splits name the same text differently
+    # (How2Sign: train's cased sentence is SENTENCE, val/test's is text).
+    train_text_col: Optional[str] = None
 
     def csv_for(self, split: str) -> str:
         return {"train": self.train_csv, "val": self.val_csv, "test": self.test_csv}[split]
+
+    def text_col_for(self, split: str) -> str:
+        return self.train_text_col if split == "train" and self.train_text_col else self.text_col
 
 
 def load_configs(data_yaml: str, preprocess_yaml: str) -> tuple[DataConfig, PreprocessConfig]:
@@ -79,6 +85,8 @@ def config_hash(dc: DataConfig, pc: PreprocessConfig) -> str:
         "uid_col": dc.uid_col, "text_col": dc.text_col, "pose_id_col": dc.pose_id_col,
         "pose_ext": dc.pose_ext,
     }
+    if dc.train_text_col:  # only when set, so existing caches keep their hash
+        payload["train_text_col"] = dc.train_text_col
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
 
 
@@ -219,9 +227,10 @@ def build_split(dc: DataConfig, pc: PreprocessConfig, split: str, out_dir: str,
     df = pd.read_csv(dc.csv_for(split))
     if limit:
         df = df.head(limit)
-    df[dc.text_col] = df[dc.text_col].map(nfkc)
+    text_col = dc.text_col_for(split)
+    df[text_col] = df[text_col].map(nfkc)
 
-    jobs = [(row[dc.uid_col], row[dc.pose_id_col], row[dc.text_col], dc.pose_dir, dc.pose_ext,
+    jobs = [(row[dc.uid_col], row[dc.pose_id_col], row[text_col], dc.pose_dir, dc.pose_ext,
              shard_dir, asdict(pc)) for _, row in df.iterrows()]
 
     print(f"[{dc.dataset}/{split}] {len(jobs)} rows, {workers} workers, shard_dir={shard_dir}")

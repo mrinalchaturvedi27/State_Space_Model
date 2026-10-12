@@ -39,7 +39,8 @@ def main():
     args = ap.parse_args()
     with open(args.data) as f:
         dc = yaml.safe_load(f)
-    print(f"dataset {dc['dataset']}: configured text_col = {dc['text_col']!r}\n")
+    print(f"dataset {dc['dataset']}: configured text_col = {dc['text_col']!r}"
+          + (f", train_text_col = {dc['train_text_col']!r}" if dc.get("train_text_col") else "") + "\n")
 
     for split in ("train", "val", "test"):
         df = pd.read_csv(dc[f"{split}_csv"])
@@ -51,7 +52,8 @@ def main():
         for c in cols:
             p = profile(df[c])
             if p and p["mean words"] >= 2:  # skip ids and short codes
-                rows.append({"column": c + (" <- used" if c == dc["text_col"] else ""), **p})
+                used = dc.get("train_text_col") if split == "train" and dc.get("train_text_col") else dc["text_col"]
+                rows.append({"column": c + (" <- used" if c == used else ""), **p})
         print(pd.DataFrame(rows).to_string(index=False))
         text_cols = [r["column"].split(" ")[0] for r in rows]
         for i in range(min(args.examples, len(df))):

@@ -58,7 +58,7 @@ A time-invariant SSM is equivalent to a long learned convolution. **The winning 
 ### Now
 #### P9 `how2sign`: the third dataset, with corrected targets (12 runs)
 The original How2Sign runs trained on lowercased text with `<UNKNOWN>` tokens but were scored against cased references. `how2sign_cased` uses one consistently formatted column for train, val and test.
-- [ ] **Step 1 (you, minutes):** run `check_text_columns.py` and paste the output. I'll confirm the column, or change `text_col` in both `configs/data/how2sign_cased.yaml` and `phase 2/configs/data/how2sign_cased.yaml`.
+- [x] **Step 1:** `check_text_columns.py` (2026-10-12): train `text` is lowercase with 22.8% `<UNKNOWN>`, train `SENTENCE` is cased; val/test have only `text`, already cased. The configs now use `train_text_col: SENTENCE` and `text_col: text`, and the runner refuses to train unless the built cache passes the same check for all three splits.
 - [ ] **Step 2:** `H2S_TEXT_CHECKED=1 PARTS="how2sign"`. It builds the cache once (CPU, about 40 min), then trains Transformer, TCN, Mamba and non-selective Mamba, 3 seeds each, with the 80-epoch budget. Seed 42 also gets order diagnostics on short and long clips.
 - **What it decides:** How2Sign has the longest clips, so it's the strongest test of point 2 (context beyond ~5 s) and a third-language check of points 1 and 3.
 

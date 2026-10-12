@@ -131,6 +131,20 @@ case " ${PARTS} " in *" how2sign "*)
       python scripts/build_cache.py --data configs/data/how2sign_cased.yaml --out-dir cache --workers 32) \
       > "${LOG_DIR}/queue_build_cache_how2sign_cased.log" 2>&1
     echo "=== cache built $(date) ===" | tee -a "${LOG_DIR}/queue.log"
+  fi
+  if [ "${SMOKE}" != "1" ]; then  # refuse to train unless train and val/test targets look alike
+    (cd "${PROJECT_DIR}" && conda run --no-capture-output -n "${CONDA_ENV}" python -c "
+import re, sys, pandas as pd
+unk = re.compile(r'<\s*unk(nown)?\s*>', re.I)
+for split in ('train', 'val', 'test'):
+    t = pd.read_parquet(f'cache/how2sign_cased/{split}_index.parquet')['text'].astype(str)
+    up = 100 * t.map(lambda s: any(c.isupper() for c in unk.sub('', s))).mean()
+    un = 100 * t.map(lambda s: bool(unk.search(s))).mean()
+    print(f'how2sign_cased {split}: {len(t)} clips, uppercase {up:.1f}%, <UNKNOWN> {un:.1f}%')
+    if up < 90 or un > 1:
+        sys.exit(f'target check FAILED for {split}: fix text_col / train_text_col and rebuild cache/how2sign_cased')
+") 2>&1 | tee -a "${LOG_DIR}/queue.log"
+    [ "${PIPESTATUS[0]}" = "0" ] || exit 1
   fi ;;
 esac
 
