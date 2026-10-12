@@ -4,40 +4,41 @@ Priority-ordered checklist for the remaining experiments from the expert review 
 
 ## Where we stand
 
-### iSign (test, beam 5; video-grouped 95% intervals)
-| Encoder | Seeds | chrF2 | BLEU-4 | vs Mamba, chrF2 | vs Mamba, >256-frame clips |
+### iSign (test, beam 5, 3 seeds; video-grouped 95% intervals)
+| Encoder | chrF2 | BLEU-4 | vs Mamba, chrF2 | vs Mamba, BLEU-4 | vs Mamba, >256-frame clips |
 |---|---|---|---|---|---|
-| Transformer | 3 | 19.06 | 2.90 | −2.30 [−2.55, −2.05] | −2.60 |
-| + conv stem | 3 | 19.70 | 3.15 | −1.66 | −1.93 |
-| + relative positions | 3 | 19.78 | 3.37 | −1.58 | −1.82 |
-| Local-attention Transformer (121 frames) | 1 | 20.00 | 3.54 | −1.26 | −1.16 |
-| **TCN** | 3 | **20.95** | **3.92** | **−0.41 [−0.57, −0.27]** | −0.68 |
-| TCN reaching the whole clip | 1 | 20.93 | 4.13 | −0.33 | −0.08 |
-| **Mamba in 5-second windows** | 1 | 21.27 | 3.80 | **+0.01** [−0.21, +0.24] | −0.09 |
-| **Mamba, selectivity removed** | 1 | **21.66** | 4.08 | **+0.40** [+0.18, +0.62] | **+0.88** |
-| Mamba | 3 | 21.36 | 4.00 | — | — |
+| Transformer | 19.06 | 2.90 | −2.30 [−2.55, −2.05] | −1.10 | −2.60 |
+| + conv stem | 19.70 | 3.15 | −1.66 | −0.85 | −1.93 |
+| + relative positions | 19.78 | 3.37 | −1.58 | −0.64 | −1.82 |
+| TCN | 20.95 | 3.92 | −0.41 [−0.57, −0.27] | −0.08 (n.s.) | −0.68 |
+| Mamba in 5-second windows | 21.19 | 3.79 | −0.17 [−0.34, −0.02] | −0.22 | **−0.58** [−0.83, −0.36] |
+| **Mamba, selectivity removed** | **21.79** | **4.31** | **+0.43 [+0.28, +0.57]** | **+0.31 [+0.17, +0.45]** | +0.46 |
+| Mamba | 21.36 | 4.00 | — | — | — |
 
-**What the results say:**
-1. **A TCN closes 82% of the chrF2 gap and 93% of the BLEU gap** (3 seeds). Its remaining deficit is on long clips: the long-minus-short difference is +0.83 [+0.44, +1.26].
-2. **Mamba doesn't need memory beyond about 5 seconds.** The windowed version loses nothing.
-3. **Mamba doesn't need input-dependent selectivity.** The fixed (time-invariant) version is slightly better (1 seed).
-4. **The likely mechanism:** dense temporal recurrence over a few seconds of motion. The Transformer barely uses frame order; shuffling every frame costs it −0.35 chrF2, against −4.21 for Mamba.
+Single-seed arms: local-attention Transformer 20.00 / 3.54; whole-clip TCN 20.93 / 4.13 (closes the TCN's long-clip deficit, −0.08).
 
-The earlier hypothesis, "selective long-range memory explains the length-dependent part", is **rejected** by points 2 and 3.
+### PHOENIX (80-epoch budget, every run converged and early-stopped; 3 seeds)
+| Encoder | chrF2 | BLEU-4 | vs Mamba, chrF2 | vs Mamba, BLEU-4 | Best epoch |
+|---|---|---|---|---|---|
+| Transformer | 32.25 | 10.76 | −2.19 [−2.75, −1.56] | −0.35 (n.s.) | 30–42 |
+| TCN | 33.63 | 11.70 | −0.81 [−1.51, −0.15] | +0.59 [+0.01, +1.05] | 39–49 |
+| **Mamba, selectivity removed** | 34.23 | **12.10** | −0.20 (n.s.) | **+0.99 [+0.37, +1.54]** | 24–47 |
+| Mamba | 34.44 | 11.11 | — | — | 22–26 |
 
-### PHOENIX: not conclusive yet
-- **3-seed scores:** Transformer 31.87 / 10.64, TCN 32.46 / 10.77, Mamba 33.94 / 11.68.
-- **The problem:** the Transformer and TCN were still improving at the 40-epoch cap (best epochs 36–39), while Mamba converged by about epoch 30. P8 reruns PHOENIX with an 80-epoch budget.
+PHOENIX clips are all ≤256 frames, so the long-clip question can't be asked there.
 
-### Other results
-- **Word-level (bag-of-words) loss, E6:** hurts both encoders (Transformer −4.15, Mamba −1.21 chrF2). The Transformer + loss run was also still improving at the cap, so the interaction isn't interpretable. **Dropped.**
-- **Resources** (`phase 3/results/profile/profile.csv`):
+### What the results say
+1. **Local temporal modelling explains most of the gap.** A TCN closes 82% (iSign) and 63% (PHOENIX) of the chrF2 gap, and all of the BLEU-4 gap.
+2. **Long clips also need context beyond about 5 seconds.** Windowed Mamba loses specifically on long iSign clips (long-minus-short −0.92 [−1.32, −0.54]), and a TCN reaching the whole clip recovers the TCN's long-clip deficit.
+3. **Input-dependent selectivity isn't needed; removing it helps.** A time-invariant (non-selective) Mamba is the best encoder on iSign (+0.43 chrF2, +0.31 BLEU-4, the same at every length). On PHOENIX it ties on chrF2 and is better on BLEU-4.
+4. **Mamba converges fastest** (best epochs 22–26 on PHOENIX, against 30–49 for the others).
 
-| | Training step | Peak memory | Batch-1 encoder time |
-|---|---|---|---|
-| Transformer | 66 ms | 4.4 GB | 3–5 ms |
-| TCN | 91 ms | 4.8 GB | 3.5 ms |
-| Mamba | 140 ms | 3.9 GB | 15 ms |
+A time-invariant SSM is equivalent to a long learned convolution. **The winning inductive bias is dense temporal filtering over the whole clip, not content-dependent selection.**
+
+**Other results:**
+- The word-level (bag-of-words) loss hurts both encoders; dropped.
+- Resources: `phase 3/results/profile/profile.csv`.
+- Headline tables: `phase 3/results/compare/`.
 
 ## Checklist
 
@@ -50,22 +51,17 @@ The earlier hypothesis, "selective long-range memory explains the length-depende
 - [x] P6 `bow`: dropped.
 - [x] E3 length-gap analysis with video-grouped bootstrap: `phase 3/results/length_gap/`.
 
+### Done since
+- [x] P7 `select3` (3 seeds): selectivity removed is better; windowing hurts long clips.
+- [x] P8 `phoenix_long`: converged comparison on PHOENIX.
+
 ### Now
-#### P7 `select3`: are "no selectivity needed" and "no long memory needed" real? (iSign, 4 runs)
-- [ ] `mamba_nonselective` and `mamba_window`, seeds 13 and 1337.
-- **Decision:** if non-selective Mamba ≥ Mamba on the 3-seed mean, "selectivity isn't needed" becomes the headline.
-
-#### P8 `phoenix_long`: PHOENIX with an 80-epoch budget (12 short runs)
-- [ ] Transformer, TCN, Mamba and non-selective Mamba, seeds 42, 13 and 1337.
-- **Settings:** `configs/train/base_f3_long.yaml`, same early stopping. Results go to `phase 2/results_long/`, so the 40-epoch runs stay intact.
-- **Decision:** does TCN ≈ Mamba and non-selective ≥ Mamba also hold on a second language once every encoder has converged?
-
 #### P5 How2Sign target validity (manual; needed before any How2Sign claim)
 - [ ] `python scripts/check_text_columns.py --data configs/data/how2sign.yaml`. Paste the output so the correct target column can be confirmed.
-- [ ] If confirmed: `H2S_TEXT_CHECKED=1 PART=how2sign bash scripts/run_fixes.sh` (retrains **both** encoders on the cased targets).
+- [ ] If confirmed: retrain Transformer, TCN, Mamba and non-selective Mamba on the corrected targets. This is the third dataset, and the longest clips.
 
 ### My side (CPU, after each push)
-- [ ] `length_gap.py` for the P7 arms (3 seeds) and the PHOENIX reruns.
+- [x] `length_gap.py` for the P7 arms (3 seeds); `compare_encoders.py` headline tables.
 - [ ] Video-grouped bootstrap for every headline comparison in REPORT.md.
 - [ ] Draft the paper: "Temporal inductive bias, not selectivity: what makes state-space encoders win in pose-based SLT".
 
