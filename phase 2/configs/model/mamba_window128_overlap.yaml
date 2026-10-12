@@ -1,0 +1,21 @@
+# Boundary control (2026-10-12 review): 128-frame windows at stride 64, each output taken from the window
+# in whose central half the frame lies. Same maximum context as mamba_window (128 frames), but no frame
+# away from the clip ends sits next to a window edge. If this removes the long-clip penalty, it was boundaries.
+#
+arm: mamba_window
+tag: mamba_window128_overlap
+d_model: 512
+d_in: 356
+enc_layers: 5
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+d_state: 64
+expand: 2
+headdim: 64
+d_conv: 4
+max_tgt_len: 64
+window_frames: 128
+window_mode: overlap

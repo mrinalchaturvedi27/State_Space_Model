@@ -12,7 +12,11 @@ whether that residual comes from Mamba's selective (input-dependent) long-range 
   mamba_window        the padfix encoder run on non-overlapping windows of window_frames frames
                       (default 128, 5.1 s, close to the TCN's 121): no information crosses a window
                       edge in any layer, so the receptive field is the window. Same parameters as
-                      mamba_padfix.
+                      mamba_padfix. window_mode "overlap" separates context from boundaries
+                      (2026-10-12 review): windows of W frames at stride W/2, each frame's output taken
+                      from the window in whose central half it lies, so every frame still sees at most
+                      W frames but no frame (except the clip ends) sits next to a window edge.
+                      window_offset shifts the block grid (the first block has `offset` frames).
 """
 from __future__ import annotations
 
@@ -45,20 +49,58 @@ def make_nonselective(mamba: nn.Module) -> nn.Module:
 
 
 class WindowedEncoder(nn.Module):
-    """Runs an encoder on non-overlapping windows of `window` frames and stitches the outputs back.
-    Windows that are entirely padding are dropped; the inner encoder handles partial windows with
-    its own padding mask."""
+    """Runs an encoder on windows of `window` frames and stitches the outputs back.
+    mode "block": non-overlapping windows starting at `offset` (0: the grid 0, W, 2W, ...).
+    mode "overlap": windows [kH - H/2, kH + 3H/2) with H = W/2, keeping outputs for [kH, (k+1)H).
+    Windows that are entirely padding are skipped; the inner encoder handles partial windows with
+    its own padding mask (padding is always trailing, so a window slice stays trailing-padded)."""
 
-    def __init__(self, inner: nn.Module, window: int = 128):
+    def __init__(self, inner: nn.Module, window: int = 128, mode: str = "block", offset: int = 0):
         super().__init__()
+        if mode not in ("block", "overlap"):
+            raise ValueError(f"unknown window mode {mode!r}")
         self.inner = inner
         self.window = window
+        self.mode = mode
+        self.offset = offset
+
+    def spans(self, T: int):
+        """[(start, end, keep_start, keep_end)] covering 0..T, each frame kept exactly once."""
+        W = self.window
+        if self.mode == "block":
+            cuts = sorted({0, T} | set(range(self.offset % W or W, T, W)))
+            return [(a, b, a, b) for a, b in zip(cuts[:-1], cuts[1:])]
+        H = W // 2
+        out = []
+        for k in range(-(-T // H)):
+            ks, ke = k * H, min(T, (k + 1) * H)
+            out.append((max(0, ks - H // 2), min(T, ks + W - H // 2), ks, ke))
+        return out
 
     def pop_pool_stats(self) -> dict:
         self.inner.reset_pool_stats()  # per-window counts would read as pooling; there is none
         return {}
 
     def forward(self, x: torch.Tensor, src_key_padding_mask: torch.Tensor | None = None):
+        if self.mode == "block" and self.offset == 0:
+            return self._block_fast(x, src_key_padding_mask)
+        B, T, _ = x.shape
+        pad = src_key_padding_mask if src_key_padding_mask is not None else torch.zeros(B, T, dtype=torch.bool, device=x.device)
+        full = None
+        for s, e, ks, ke in self.spans(T):
+            ps = pad[:, s:e]
+            rows = ~ps.all(1)
+            if not rows.any():
+                continue
+            out = self.inner(x[rows, s:e], ps[rows])
+            mem = out[0] if isinstance(out, tuple) else out
+            if full is None:
+                full = torch.zeros(B, T, mem.size(-1), dtype=mem.dtype, device=mem.device)
+            full[rows, ks:ke] = mem[:, ks - s:ke - s]
+        return full, src_key_padding_mask
+
+    def _block_fast(self, x: torch.Tensor, src_key_padding_mask: torch.Tensor | None):
+        """The grid 0, W, 2W, ...: all windows of the batch in one call (the trained configuration)."""
         B, T, D = x.shape
         W = self.window
         n = -(-T // W)

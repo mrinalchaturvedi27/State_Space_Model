@@ -62,10 +62,27 @@ The original How2Sign runs trained on lowercased text with `<UNKNOWN>` tokens bu
 - [ ] **Step 2:** `H2S_TEXT_CHECKED=1 PARTS="how2sign"`. It builds the cache once (CPU, about 40 min), then trains Transformer, TCN, Mamba and non-selective Mamba, 3 seeds each, with the 80-epoch budget. Seed 42 also gets order diagnostics on short and long clips.
 - **What it decides:** How2Sign has the longest clips, so it's the strongest test of point 2 (context beyond ~5 s) and a third-language check of points 1 and 3.
 
+#### After the 12 October review (`REVIEW_FEEDBACK_2026-10-12.md`)
+Fixed on my side, with every interval recomputed:
+- [x] Source-video grouping: iSign dictionary clips (`_d`, `_e1`–`_e4`) are now grouped by video; 216 test videos, not 260.
+- [x] Content F1 is now clipped-multiset; number F1 and negation are scored separately.
+
+Queued behind How2Sign, appended to the running queue:
+- [ ] **P10 `windows`, boundary vs context.**
+  - Window diagnostic (inference) on the window-trained checkpoints (3 seeds), fixed Mamba and input-independent Mamba.
+  - Train windows of 64 and 256, and 128 with overlap (seed 42).
+- [ ] **P11 `s4d`:** independent LTI baseline, 3 seeds.
+- [ ] **P12 `tcn_wide3`:** wide-receptive-field TCN, seeds 13 and 1337.
+
+CPU checks, run now on the server:
+- [ ] E1 partner re-check (`check_video_partners.py`).
+- [ ] Learned retention times (`inspect_retention.py`).
+
 ### My side (CPU, after each push)
-- [x] `length_gap.py` for the P7 arms (3 seeds); `compare_encoders.py` headline tables.
-- [ ] Video-grouped bootstrap for every headline comparison in REPORT.md.
-- [ ] Draft the paper: "Temporal inductive bias, not selectivity: what makes state-space encoders win in pose-based SLT".
+- [x] `length_gap.py` and `compare_encoders.py` with corrected grouping and metrics.
+- [x] `REVIEW_RESPONSE.md` revised (claim scoped, labels fixed, parameter bookkeeping, §0 changes).
+- [ ] Analyse P9–P12; update the response.
+- [ ] Draft the paper.
 
 ## Not queued, and why
 | Review item | Reason |
@@ -79,31 +96,43 @@ The original How2Sign runs trained on lowercased text with `<UNKNOWN>` tokens bu
 
 ## Commands
 
-Step 1, the target check (no GPU, minutes). Paste me the whole output:
+1. Update the code. The How2Sign queue keeps running; the running jobs already loaded their code.
 
 ```bash
 cd /scratch/home/student1/Sign_Language/Projects/State_Space_Model
 git pull --ff-only
 conda activate ssm-slt
-python scripts/check_text_columns.py --data configs/data/how2sign.yaml --cache-dir cache
 ```
 
-Step 2, only after I've confirmed the column:
+2. Tests (CPU):
 
 ```bash
-rm -f logs/queue.log logs/queue_jobs.txt
-tmux new -s queue
-H2S_TEXT_CHECKED=1 PARTS="how2sign" GPUS="0 1 2 3" bash "phase 3/scripts/run_queue.sh"
+cd "phase 2" && python scripts/test_selectivity.py && cd ..
+cd "phase 3" && python scripts/test_diagnostics.py && cd ..
 ```
 
-Progress: `tail -f logs/queue.log`. Pending jobs: `cut -f1 logs/queue_jobs.txt`.
-
-To push results (as many times as you like while the queue runs):
+3. Append the review experiments to the running queue. This only works once the How2Sign queue has listed its jobs (after its ~40-minute cache build):
 
 ```bash
-git add "phase 2/results_long" "phase 3/results"
-git commit -m "How2Sign results"
+APPEND=1 PARTS="windows s4d tcn_wide3" bash "phase 3/scripts/run_queue.sh"
+```
+
+4. CPU checks (seconds to minutes; they don't need a GPU):
+
+```bash
+cd "phase 3"
+python scripts/check_video_partners.py --cache-dir ../cache --dataset isign --video-dir results/diagnostics/screen/video
+for s in 42 13 1337; do python scripts/inspect_retention.py --checkpoint "../phase 2/results/isign/mamba_nonselective/lr0.0003_s$s/checkpoints/best.pt" --out results/retention/isign_mamba_nonselective_s$s.csv; done
+python scripts/inspect_retention.py --checkpoint "../phase 2/results/isign/mamba_padfix/lr0.0003_s42/checkpoints/best.pt" --out results/retention/isign_mamba_padfix_s42.csv
+cd ..
+```
+
+5. Progress: `tail -f logs/queue.log`. Pending jobs: `cut -f1 logs/queue_jobs.txt`.
+
+6. Push results (partway or at the end):
+
+```bash
+git add "phase 2/results" "phase 2/results_long" "phase 3/results"
+git commit -m "Queue results"
 git push
 ```
-
-**Expected time:** about 40 min for the cache, then 12 runs on 4 GPUs, roughly 1–1.5 days.

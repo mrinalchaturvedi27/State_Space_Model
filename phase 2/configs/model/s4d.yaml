@@ -1,0 +1,16 @@
+# Independent LTI baseline (2026-10-12 review): bidirectional S4D (diagonal complex SSM, S4D-Lin init,
+# N=64 -> 32 modes per channel, ZOH) + GLU, then FFN; no input-dependent gating inside the SSM.
+# enc_layers chosen for +-2% total parameters vs the Transformer.
+#
+arm: s4d
+d_model: 512
+d_in: 356
+enc_layers: 7
+dec_layers: 3
+n_heads: 8
+dim_feedforward: 2048
+dropout: 0.1
+label_smoothing: 0.1
+max_src_len: 512
+max_tgt_len: 64
+d_state: 64

@@ -29,7 +29,7 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from sacrebleu.metrics import BLEU, CHRF  # noqa: E402
 
-from p3.stitch import parse_uid  # noqa: E402
+from p3.stitch import source_video  # noqa: E402
 
 METRICS = {"chrF2": CHRF(), "BLEU4": BLEU()}
 
@@ -93,7 +93,7 @@ def main():
     cap = nf >= nf.max()
     strata["cap-hit (512f)"], strata["not cap-hit"] = cap, ~cap
 
-    vid = np.array([parse_uid(str(u))[0] for u in uids])
+    vid = np.array([source_video(str(u)) for u in uids])
     groups, g_idx = np.unique(vid, return_inverse=True)
     G = len(groups)
     rng = np.random.default_rng(args.seed)

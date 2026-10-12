@@ -27,6 +27,23 @@ PATTERNS = [
 ]
 
 
+# iSign dictionary-style videos: <youtube id>_d (a definition) and _e1.._e4 (example sentences). They are
+# not a story, so parse_uid leaves them as one-clip "videos" for stitching, but they come from ONE source
+# video (19 test / 34 val families; 2026-10-12 review), which is what statistics must group by.
+DICTIONARY = re.compile(r"^(.+)_(?:d|e\d+)$")
+
+
+def source_video(uid: str) -> str:
+    """The source video a clip was cut from: the unit for grouped bootstraps and for choosing a
+    'different video' partner. Unlike parse_uid, dictionary clips (<id>_d, <id>_e<n>) share <id>."""
+    vid, seg = parse_uid(uid)
+    if seg < 0:
+        m = DICTIONARY.match(uid)
+        if m:
+            return m.group(1)
+    return vid
+
+
 def parse_uid(uid: str):
     """(video id, segment number), or (uid, -1) when no pattern matches (a one-clip 'video')."""
     for p in PATTERNS:

@@ -1,4 +1,5 @@
-"""Headline encoder comparison on test: mean +- std over seeds of corpus chrF2 / BLEU-4, content-word F1,
+"""Headline encoder comparison on test: mean +- std over seeds of corpus chrF2 / BLEU-4, content-word F1
+(clipped multiset counts), number-token F1, negation recall / false-negation rate,
 and each model minus a reference model with a source-video-grouped bootstrap interval (mean over common
 seeds), overall and on short (<=128) / long (>256 frames) clips. CPU only; reads prediction CSVs.
 
@@ -18,10 +19,19 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from sacrebleu.metrics import BLEU, CHRF  # noqa: E402
 
-from p3.content import content  # noqa: E402
-from p3.stitch import parse_uid  # noqa: E402
+from p3.content import content_tokens, has_negation, number_tokens  # noqa: E402
+from p3.stitch import source_video  # noqa: E402
 
 METRICS = {"chrF2": CHRF(), "BLEU4": BLEU()}
+
+
+def clipped_f1(hyp, ref, tok) -> float:
+    """Corpus F1 over clipped multiset matches (a word repeated twice in both counts twice)."""
+    tp = pp = rr = 0
+    for h, r in zip(hyp, ref):
+        a, b = Counter(tok(h)), Counter(tok(r))
+        tp, pp, rr = tp + sum((a & b).values()), pp + sum(a.values()), rr + sum(b.values())
+    return 200 * tp / max(1, pp + rr)
 
 
 def main():
@@ -39,7 +49,7 @@ def main():
     load = lambda p: pd.read_csv(p, keep_default_na=False).set_index("video_id")
     base = load(path(args.ref, next(s for s in seeds if os.path.exists(path(args.ref, s)))))
     uids, ref = base.index, base.ground_truth.astype(str).tolist()
-    _, g = np.unique([parse_uid(str(u))[0] for u in uids], return_inverse=True)
+    _, g = np.unique([source_video(str(u)) for u in uids], return_inverse=True)
     G = g.max() + 1
     rng = np.random.default_rng(0)
     W = np.stack([np.bincount(rng.integers(0, G, G), minlength=G)[g] for _ in range(args.n_boot)]).astype(float)
@@ -50,12 +60,13 @@ def main():
         if not os.path.exists(path(n, s)):
             return None
         hyp = load(path(n, s)).loc[uids].prediction.astype(str).tolist()
-        tp = pp = rr = 0
-        for h, r in zip(hyp, ref):
-            a, b = Counter(content(h, args.lang)), Counter(content(r, args.lang))
-            tp, pp, rr = tp + sum((a & b).values()), pp + sum(a.values()), rr + sum(b.values())
-        f1 = 200 * tp / max(1, pp + rr)
-        return {k: np.asarray(m._extract_corpus_statistics(hyp, [ref]), float) for k, m in METRICS.items()}, f1
+        extra = {"contentF1": clipped_f1(hyp, ref, lambda x: content_tokens(x, args.lang)),
+                 "numberF1": clipped_f1(hyp, ref, lambda x: number_tokens(x, args.lang))}
+        hn = np.array([has_negation(h, args.lang) for h in hyp])
+        rn = np.array([has_negation(r, args.lang) for r in ref])
+        extra["neg_recall"] = 100 * (hn & rn).sum() / max(1, rn.sum())        # negated refs whose hyp negates
+        extra["false_neg"] = 100 * (hn & ~rn).sum() / max(1, (~rn).sum())   # unnegated refs whose hyp negates
+        return {k: np.asarray(m._extract_corpus_statistics(hyp, [ref]), float) for k, m in METRICS.items()}, extra
 
     sc = lambda k, st, w: METRICS[k]._compute_score_from_stats(list(w @ st[k])).score
     D = {n: {s: stats(n, s) for s in seeds} for n in R}
@@ -68,7 +79,8 @@ def main():
         for k in METRICS:
             v = [sc(k, D[n][s][0], masks["all"]) for s in ss]
             row[k] = f"{np.mean(v):.2f}±{np.std(v):.2f}"
-        row["contentF1"] = round(np.mean([D[n][s][1] for s in ss]), 2)
+        for k in ("contentF1", "numberF1", "neg_recall", "false_neg"):
+            row[k] = round(np.mean([D[n][s][1][k] for s in ss]), 2)
         cs = [s for s in ss if D[args.ref][s]]
         for k in METRICS:
             for mname, mk in masks.items():

@@ -16,7 +16,14 @@
 #                   four encoders x 3 seeds with the 80-epoch budget into "phase 2/results_long"; seed 42 also
 #                   gets the order diagnostic on short and long clips. Refuses to run unless
 #                   H2S_TEXT_CHECKED=1, i.e. after scripts/check_text_columns.py confirmed text_col.
-# P5 (How2Sign target check + retrain) is manual; see EXPERIMENT_QUEUE.md.
+#   After the 2026-10-12 review:
+#   P10 windows     boundary vs context on iSign: the window diagnostic (inference) on the existing
+#                   mamba_window (3 seeds), mamba_padfix and mamba_nonselective checkpoints, then training
+#                   mamba_window64, mamba_window256, mamba_window128_overlap (seed 42, + order diagnostics)
+#   P11 s4d         independent LTI baseline: S4D encoder, iSign, seeds 42/13/1337 (42 + order diagnostics)
+#   P12 tcn_wide3   wide-receptive-field TCN, iSign seeds 13/1337
+# APPEND=1 adds the PARTS' jobs to the end of an already running queue and exits (the running workers
+# pick them up); it refuses if no running queue has listed its jobs yet.
 # Each iSign seed-42 training job also runs the order/density diagnostic on short and long clips.
 #
 # Usage (on t3ihpc07):
@@ -112,6 +119,21 @@ build() {
       how2sign)
         for s in 42 13 1337; do for a in mamba_nonselective tcn transformer mamba_padfix; do
           job "$a" "$s" how2sign_cased base_f3_long "$([ "$s" = 42 ] && echo both || echo none)" "${LONG_RESULTS}"; done; done ;;
+      windows)
+        WS_S="results/diagnostics/queue/density_short/sample_density_isign_0-256.csv"
+        WS_L="results/diagnostics/queue/density_long/sample_density_isign_257-512.csv"
+        for pair in "mamba_window|s42" "mamba_window|s13" "mamba_window|s1337" "mamba_padfix|s42" "mamba_nonselective|s42"; do
+          c="${pair%%|*}"; sd="${pair#*|}"; r="${PHASE2_DIR}/results/isign/${c}/lr0.0003_${sd}"
+          diag_only "window_isign_${c}_${sd}" "results/diagnostics/window/isign_${c}_${sd}" \
+            "cd \"${PHASE3_DIR}\" && python scripts/diag_window.py --data configs/data/isign.yaml --model configs/model/${c}.yaml \
+--checkpoint \"${r}/checkpoints/best.pt\" --cache-dir \"${PROJECT_DIR}/cache\" --sample-short ${WS_S} --sample-long ${WS_L} \
+--out results/diagnostics/window/isign_${c}_${sd}"
+        done
+        for a in mamba_window128_overlap mamba_window64 mamba_window256; do job "$a" 42 isign base both; done ;;
+      s4d)
+        for s in 42 13 1337; do job s4d "$s" isign base "$([ "$s" = 42 ] && echo both || echo none)"; done ;;
+      tcn_wide3)
+        for s in 13 1337; do job tcn_wide "$s" isign base none; done ;;
       select3)
         for s in 13 1337; do for a in ${ARMS7}; do job "$a" "$s" isign base none; done; done ;;
       *) echo "unknown part ${part}" >&2; exit 1 ;;
@@ -147,6 +169,18 @@ for split in ('train', 'val', 'test'):
     [ "${PIPESTATUS[0]}" = "0" ] || exit 1
   fi ;;
 esac
+
+if [ "${APPEND:-0}" = "1" ]; then
+  if [ ! -s "${QUEUE}" ]; then
+    echo "APPEND=1 needs a running queue with pending jobs in ${QUEUE}; none found (wait until it has listed" >&2
+    echo "its jobs, or start these parts normally without APPEND)." >&2
+    exit 1
+  fi
+  tmp="$(mktemp)"; build > "${tmp}"
+  flock "${LOCK}" bash -c 'cat "$0" >> "$1"' "${tmp}" "${QUEUE}"
+  echo "appended $(wc -l < "${tmp}") jobs to ${QUEUE}:"; cut -f1 "${tmp}" | sed 's/^/  /'; rm -f "${tmp}"
+  exit 0
+fi
 
 if [ -s "${QUEUE}" ]; then
   echo "resuming: $(wc -l < "${QUEUE}") jobs left in ${QUEUE} (delete it to rebuild from PARTS)"

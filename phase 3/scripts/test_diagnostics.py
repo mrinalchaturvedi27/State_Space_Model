@@ -130,6 +130,52 @@ def test_video_and_density_end_to_end():
         assert os.path.exists(os.path.join(root, "density", "sample_density_isign_0-256.csv"))
 
 
+def test_window_partners_and_retention_end_to_end():
+    with tempfile.TemporaryDirectory() as root:
+        tc.make_cache(root)
+        shutil.copytree(os.path.join(root, "isign"), os.path.join(root, "how2sign"))
+        # windowed checkpoint (window 8): boundary diagnostic over every condition family
+        cfg = {**tc.arms.CFG, "arm": "mamba_window", "window_frames": 8, "d_in": tc.D, "max_src_len": 128}
+        m, d, x, ck = _write_cfgs(root, "mamba_window")
+        yaml.safe_dump(cfg, open(m, "w"))
+        torch.manual_seed(0)
+        torch.save({"model": build_model(cfg, vocab_size=30).state_dict()}, ck)
+        den = importlib.import_module("diag_density")
+        sys.argv = ["diag_density", "--data", d, "--model", m, "--checkpoint", ck, "--cache-dir", root,
+                    "--out", os.path.join(root, "density", "w")]
+        den.main()
+        smp = os.path.join(root, "density", "sample_density_isign_0-256.csv")
+        win = importlib.import_module("diag_window")
+        out = os.path.join(root, "window")
+        sys.argv = ["diag_window", "--data", d, "--model", m, "--checkpoint", ck, "--cache-dir", root,
+                    "--sample-short", smp, "--sample-long", smp, "--conditions", "full block8 overlap8 block8_off3",
+                    "--out", out]
+        win.main()
+        s = pd.read_csv(os.path.join(out, "summary.csv")).set_index("condition")
+        assert list(s.index) == ["full", "block8", "overlap8", "block8_off3"]
+        assert s.chrF2_long_minus_short.abs().max() < 1e-9, "same sample for both ranges here"
+        # partner check on a real E1 sample
+        vid = importlib.import_module("diag_video")
+        sys.argv = ["diag_video", "--data", d, "--model", m, "--checkpoint", ck, "--cross-data", x,
+                    "--cache-dir", root, "--n", "6", "--n-decode", "2", "--out", os.path.join(root, "video", "w")]
+        vid.main()
+        chk = importlib.import_module("check_video_partners")
+        sys.argv = ["check_video_partners", "--cache-dir", root, "--dataset", "isign", "--video-dir", os.path.join(root, "video")]
+        chk.main()
+        assert os.path.exists(os.path.join(root, "video", "w", "summary_partner_checked.csv"))
+        # retention times: non-selective Mamba and S4D checkpoints
+        ret = importlib.import_module("inspect_retention")
+        for arm in ("mamba_nonselective", "s4d"):
+            c = {**tc.arms.CFG, "arm": arm, "d_in": tc.D, "enc_layers": 2}
+            p = os.path.join(root, f"{arm}.pt")
+            torch.save({"model": build_model(c, vocab_size=30).state_dict()}, p)
+            o = os.path.join(root, f"{arm}.csv")
+            sys.argv = ["inspect_retention", "--checkpoint", p, "--out", o]
+            ret.main()
+            r = pd.read_csv(o)
+            assert (r.tau_frames > 0).all() and set(r.direction) == {"fwd", "bwd"} and not r.selective.any(), arm
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_") and callable(fn):

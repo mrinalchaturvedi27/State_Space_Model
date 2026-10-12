@@ -62,7 +62,10 @@ def test_parse_uid_for_all_three_datasets():
     assert parse_uid("89DRLAodtpQ--26") == ("89DRLAodtpQ", 26)
     assert parse_uid("--7E2sU6zP4_10-5-rgb_front") == ("--7E2sU6zP4", 10)
     assert parse_uid("01April_2010_Thursday_heute-6694") == ("01April_2010_Thursday_heute", 6694)
-    assert parse_uid("1Kus_VFkXlk_e1")[1] == -1
+    assert parse_uid("1Kus_VFkXlk_e1")[1] == -1  # not a story: stays a one-clip video for stitching
+    from p3.stitch import source_video
+    assert source_video("1Kus_VFkXlk_e1") == source_video("1Kus_VFkXlk_d") == "1Kus_VFkXlk"
+    assert source_video("ed5590797795-8") == "ed5590797795" and source_video("odd") == "odd"
 
 
 def test_stitching_order_coverage_and_flags():

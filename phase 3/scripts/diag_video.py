@@ -32,7 +32,7 @@ from p3 import paths  # noqa: E402,F401
 from p3.content import content  # noqa: E402
 from p3.diag import resample, teacher_forced, word_scores  # noqa: E402
 from p3.loading import load, load_cfg  # noqa: E402
-from p3.stitch import parse_uid  # noqa: E402
+from p3.stitch import source_video  # noqa: E402
 
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
@@ -73,7 +73,7 @@ def build_sample(ds, cross, n, seed, lang, path):
     uids = ds.index["uid"].astype(str).tolist()
     texts = ds.index["text"].astype(str).tolist()
     nf = ds.n_frames_array()
-    vids = [parse_uid(u)[0] for u in uids]
+    vids = [source_video(u) for u in uids]
     vecs = tfidf_vectors(texts, lang)
     norm = [" ".join(t.lower().split()) for t in texts]
     cnf = cross.n_frames_array()
