@@ -22,6 +22,10 @@
 #                   mamba_window64, mamba_window256, mamba_window128_overlap (seed 42, + order diagnostics)
 #   P11 s4d         independent LTI baseline: S4D encoder, iSign, seeds 42/13/1337 (42 + order diagnostics)
 #   P12 tcn_wide3   wide-receptive-field TCN, iSign seeds 13/1337
+#   Before the paper:
+#   P13 lr_sweep    learning rate 1e-4 and 1e-3 (seed 42, iSign, base.yaml) for tcn, s4d, mamba_nonselective,
+#                   matching phase 1's sweep of transformer and mamba (3e-4 was best on val for both)
+#   P14 h2s_tcn_wide wide-receptive-field TCN on How2Sign (cased, 80-epoch budget), 3 seeds (42 + diagnostics)
 # APPEND=1 adds the PARTS' jobs to the end of an already running queue and exits (the running workers
 # pick them up); it refuses if no running queue has listed its jobs yet.
 # Each iSign seed-42 training job also runs the order/density diagnostic on short and long clips.
@@ -62,16 +66,17 @@ density_cmd() {  # data cfg checkpoint tag range(short|long) n [sample_file]
 --out ${DIAG}/density_${range}/${data}_${tag}"
 }
 
-job() {  # cfg seed data train diag(none|both|short) [results root] -> one queue line, or nothing if done
+job() {  # cfg seed data train diag(none|both|short) [results root] [lr] -> one queue line, or nothing if done
   local cfg="$1" seed="$2" data="$3" train="$4" diag="$5"
-  local RESULTS="${6:-${RESULTS}}"
+  local RESULTS="${6:-${RESULTS}}" lr="${7:-0.0003}"
   local y="${PHASE2_DIR}/configs/model/${cfg}.yaml" tag
   [ -f "${y}" ] || { echo "missing model config ${y}" >&2; exit 1; }
   tag="$(awk '$1 == "tag:" {print $2}' "${y}")"; tag="${tag:-$(awk '$1 == "arm:" {print $2}' "${y}")}"
-  local run="${RESULTS}/${data}/${tag}/lr0.0003_s${seed}"
-  if [ "${SMOKE}" != "1" ] && [ -f "${run}/predictions/test_best_beam5.csv" ]; then echo "skip ${data} ${tag} s${seed}: done" >&2; return 0; fi
+  local run="${RESULTS}/${data}/${tag}/lr${lr}_s${seed}" name="${data}_${tag}_s${seed}"
+  [ "${lr}" = "0.0003" ] || name="${data}_${tag}_lr${lr}_s${seed}"
+  if [ "${SMOKE}" != "1" ] && [ -f "${run}/predictions/test_best_beam5.csv" ]; then echo "skip ${name}: done" >&2; return 0; fi
   local cmd="cd \"${PHASE2_DIR}\" && python src/train.py --data configs/data/${data}.yaml --model configs/model/${cfg}.yaml \
---train configs/train/${train}.yaml --cache-dir \"${PROJECT_DIR}/cache\" --results-dir \"${RESULTS}\" --lr 3e-4 --seed ${seed} ${TRAIN_EXTRA}"
+--train configs/train/${train}.yaml --cache-dir \"${PROJECT_DIR}/cache\" --results-dir \"${RESULTS}\" --lr ${lr} --seed ${seed} ${TRAIN_EXTRA}"
   if [ "${SMOKE}" != "1" ]; then
     cmd="${cmd} && python src/evaluate.py --data configs/data/${data}.yaml --model configs/model/${cfg}.yaml \
 --cache-dir \"${PROJECT_DIR}/cache\" --checkpoint \"${run}/checkpoints/best.pt\""
@@ -81,7 +86,7 @@ job() {  # cfg seed data train diag(none|both|short) [results root] -> one queue
       short) cmd="${cmd} && $(density_cmd "${data}" "${cfg}" "${run}/checkpoints/best.pt" "${tag}" short ${n})" ;;
     esac
   fi
-  printf '%s\t%s\n' "${data}_${tag}_s${seed}" "${cmd}"
+  printf '%s\t%s\n' "${name}" "${cmd}"
 }
 
 diag_only() {  # name cmd -- for existing checkpoints; skipped when its summary exists
@@ -134,6 +139,11 @@ build() {
         for s in 42 13 1337; do job s4d "$s" isign base "$([ "$s" = 42 ] && echo both || echo none)"; done ;;
       tcn_wide3)
         for s in 13 1337; do job tcn_wide "$s" isign base none; done ;;
+      lr_sweep)
+        for lr in 0.0001 0.001; do for a in tcn s4d mamba_nonselective; do job "$a" 42 isign base none "${RESULTS}" "${lr}"; done; done ;;
+      h2s_tcn_wide)
+        for s in 42 13 1337; do
+          job tcn_wide "$s" how2sign_cased base_f3_long "$([ "$s" = 42 ] && echo both || echo none)" "${LONG_RESULTS}"; done ;;
       select3)
         for s in 13 1337; do for a in ${ARMS7}; do job "$a" "$s" isign base none; done; done ;;
       *) echo "unknown part ${part}" >&2; exit 1 ;;

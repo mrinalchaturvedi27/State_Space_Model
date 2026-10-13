@@ -84,9 +84,10 @@ Done (2026-10-13):
 - [x] E1 partner re-check: unchanged (≤0.1).
 - [x] Learned retention times: median τ ≈ 13 frames; 5–9% of heads ≥128 frames.
 
-Optional next:
-- [ ] Wide-RF TCN on How2Sign, 3 seeds (does reach close the TCN's long-clip deficit there?).
-- [ ] Window-trained arms (64, 256, 128 overlap), seeds 13 and 1337.
+#### Before the paper (9 runs)
+- [ ] **P14 `h2s_tcn_wide`:** wide-RF TCN on How2Sign, 3 seeds, 80-epoch budget (seed 42 + order diagnostics). Does reach alone close the TCN's long-clip deficit on the longest clips?
+- [ ] **P13 `lr_sweep`:** learning rates 1e-4 and 1e-3 (seed 42, iSign) for TCN, S4D and input-independent Mamba. Phase 1 already swept the Transformer and Mamba (3e-4 best on val for both: 18.92 vs 17.88 / 18.56, and 20.74 vs 19.43 / 20.29). Chosen on **validation**. If another rate wins for an arm, that arm gets 3 seeds at it.
+- Later, optional: window-trained arms (64, 256, 128 overlap), seeds 13 and 1337.
 
 ### My side (CPU, after each push)
 - [x] `length_gap.py` and `compare_encoders.py` with corrected grouping and metrics.
@@ -122,10 +123,10 @@ cd "phase 2" && python scripts/test_selectivity.py && cd ..
 cd "phase 3" && python scripts/test_diagnostics.py && cd ..
 ```
 
-3. Start the review experiments. The How2Sign queue has finished, so start them as a new queue. Use `APPEND=1` only if another queue is still running.
+3. Start the pre-paper runs (How2Sign first, since its runs are the longest):
 
 ```bash
-PARTS="windows s4d tcn_wide3" bash "phase 3/scripts/run_queue.sh"
+PARTS="h2s_tcn_wide lr_sweep" bash "phase 3/scripts/run_queue.sh"
 ```
 
 4. CPU checks (seconds to minutes; they don't need a GPU):
