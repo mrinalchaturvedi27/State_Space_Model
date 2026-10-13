@@ -15,7 +15,7 @@ Priority-ordered checklist for the remaining experiments from the expert review 
 | **Mamba, selectivity removed** | **21.79** | **4.31** | **+0.43 [+0.28, +0.57]** | **+0.31 [+0.17, +0.45]** | +0.46 |
 | Mamba | 21.36 | 4.00 | — | — | — |
 
-Single-seed arms: local-attention Transformer 20.00 / 3.54; whole-clip TCN 20.93 / 4.13 (closes the TCN's long-clip deficit, −0.08).
+Also: wide-RF TCN (3 seeds) 21.03 / 4.13, −0.33 vs Mamba; S4D (3 seeds) 20.66 / 3.63, −0.70; local-attention Transformer (1 seed) 20.00 / 3.54.
 
 ### PHOENIX (80-epoch budget, every run converged and early-stopped; 3 seeds)
 | Encoder | chrF2 | BLEU-4 | vs Mamba, chrF2 | vs Mamba, BLEU-4 | Best epoch |
@@ -77,22 +77,22 @@ Fixed on my side, with every interval recomputed:
 - [x] Source-video grouping: iSign dictionary clips (`_d`, `_e1`–`_e4`) are now grouped by video; 216 test videos, not 260.
 - [x] Content F1 is now clipped-multiset; number F1 and negation are scored separately.
 
-Queued behind How2Sign, appended to the running queue:
-- [ ] **P10 `windows`, boundary vs context.**
-  - Window diagnostic (inference) on the window-trained checkpoints (3 seeds), fixed Mamba and input-independent Mamba.
-  - Train windows of 64 and 256, and 128 with overlap (seed 42).
-- [ ] **P11 `s4d`:** independent LTI baseline, 3 seeds.
-- [ ] **P12 `tcn_wide3`:** wide-receptive-field TCN, seeds 13 and 1337.
+Done (2026-10-13):
+- [x] **P10 `windows`, boundary vs context.** Overlap ≈ blocks; long clips rise steadily with W (16.9 / 21.4 / 22.7 / 23.0). It's context, not boundaries. The single-seed trained arms are inconclusive.
+- [x] **P11 `s4d`:** 20.66 chrF2, −0.70 vs Mamba. A generic LTI SSM doesn't reproduce the input-independent Mamba result.
+- [x] **P12 `tcn_wide3`:** 21.03 / 4.13; wide minus standard TCN, long-minus-short +0.57 [+0.19, +0.97].
+- [x] E1 partner re-check: unchanged (≤0.1).
+- [x] Learned retention times: median τ ≈ 13 frames; 5–9% of heads ≥128 frames.
 
-CPU checks, run now on the server:
-- [ ] E1 partner re-check (`check_video_partners.py`).
-- [ ] Learned retention times (`inspect_retention.py`).
+Optional next:
+- [ ] Wide-RF TCN on How2Sign, 3 seeds (does reach close the TCN's long-clip deficit there?).
+- [ ] Window-trained arms (64, 256, 128 overlap), seeds 13 and 1337.
 
 ### My side (CPU, after each push)
 - [x] `length_gap.py` and `compare_encoders.py` with corrected grouping and metrics.
 - [x] `REVIEW_RESPONSE.md` revised (claim scoped, labels fixed, parameter bookkeeping, §0 changes).
 - [x] Analyse P9 (How2Sign); response updated.
-- [ ] Analyse P10–P12; update the response.
+- [x] Analyse P10–P12; response updated.
 - [ ] Draft the paper.
 
 ## Not queued, and why

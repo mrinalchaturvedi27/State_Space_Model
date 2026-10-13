@@ -2,7 +2,7 @@
 
 **Follows:** `EXPERT_BRIEF.md` (what you reviewed) and your research program of 8 October 2026 (`RESEARCH_PROGRAM_2026-10-08.md`).
 **Revised:** 12 October 2026, after your feedback (`REVIEW_FEEDBACK_2026-10-12.md`). Section 0 lists what changed. All numbers below are recomputed.
-**Updated:** 13 October 2026, with the corrected How2Sign results (§6, How2Sign).
+**Updated:** 13 October 2026, with the corrected How2Sign results (§6), the boundary-vs-context study (§6a), S4D, the wide-RF TCN seeds, learned retention times and the E1 partner check.
 
 We followed your order: audit → correct-video dependence → same-clip temporal controls → matched training controls → confirmation. Experiment IDs (E0–E13, C1–C12) are yours.
 
@@ -11,21 +11,21 @@ We followed your order: audit → correct-video dependence → same-clip tempora
 | Your point | What we did | Effect |
 |---|---|---|
 | Source-video grouping incomplete | A new `source_video()` groups iSign dictionary clips (`<id>_d`, `<id>_e1`–`_e4`; 19 test and 34 val families) by source video for all statistics and wrong-video partners. The stitching parser keeps them apart, since a definition plus unrelated examples isn't a story. iSign test has **216** source videos, not 260. Every grouped interval was recomputed | Point estimates unchanged; intervals moved by ≤0.05. One conclusion changed: the TCN's BLEU-4 lead on PHOENIX is no longer significant |
-| E1 partners chosen with the same parser | `check_video_partners.py` maps every partner to its source video and recomputes E1 without same-video pairs. It runs on the server (it needs the cache index) | Pending |
+| E1 partners chosen with the same parser | `check_video_partners.py` maps every partner to its source video and recomputes E1 without same-video pairs. It ran on the server (it needs the cache index) | Done: 997 of 1,000 clips kept; every E1 number moves by ≤0.1 (§3) |
 | Content F1 changed definition (set, not clipped multiset) | All content F1 is now clipped-multiset. Your numbers are reproduced exactly (Transformer 10.15, Mamba 14.05, TCN 14.29, input-independent 14.94). Number-token F1 and negation recall / false-negation rate are reported separately | Ranking unchanged |
 | Central claim too strong | Replaced with your scoped wording (§1) | — |
 | Labels | "Mamba with input-independent scan coefficients" (was "non-selective Mamba"); "wide-receptive-field TCN" (was "whole-clip TCN"). We now note that the decoder attends globally to all encoder outputs | — |
 | Parameter bookkeeping | The input-independent arm leaves 737,280 `in_proj` weights unused: **33.27M active** vs 34.01M for selective Mamba. Reported, with regularisation and parameterisation as open explanations | — |
 | Finish corrected How2Sign | Done: 4 encoders × 3 seeds on consistently cased targets, plus order diagnostics (§6) | Reproduces the iSign ordering; adds a boundary-free long-context result |
-| Boundaries vs context | New window diagnostic and training controls (§8) | Running |
-| One-exponential-per-head kernel | Confirmed against the implementation: A is a scalar per head and ngroups = 1, so with constant B, C and Δ each head's long-range filter is a single decaying exponential, `k_h(ℓ) = (C·B) Δ_h exp(−e^{A_log,h} Δ_h ℓ)`, with C·B shared across heads. `inspect_retention.py` reads the learned time constants from the checkpoints | Running (CPU) |
-| Independent LTI baseline | S4D encoder added (diagonal complex SSM, S4D-Lin init, no gating inside the SSM; +1.20% parameters vs the Transformer) | Queued, 3 seeds |
+| Boundaries vs context | Window diagnostic (overlap, offsets, W = 64/128/256/full) on 5 checkpoints, plus 3 window-trained arms (§6a) | Boundaries cost almost nothing; the long-clip penalty shrinks steadily with context. Long-context reading strengthened |
+| One-exponential-per-head kernel | Confirmed against the implementation: A is a scalar per head and ngroups = 1, so with constant B, C and Δ each head's long-range filter is a single decaying exponential, `k_h(ℓ) = (C·B) Δ_h exp(−e^{A_log,h} Δ_h ℓ)`, with C·B shared across heads. `inspect_retention.py` reads the learned time constants from the checkpoints | Done: median τ ≈ 11–15 frames (0.5 s); 5–9% of heads exceed 128 frames (§6b) |
+| Independent LTI baseline | S4D encoder added (diagonal complex SSM, S4D-Lin init, no gating inside the SSM; +1.20% parameters vs the Transformer) | Done, 3 seeds: 20.66 chrF2, −0.70 vs Mamba and −1.12 vs input-independent Mamba. A generic LTI SSM does **not** reproduce the result (§6) |
 | Softer readings | "Weak order sensitivity relative to Mamba" (shuffling every frame lowers the Transformer's greedy BLEU-4 from 2.63 to 1.89). The topic-matched overlap result is no longer read as a share of recognition | — |
 | Efficiency | Kept to a table; absolute differences only; GPU-hours to the selected checkpoint added to the plan | — |
 
 ## 1. Summary
 
-1. **Both encoders depend on the correct video** (E1). The correct pose scores the reference higher than a length- and topic-matched wrong video for 94–98% of clips, and free decoding loses almost all content-word overlap without it. (Partner check pending; §0.)
+1. **Both encoders depend on the correct video** (E1). The correct pose scores the reference higher than a length- and topic-matched wrong video for 94–98% of clips, and free decoding loses almost all content-word overlap without it. (Unchanged after excluding same-video partners.)
 2. **The Transformer is weakly order-sensitive relative to Mamba** (E2).
    - Shuffling every frame costs the Transformer −0.35 greedy chrF2 and −0.74 BLEU-4 (2.63 → 1.89). It costs Mamba −4.21 chrF2.
    - The Transformer's sensitivity to sampling density disappears when positions follow original time (−1.97 → −0.12).
@@ -34,14 +34,16 @@ We followed your order: audit → correct-video dependence → same-clip tempora
 4. **Wider encoder context appears to help on longer clips** (E3 and the window/receptive-field controls).
    - The Mamba − Transformer gap grows with clip length, including at fixed sentence length for medium and long sentences. The TCN − Transformer gap is flat.
    - Windowed Mamba (128 frames) loses specifically on long clips.
-   - Whether that comes from lost context or from window boundaries is being tested (§8).
+   - **Boundaries are not the explanation (§6a).** Overlapping windows, which keep the 128-frame context limit but put no frame at an edge, score the same as non-overlapping ones (long clips 21.56 vs 21.39). Long-clip scores rise steadily with the window: 16.9 / 21.4 / 22.7 / 23.0 for 64 / 128 / 256 frames / full clip.
+   - **Widening the TCN helps long clips specifically:** wide-RF minus standard TCN, long-minus-short +0.57 [+0.19, +0.97] (3 seeds).
    - **How2Sign gives evidence without window boundaries:** the TCN (121-frame reach, no resets) beats Mamba on clips ≤128 frames (+0.71 chrF2) but loses on clips >256 frames (−1.45). Long-minus-short, Mamba − TCN: +2.16 [+1.56, +2.74].
 5. **Replacing Mamba's input-dependent scan coefficients with learned input-independent ones preserves or improves translation.**
    - iSign: +0.43 [+0.28, +0.57] chrF2 and +0.31 [+0.17, +0.44] BLEU-4, the same at every length.
    - PHOENIX: −0.20 (n.s.) chrF2 and +0.99 [+0.39, +1.52] BLEU-4.
    - How2Sign: +0.78 [+0.52, +1.05] chrF2 and +0.49 [+0.30, +0.69] BLEU-4. Here the gain is concentrated on shorter clips (+1.36 at ≤128 frames, +0.25 n.s. at >256).
+   - **An independent LTI SSM (S4D) does not match it:** −0.70 [−0.83, −0.56] vs selective Mamba and −1.12 vs the input-independent arm, though +1.60 over the Transformer. What works is input-independent coefficients *inside the Mamba-2 block* (with its short convolution, gating and x/z paths), not time-invariant SSMs in general. S4D was not tuned separately.
 
-**Central claim (your wording):** in scratch-trained pose-based SLT, temporal convolution recovers most of the advantage over the tested Transformer, while replacing input-dependent SSM coefficients with learned input-independent coefficients preserves or improves translation performance. Wider encoder context appears beneficial on longer clips.
+**Central claim (your wording, last sentence strengthened by §6a):** in scratch-trained pose-based SLT, temporal convolution recovers most of the advantage over the tested Transformer, while replacing input-dependent SSM coefficients with learned input-independent coefficients preserves or improves translation performance. Wider encoder context is beneficial on longer clips, and this is not explained by window boundaries.
 
 **Scope:**
 - These architectures, pose inputs and training conditions only. Not "selectivity is harmful for SLT".
@@ -61,7 +63,9 @@ All intervals are 95% source-video-grouped bootstrap intervals (resampling the 2
 
 ## 3. Does the model use the correct video? (E1)
 
-**Setup:** 1,000 fixed iSign dev clips, chosen before scoring. The reference is teacher-forced under each source; the first 200 clips are also free-decoded with beam 5. The wrong-video partners are being re-checked against the corrected source-video mapping (§0).
+**Setup:** 1,000 fixed iSign dev clips, chosen before scoring. The reference is teacher-forced under each source; the first 200 clips are also free-decoded with beam 5.
+
+**Partner check:** with partners mapped through `source_video`, 3 clips whose partner shared a source video were dropped. On the remaining 997, every number below moves by ≤0.1 (for example, topic-matched: Mamba 94.3%, Transformer 90.6%). The table shows the original 1,000-clip run.
 
 | Source pose | Fixed Mamba: Δ token log-lik vs correct | Correct better (% of clips) | Transformer: Δ token log-lik | Correct better (%) |
 |---|---|---|---|---|
@@ -126,6 +130,8 @@ All arms share the front end, the decoder (which attends globally to all encoder
 | TCN | Dilated depthwise conv (kernel 5, dilations 1–8 repeated) + FFN, 8 layers, no attention | 121 frames (radius 60) | +0.08% |
 | Wide-receptive-field TCN | Dilations 1–64 then 1 | 513 frames (radius 256; not the whole clip from an endpoint) | +0.08% |
 | Mamba in windows | Fixed Mamba on separate 128-frame windows; nothing crosses a window edge | 128 frames | +0.74% (same as Mamba) |
+| Mamba, overlapping windows | 128-frame windows at stride 64; each frame's output comes from the window in whose central half it lies | 128 frames, no frame at an edge | +0.74% |
+| S4D | Diagonal complex SSM (S4D-Lin, zero-order hold, FFT convolution), bidirectional, GLU + FFN, 7 layers | whole clip | +1.20% |
 | Mamba with input-independent scan coefficients | B, C and Δ channels of `in_proj` replaced by learned constants; x/z paths, gating and normalisation unchanged | whole clip | +0.74% nominal; **33.27M active** (737,280 `in_proj` weights unused) |
 
 ### iSign (test, beam 5)
@@ -138,7 +144,8 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
 | + relative positions | 3 | 19.78 ± 0.03 | 3.37 ± 0.10 | 11.73 | 29.7 | 34.3 | −1.58 [−1.79, −1.38] | −0.64 | −1.82 |
 | Local-attention Transformer | 1 | 20.00 | 3.54 | 12.42 | 28.5 | 41.0 | −1.26 [−1.53, −1.00] | −0.56 | −1.16 |
 | TCN | 3 | 20.95 ± 0.11 | 3.92 ± 0.03 | 14.29 | 38.8 | 35.8 | −0.41 [−0.54, −0.28] | −0.08 [−0.21, +0.05] | −0.68 [−0.95, −0.42] |
-| Wide-RF TCN | 1 | 20.93 | 4.13 | 14.50 | 36.5 | 44.1 | −0.33 [−0.55, −0.10] | +0.04 | −0.08 [−0.47, +0.33] |
+| Wide-RF TCN | 3 | 21.03 ± 0.12 | 4.13 ± 0.03 | 14.57 | 37.5 | 41.9 | −0.33 [−0.47, −0.18] | +0.13 [+0.01, +0.26] | −0.32 [−0.56, −0.05] |
+| S4D (independent LTI SSM) | 3 | 20.66 ± 0.05 | 3.63 ± 0.13 | 12.97 | 33.7 | 35.6 | −0.70 [−0.83, −0.56] | −0.38 [−0.50, −0.25] | −0.76 [−1.00, −0.50] |
 | Mamba in windows | 3 | 21.19 ± 0.14 | 3.79 ± 0.12 | 13.66 | 35.3 | 41.8 | −0.17 [−0.32, −0.01] | −0.22 [−0.35, −0.09] | −0.58 [−0.82, −0.34] |
 | **Mamba, input-independent coefficients** | 3 | **21.79 ± 0.11** | **4.31 ± 0.16** | **14.94** | **40.4** | **43.0** | **+0.43 [+0.28, +0.57]** | **+0.31 [+0.17, +0.44]** | +0.46 [+0.22, +0.70] |
 | Fixed Mamba | 3 | 21.36 ± 0.16 | 4.00 ± 0.16 | 14.05 | 38.5 | 39.1 | — | — | — |
@@ -148,6 +155,9 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
 - **TCN − Transformer:** +0.00 [−0.56, +0.50].
 - **Windowed Mamba − Mamba:** −0.92 [−1.33, −0.54].
 - **Input-independent − Mamba:** −0.11 [−0.56, +0.31].
+- **Wide-RF TCN − TCN:** +0.57 [+0.19, +0.97]. Widening reach helps long clips specifically, without any window boundary.
+- **Mamba − wide-RF TCN:** +0.26 [−0.15, +0.67] (n.s.; against +0.83 for the standard TCN).
+- **Mamba − S4D:** +0.25 [−0.11, +0.65] (n.s.; S4D's deficit is the same at every length).
 
 ### PHOENIX (80-epoch budget, all runs stopped early on their own; 3 seeds)
 | Encoder | chrF2 | BLEU-4 | Content F1 | vs fixed Mamba, chrF2 | vs fixed Mamba, BLEU-4 | Best epochs |
@@ -160,6 +170,59 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
 **Notes:**
 - PHOENIX clips are all ≤256 frames, so the long-clip question can't be asked there.
 - PHOENIX references contain few negations, so negation recall isn't reported for it.
+
+### 6a. Boundary vs context (your main request)
+
+**Inference diagnostic** (`diag_window.py`; greedy chrF2 on 2,000 short (≤256 frames) and 1,262 long (257–512) iSign dev clips; the restriction applies to the whole encoder). The cleanest test uses the models **trained** with 128-frame windows (mean of 3 seeds), so restricted context isn't a distribution shift for them:
+
+| Encoder context at test | Long clips | Short clips |
+|---|---|---|
+| 64-frame blocks | 16.89 | 17.88 |
+| 64, overlapping | 17.98 | 18.55 |
+| **128-frame blocks (as trained)** | **21.39** | **20.85** |
+| **128, overlapping (no frame at an edge)** | **21.56** | **20.84** |
+| 128 blocks, shifted by 32 / 64 / 96 (mean) | 20.36 | 19.40 |
+| 256-frame blocks | 22.68 | 21.66 |
+| 256, overlapping | 23.09 | 21.61 |
+| Full clip | 23.02 | 21.66 |
+
+**Reading, against your decision rule:**
+- **Overlap does not remove the penalty.** At the trained width, removing every boundary changes long clips by +0.17 and short clips by −0.01.
+- **The penalty shrinks steadily with W.** Long clips: 16.9 → 21.4 → 22.7 → 23.0. Going from 128-frame windows to the full clip helps long clips twice as much as short ones (+1.63 vs +0.81), although these models never saw more than 128 frames in training.
+- **Shifting the boundaries costs about 1 point at both lengths.** This is a mismatch with the trained boundary positions (and a shorter first window), not a length effect.
+- So your second branch applies: **the long-clip result is mainly about context, not boundaries.**
+
+**Full-clip-trained checkpoints** (seed 42, the same diagnostic; restricted context is out of distribution for them, so this is supporting evidence only):
+
+| Long / short clips | Full | 128 blocks | 128 overlapping | 256 overlapping |
+|---|---|---|---|---|
+| Fixed Mamba | 22.00 / 20.71 | 16.45 / 18.75 | 17.94 / 19.26 | 20.59 / 20.36 |
+| Input-independent Mamba | 22.59 / 21.18 | 16.58 / 18.61 | 19.51 / 19.73 | 21.37 / 20.80 |
+
+Here overlap recovers part of the block penalty (+1.5 and +2.9 on long clips), so out of distribution, boundaries matter too. But even 256-frame overlapping windows leave a long-clip deficit (−1.41 and −1.22, against −0.35 and −0.38 on short clips). Both encoders use context beyond 256 frames on long clips.
+
+**Window-trained arms** (seed 42 only; vs fixed Mamba seed 42, test):
+
+| Arm | chrF2 | BLEU-4 | vs Mamba, chrF2 | >256 frames |
+|---|---|---|---|---|
+| Windows 64 | 20.92 | 3.40 | −0.34 [−0.57, −0.12] | −0.21 |
+| Windows 128 | 21.27 | 3.80 | +0.01 | −0.09 |
+| Windows 128, overlapping | 21.40 | 4.01 | +0.14 | +0.36 |
+| Windows 256 | 21.07 | 3.74 | −0.19 | −0.31 |
+| Fixed Mamba | 21.26 | 4.10 | — | — |
+
+With one seed these are all within about ±0.35 of Mamba and show no trend in W. Seed 42 is also the windows-128 seed closest to full Mamba (the 3-seed long-clip gap is −0.58). They don't decide anything; the inference diagnostic above does.
+
+### 6b. Learned retention times (your one-exponential-per-head point)
+
+`inspect_retention.py`, iSign, 160 heads per model (5 layers × 2 directions × 16 heads), τ = 1 / (e^{A_log} Δ) in frames (25 fps):
+
+| Model | Median τ | 10th–90th percentile | Heads ≥ 25 frames (1 s) | ≥ 128 frames (5 s) | Max |
+|---|---|---|---|---|---|
+| Input-independent Mamba, seed 42 / 13 / 1337 | 13.1 / 14.8 / 11.2 | ~2.3–100 | 34 / 40 / 31% | 7 / 5 / 9% | 548 / 231 / 440 |
+| Fixed Mamba, seed 42 (at the Δ bias, before input modulation) | 13.4 | 1.8–120 | 37% | 9% | 607 |
+
+**Reading:** with fixed coefficients, each layer is a bank of mostly short exponential filters (about half a second) plus a few slow heads of 5–20 s. Five stacked bidirectional layers give the whole-clip reach. Each head has one time constant, as you derived, so the arm is a sparser filter family than S4D's 64 modes per channel, yet it outperforms S4D here.
 
 ### How2Sign (corrected targets, 80-epoch budget, all runs stopped early on their own; 3 seeds)
 2,098 test clips from 158 source videos; median 137 frames, 18% over 256 frames.
@@ -207,11 +270,12 @@ The TCN is far less sensitive to frame shuffling on How2Sign than on iSign (−0
 | Input-independent Mamba | −5.79 | −6.95 |
 
 **Against your gates:**
+- **Boundary vs context:** overlap leaves the penalty and it shrinks steadily with W, so the long-context reading is strengthened (§6a).
 - **E5 gate ("closes ≥50% of the content gap"):** met by the TCN on all three datasets.
 - **Our pre-registered iSign rule ("TCN within ~0.3 chrF2 of Mamba"):** missed (−0.41), hence "most of the advantage", not all.
 - **C1 + C7:** within these conditions, input-dependent scan coefficients were not needed.
   - **Caveat 1:** the input-independent arm has fewer active parameters (33.27M vs 34.01M), so regularisation or parameterisation could contribute to its gain.
-  - **Caveat 2:** its long-range filter is one exponential per head, so it isn't comparable to a fully parameterised S4D. S4D is queued (§8).
+  - **Caveat 2:** its long-range filter is one exponential per head (§6b), a sparser family than a fully parameterised S4D. The S4D run (3 seeds) scores 1.12 chrF2 below it, so richer LTI filters alone don't explain the result.
 
 ## 7. Other suggestions we ran
 
@@ -237,13 +301,9 @@ The TCN is far less sensitive to frame shuffling on How2Sign than on iSign (−0
 
 | Item | Design | Status |
 |---|---|---|
-| **Boundary vs context** (your main request) | **Inference** (`diag_window.py`, dev short and long samples, full-encoder restriction): no windows; non-overlapping 64 / 128 / 256; overlapping 64 / 128 / 256 (stride W/2, each output from the window in whose central half it lies, so ≤W frames of context but no frame at an edge); 128 shifted by 32 / 64 / 96. Run on the window-trained checkpoints (3 seeds), fixed Mamba and input-independent Mamba. **Training** (seed 42): windows of 64 and 256, and 128 with overlap | Queued |
-| Independent LTI baseline | S4D, 3 seeds | Queued |
-| Wide-RF TCN | Seeds 13 and 1337 | Queued |
-| Learned retention times | Per head (input-independent Mamba) and per mode (S4D), from checkpoints | CPU, running |
-| E1 partner re-check | Without same-video pairs | CPU, running |
-
-**Decision rule** (your formulation): if overlap removes most of the block-window long-clip penalty without adding context, the windowed result is mainly about boundaries. If the penalty persists and shrinks steadily with W, the long-context reading is strengthened.
+| Window-trained arms, seeds 13 and 1337 | Only if you want trained (not just inference) evidence on boundaries; the single-seed arms are underpowered | Not started |
+| Wide-RF TCN on How2Sign | Does reach alone close the TCN's long-clip deficit on the longest clips? | Not started |
+| S4D retention per mode | Per-mode τ from the S4D checkpoints | Not started (CPU) |
 
 **Not run, following your prioritisation:**
 - E4 (its trigger didn't occur);
@@ -258,7 +318,8 @@ The TCN is far less sensitive to frame shuffling on How2Sign than on iSign (−0
   - B and C pass through Mamba-2's short depthwise convolution, so their first few (zero-padded) frames differ from the steady state.
   - 737,280 `in_proj` weights are unused.
   - With a scalar A per head, d_state = 64 does not give 64 distinct decay rates per head.
-- **Windowed Mamba** uses non-overlapping windows, so the boundary/context confound remains until §8 lands.
+- **The boundary-vs-context answer rests on the inference diagnostic** (greedy, dev, no intervals). The window-trained arms are single-seed.
+- **S4D used the shared recipe** (learning rate, dropout, 7 layers) without its own tuning, so "S4D is worse" is a statement about this configuration.
 - **How2Sign has no wide-RF TCN, windowed or S4D arm yet,** so its long-context reading rests on the TCN's fixed reach.
 - **PHOENIX fixed Mamba under the 80-epoch budget** has higher chrF2 but lower BLEU-4 than under 40 epochs (34.44 / 11.11 vs 33.94 / 11.68). The longer budget also lengthens warmup. All four PHOENIX encoders share the budget, but the PHOENIX BLEU-4 differences are less stable than chrF2.
 - **chrF2 and BLEU-4 aren't adequacy.** Content F1 excludes negation and digits, which are now reported separately. No human evaluation yet.
