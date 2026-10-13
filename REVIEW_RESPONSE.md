@@ -2,6 +2,7 @@
 
 **Follows:** `EXPERT_BRIEF.md` (what you reviewed) and your research program of 8 October 2026 (`RESEARCH_PROGRAM_2026-10-08.md`).
 **Revised:** 12 October 2026, after your feedback (`REVIEW_FEEDBACK_2026-10-12.md`). Section 0 lists what changed. All numbers below are recomputed.
+**Updated:** 13 October 2026, with the corrected How2Sign results (§6, How2Sign).
 
 We followed your order: audit → correct-video dependence → same-clip temporal controls → matched training controls → confirmation. Experiment IDs (E0–E13, C1–C12) are yours.
 
@@ -15,6 +16,7 @@ We followed your order: audit → correct-video dependence → same-clip tempora
 | Central claim too strong | Replaced with your scoped wording (§1) | — |
 | Labels | "Mamba with input-independent scan coefficients" (was "non-selective Mamba"); "wide-receptive-field TCN" (was "whole-clip TCN"). We now note that the decoder attends globally to all encoder outputs | — |
 | Parameter bookkeeping | The input-independent arm leaves 737,280 `in_proj` weights unused: **33.27M active** vs 34.01M for selective Mamba. Reported, with regularisation and parameterisation as open explanations | — |
+| Finish corrected How2Sign | Done: 4 encoders × 3 seeds on consistently cased targets, plus order diagnostics (§6) | Reproduces the iSign ordering; adds a boundary-free long-context result |
 | Boundaries vs context | New window diagnostic and training controls (§8) | Running |
 | One-exponential-per-head kernel | Confirmed against the implementation: A is a scalar per head and ngroups = 1, so with constant B, C and Δ each head's long-range filter is a single decaying exponential, `k_h(ℓ) = (C·B) Δ_h exp(−e^{A_log,h} Δ_h ℓ)`, with C·B shared across heads. `inspect_retention.py` reads the learned time constants from the checkpoints | Running (CPU) |
 | Independent LTI baseline | S4D encoder added (diagonal complex SSM, S4D-Lin init, no gating inside the SSM; +1.20% parameters vs the Transformer) | Queued, 3 seeds |
@@ -27,15 +29,17 @@ We followed your order: audit → correct-video dependence → same-clip tempora
 2. **The Transformer is weakly order-sensitive relative to Mamba** (E2).
    - Shuffling every frame costs the Transformer −0.35 greedy chrF2 and −0.74 BLEU-4 (2.63 → 1.89). It costs Mamba −4.21 chrF2.
    - The Transformer's sensitivity to sampling density disappears when positions follow original time (−1.97 → −0.12).
-3. **A TCN recovers most of the Transformer → Mamba improvement** (E5, parameter-matched, 3 seeds). On chrF2 the TCN is 0.41 below Mamba on iSign, against the Transformer's 2.30, and 0.81 below on PHOENIX, against 2.19. Its BLEU-4 difference from Mamba is not significant on either dataset.
+3. **A TCN recovers most of the Transformer → Mamba improvement** (E5, parameter-matched, 3 seeds). On chrF2 the TCN is 0.41 below Mamba on iSign, against the Transformer's 2.30; 0.81 below on PHOENIX, against 2.19; and 0.40 below on How2Sign, against 1.69. Its BLEU-4 difference from Mamba is not significant on any of the three.
    - This is a performance comparison, not a causal estimate of how much of the original gain locality caused.
 4. **Wider encoder context appears to help on longer clips** (E3 and the window/receptive-field controls).
    - The Mamba − Transformer gap grows with clip length, including at fixed sentence length for medium and long sentences. The TCN − Transformer gap is flat.
    - Windowed Mamba (128 frames) loses specifically on long clips.
    - Whether that comes from lost context or from window boundaries is being tested (§8).
+   - **How2Sign gives evidence without window boundaries:** the TCN (121-frame reach, no resets) beats Mamba on clips ≤128 frames (+0.71 chrF2) but loses on clips >256 frames (−1.45). Long-minus-short, Mamba − TCN: +2.16 [+1.56, +2.74].
 5. **Replacing Mamba's input-dependent scan coefficients with learned input-independent ones preserves or improves translation.**
    - iSign: +0.43 [+0.28, +0.57] chrF2 and +0.31 [+0.17, +0.44] BLEU-4, the same at every length.
    - PHOENIX: −0.20 (n.s.) chrF2 and +0.99 [+0.39, +1.52] BLEU-4.
+   - How2Sign: +0.78 [+0.52, +1.05] chrF2 and +0.49 [+0.30, +0.69] BLEU-4. Here the gain is concentrated on shorter clips (+1.36 at ≤128 frames, +0.25 n.s. at >256).
 
 **Central claim (your wording):** in scratch-trained pose-based SLT, temporal convolution recovers most of the advantage over the tested Transformer, while replacing input-dependent SSM coefficients with learned input-independent coefficients preserves or improves translation performance. Wider encoder context appears beneficial on longer clips.
 
@@ -43,7 +47,7 @@ We followed your order: audit → correct-video dependence → same-clip tempora
 - These architectures, pose inputs and training conditions only. Not "selectivity is harmful for SLT".
 - The input-independent arm is still a nonlinear, input-dependent network: its x/z paths, gating and normalisation stay active. Only its scan coefficients are fixed.
 
-All intervals are 95% source-video-grouped bootstrap intervals (resampling the 216 iSign / 331 PHOENIX test source videos with all their clips; 1,000–2,000 draws), averaged over paired seeds. "n.s." means the interval includes 0.
+All intervals are 95% source-video-grouped bootstrap intervals (resampling the 216 iSign / 331 PHOENIX / 158 How2Sign test source videos with all their clips; 1,000–2,000 draws), averaged over paired seeds. "n.s." means the interval includes 0.
 
 ## 2. Validity work (E0)
 
@@ -52,7 +56,7 @@ All intervals are 95% source-video-grouped bootstrap intervals (resampling the 2
 | Provenance audit of all 139 trained runs (`AUDIT_runs.csv`) | Every reported headline reproduces from its stored predictions. Flags: 21 runs without a test decode (validation-only or stale copies), 9 stopped early, 4 with several logged decodes (length-penalty sweeps), 2 CSV mismatches in superseded runs | No headline number changed |
 | Padding invariance on real checkpoints: clip alone vs batched with the longest clip, fp32 | Transformer: max change in encoder output 1.7e-5, in token log-prob 1.1e-5. **Phase 1 Mamba: 5.6 and 4.6.** Mamba with the padding fix: 0.003 and 0.001 | Phase 1 test numbers are unaffected (decoded one clip at a time). Batched analyses use only the fixed Mamba |
 | Source-video identity | 63 iSign test clips (19 families) and 120 val clips (34 families) were treated as single-clip videos | Fixed (§0) |
-| How2Sign targets | The server check confirmed it. Train `text` is lowercase with 22.8% `<UNKNOWN>`; val/test `text` is cased with 0%; train `SENTENCE` matches val/test | Retraining all four encoders on train `SENTENCE` / val-test `text`. The runner refuses to train unless every split of the built cache is ≥90% cased with ≤1% `<UNKNOWN>` |
+| How2Sign targets | The server check confirmed it. Train `text` is lowercase with 22.8% `<UNKNOWN>`; val/test `text` is cased with 0%; train `SENTENCE` matches val/test | All four encoders retrained on train `SENTENCE` / val-test `text` (§6). The runner refused to train unless every split of the built cache was ≥90% cased with ≤1% `<UNKNOWN>` |
 | Convergence | On PHOENIX the Transformer and TCN were still improving at the 40-epoch cap while Mamba converged by epoch ~30 | PHOENIX rerun with an 80-epoch budget and the same early stopping; every run stopped on its own |
 
 ## 3. Does the model use the correct video? (E1)
@@ -157,7 +161,40 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
 - PHOENIX clips are all ≤256 frames, so the long-clip question can't be asked there.
 - PHOENIX references contain few negations, so negation recall isn't reported for it.
 
-**Order sensitivity of the controls** (shuffle every frame, greedy chrF2, iSign, short / long clips):
+### How2Sign (corrected targets, 80-epoch budget, all runs stopped early on their own; 3 seeds)
+2,098 test clips from 158 source videos; median 137 frames, 18% over 256 frames.
+
+| Encoder | chrF2 | BLEU-4 | Content F1 | Number F1 | Neg. recall | vs fixed Mamba, chrF2 | ≤128 frames | >256 frames | vs fixed Mamba, BLEU-4 | Best epochs |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Transformer | 20.14 ± 0.28 | 2.34 ± 0.21 | 8.10 | 13.2 | 32.7 | −1.69 [−2.06, −1.30] | −1.04 | −2.30 | −0.90 [−1.18, −0.62] | 20–33 |
+| TCN | 21.43 ± 0.15 | 3.33 ± 0.24 | 10.56 | 17.5 | 47.2 | −0.40 [−0.68, −0.12] | **+0.71 [+0.25, +1.16]** | **−1.45 [−1.80, −1.07]** | +0.08 (n.s.) | 24–28 |
+| **Mamba, input-independent coefficients** | **22.61 ± 0.21** | **3.73 ± 0.06** | **12.17** | **21.9** | **59.2** | **+0.78 [+0.52, +1.05]** | +1.36 [+0.95, +1.76] | +0.25 (n.s.) | **+0.49 [+0.30, +0.69]** | 19–24 |
+| Fixed Mamba | 21.83 ± 0.36 | 3.24 ± 0.27 | 10.72 | 16.7 | 49.5 | — | — | — | — | 20–27 |
+
+**Length interactions** (long-minus-short, chrF2, video-grouped):
+- **Mamba − Transformer:** +1.26 [+0.59, +1.88] (iSign: +0.83).
+- **Mamba − TCN:** +2.16 [+1.56, +2.74] (iSign: +0.83).
+- **TCN − Transformer:** −0.90 [−1.51, −0.26] (iSign: +0.00).
+- **Input-independent − Mamba:** −1.11 [−1.64, −0.58] (iSign: −0.11, n.s.).
+
+**Reading:**
+- **The iSign ordering reproduces on a third dataset and language:** Transformer < TCN ≈ fixed Mamba < input-independent Mamba. The TCN recovers 76% of the chrF2 gap and all of the BLEU-4 gap.
+- **This is the cleanest long-context evidence so far.** The TCN has no window boundaries or resets, only a 121-frame reach, yet it goes from better than Mamba on short clips to clearly worse on long ones. Its advantage over the Transformer also shrinks with length. This can't be a boundary artefact. The decoder still sees every encoder output, so the limit is on how far the *encoder* mixes information. A wide-RF TCN on How2Sign would test whether reach alone closes it (not yet run).
+- **Input-independent coefficients help most on short clips here.** On long clips they tie with selective Mamba rather than beat it. "Preserves or improves" still holds, but the iSign pattern of an equal gain at every length does not.
+- Fixed Mamba's token NLL on dev is higher than the other encoders' (4.6 vs 3.7–4.0) despite comparable chrF2. This is noted but not interpreted.
+
+**Order sensitivity, How2Sign** (greedy chrF2 change on dev, short ≤256 / long 257–512 frames):
+
+| Encoder | Shuffle every frame | Reverse | Half density |
+|---|---|---|---|
+| Transformer | −0.33 / −0.23 | −1.64 / −0.86 | −2.63 / −2.60 (time-PE: +0.03 / −0.52) |
+| TCN | −0.97 / −1.20 | −2.26 / −1.37 | −3.91 / −2.52 |
+| Input-independent Mamba | −6.14 / −12.35 | −3.06 / −2.87 | −3.49 / −3.19 |
+| Fixed Mamba | −6.47 / −15.88 | −2.43 / −2.19 | −3.92 / −3.06 |
+
+The TCN is far less sensitive to frame shuffling on How2Sign than on iSign (−0.97 here vs −3.87 there). Its How2Sign gain over the Transformer therefore does not need the strong frame-order dependence Mamba shows.
+
+**Order sensitivity of the iSign controls** (shuffle every frame, greedy chrF2, short / long clips):
 
 | Encoder | Short | Long |
 |---|---|---|
@@ -170,7 +207,7 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
 | Input-independent Mamba | −5.79 | −6.95 |
 
 **Against your gates:**
-- **E5 gate ("closes ≥50% of the content gap"):** met by the TCN on both datasets.
+- **E5 gate ("closes ≥50% of the content gap"):** met by the TCN on all three datasets.
 - **Our pre-registered iSign rule ("TCN within ~0.3 chrF2 of Mamba"):** missed (−0.41), hence "most of the advantage", not all.
 - **C1 + C7:** within these conditions, input-dependent scan coefficients were not needed.
   - **Caveat 1:** the input-independent arm has fewer active parameters (33.27M vs 34.01M), so regularisation or parameterisation could contribute to its gain.
@@ -183,12 +220,12 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
 | E6: encoder × lexical supervision (PHOENIX, seed 42, bag-of-content-words auxiliary loss, weight 0.3) | Hurts both: Transformer −4.15 chrF2, Mamba −1.21. The interaction (+2.94) is confounded, because the Transformer + loss run was still improving at the 40-epoch cap | Dropped at this weight |
 | Resource profile, H200, random weights | See below | Table and short discussion only |
 
-| Encoder | Training step | Peak memory | Batch-1 encoder time (512 frames) | Best epoch, iSign / PHOENIX |
+| Encoder | Training step | Peak memory | Batch-1 encoder time (512 frames) | Best epoch, iSign / PHOENIX / How2Sign |
 |---|---|---|---|---|
-| Transformer | 66 ms | 4.38 GB | 5.5 ms | 22–37 / 30–42 |
-| TCN | 91 ms | 4.83 GB | 3.5 ms | 23–28 / 39–49 |
-| Fixed Mamba | 140 ms | 3.86 GB | 15.7 ms | 19–34 / 22–26 |
-| Mamba, input-independent | 151 ms | 3.86 GB | 15.0 ms | 26 (s42) / 24–47 |
+| Transformer | 66 ms | 4.38 GB | 5.5 ms | 22–37 / 30–42 / 20–33 |
+| TCN | 91 ms | 4.83 GB | 3.5 ms | 23–28 / 39–49 / 24–28 |
+| Fixed Mamba | 140 ms | 3.86 GB | 15.7 ms | 19–34 / 22–26 / 20–27 |
+| Mamba, input-independent | 151 ms | 3.86 GB | 15.0 ms | 26 (s42) / 24–47 / 19–24 |
 
 **How to read this table:**
 - The TCN is faster per step than Mamba but slower than the Transformer, and uses more peak memory than both.
@@ -201,7 +238,6 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
 | Item | Design | Status |
 |---|---|---|
 | **Boundary vs context** (your main request) | **Inference** (`diag_window.py`, dev short and long samples, full-encoder restriction): no windows; non-overlapping 64 / 128 / 256; overlapping 64 / 128 / 256 (stride W/2, each output from the window in whose central half it lies, so ≤W frames of context but no frame at an edge); 128 shifted by 32 / 64 / 96. Run on the window-trained checkpoints (3 seeds), fixed Mamba and input-independent Mamba. **Training** (seed 42): windows of 64 and 256, and 128 with overlap | Queued |
-| How2Sign, corrected targets | Transformer, TCN, fixed Mamba, input-independent Mamba; 3 seeds; order diagnostics; longest clips | Running |
 | Independent LTI baseline | S4D, 3 seeds | Queued |
 | Wide-RF TCN | Seeds 13 and 1337 | Queued |
 | Learned retention times | Per head (input-independent Mamba) and per mode (S4D), from checkpoints | CPU, running |
@@ -223,6 +259,7 @@ Content F1 is clipped-multiset; "Neg. recall" is the share of negated references
   - 737,280 `in_proj` weights are unused.
   - With a scalar A per head, d_state = 64 does not give 64 distinct decay rates per head.
 - **Windowed Mamba** uses non-overlapping windows, so the boundary/context confound remains until §8 lands.
+- **How2Sign has no wide-RF TCN, windowed or S4D arm yet,** so its long-context reading rests on the TCN's fixed reach.
 - **PHOENIX fixed Mamba under the 80-epoch budget** has higher chrF2 but lower BLEU-4 than under 40 epochs (34.44 / 11.11 vs 33.94 / 11.68). The longer budget also lengthens warmup. All four PHOENIX encoders share the budget, but the PHOENIX BLEU-4 differences are less stable than chrF2.
 - **chrF2 and BLEU-4 aren't adequacy.** Content F1 excludes negation and digits, which are now reported separately. No human evaluation yet.
 

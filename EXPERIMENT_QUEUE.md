@@ -27,13 +27,23 @@ Single-seed arms: local-attention Transformer 20.00 / 3.54; whole-clip TCN 20.93
 
 PHOENIX clips are all ≤256 frames, so the long-clip question can't be asked there.
 
+### How2Sign (corrected targets, 80-epoch budget, 3 seeds; 158 test videos)
+| Encoder | chrF2 | BLEU-4 | vs Mamba, chrF2 | ≤128 frames | >256 frames | vs Mamba, BLEU-4 |
+|---|---|---|---|---|---|---|
+| Transformer | 20.14 | 2.34 | −1.69 [−2.06, −1.30] | −1.04 | −2.30 | −0.90 |
+| TCN | 21.43 | 3.33 | −0.40 [−0.68, −0.12] | **+0.71** | **−1.45** | +0.08 (n.s.) |
+| **Mamba, input-independent coefficients** | **22.61** | **3.73** | **+0.78 [+0.52, +1.05]** | +1.36 | +0.25 (n.s.) | **+0.49** |
+| Mamba | 21.83 | 3.24 | — | — | — | — |
+
+Long-minus-short: Mamba − TCN +2.16 [+1.56, +2.74]; Mamba − Transformer +1.26 [+0.59, +1.88]; input-independent − Mamba −1.11 [−1.64, −0.58].
+
 ### What the results say
-1. **Local temporal modelling explains most of the gap.** A TCN closes 82% (iSign) and 63% (PHOENIX) of the chrF2 gap, and all of the BLEU-4 gap.
-2. **Long clips also need context beyond about 5 seconds.** Windowed Mamba loses specifically on long iSign clips (long-minus-short −0.92 [−1.32, −0.54]), and a TCN reaching the whole clip recovers the TCN's long-clip deficit.
-3. **Input-dependent selectivity isn't needed; removing it helps.** A time-invariant (non-selective) Mamba is the best encoder on iSign (+0.43 chrF2, +0.31 BLEU-4, the same at every length). On PHOENIX it ties on chrF2 and is better on BLEU-4.
+1. **Local temporal modelling explains most of the gap.** A TCN closes 82% (iSign), 63% (PHOENIX) and 76% (How2Sign) of the chrF2 gap, and all of the BLEU-4 gap.
+2. **Long clips appear to need wider encoder context.** Windowed Mamba loses specifically on long iSign clips (boundary vs context still being separated, P10). On How2Sign the TCN, which has no window boundaries, beats Mamba on short clips and loses on long ones (long-minus-short +2.16 [+1.56, +2.74]).
+3. **Input-dependent scan coefficients aren't needed.** Mamba with input-independent coefficients is the best encoder on iSign (+0.43 chrF2, +0.31 BLEU-4) and How2Sign (+0.78, +0.49; gain concentrated on short clips). On PHOENIX it ties on chrF2 and is better on BLEU-4.
 4. **Mamba converges fastest** (best epochs 22–26 on PHOENIX, against 30–49 for the others).
 
-A time-invariant SSM is equivalent to a long learned convolution. **The winning inductive bias is dense temporal filtering over the whole clip, not content-dependent selection.**
+**Scoped claim (reviewer's wording):** temporal convolution recovers most of the advantage over the tested Transformer; input-independent SSM coefficients preserve or improve translation; wider encoder context appears to help on longer clips.
 
 **Other results:**
 - The word-level (bag-of-words) loss hurts both encoders; dropped.
@@ -59,7 +69,7 @@ A time-invariant SSM is equivalent to a long learned convolution. **The winning 
 #### P9 `how2sign`: the third dataset, with corrected targets (12 runs)
 The original How2Sign runs trained on lowercased text with `<UNKNOWN>` tokens but were scored against cased references. `how2sign_cased` uses one consistently formatted column for train, val and test.
 - [x] **Step 1:** `check_text_columns.py` (2026-10-12): train `text` is lowercase with 22.8% `<UNKNOWN>`, train `SENTENCE` is cased; val/test have only `text`, already cased. The configs now use `train_text_col: SENTENCE` and `text_col: text`, and the runner refuses to train unless the built cache passes the same check for all three splits.
-- [ ] **Step 2:** `H2S_TEXT_CHECKED=1 PARTS="how2sign"`. It builds the cache once (CPU, about 40 min), then trains Transformer, TCN, Mamba and non-selective Mamba, 3 seeds each, with the 80-epoch budget. Seed 42 also gets order diagnostics on short and long clips.
+- [x] **Step 2 (done 2026-10-13):** `H2S_TEXT_CHECKED=1 PARTS="how2sign"`. It builds the cache once (CPU, about 40 min), then trains Transformer, TCN, Mamba and non-selective Mamba, 3 seeds each, with the 80-epoch budget. Seed 42 also gets order diagnostics on short and long clips.
 - **What it decides:** How2Sign has the longest clips, so it's the strongest test of point 2 (context beyond ~5 s) and a third-language check of points 1 and 3.
 
 #### After the 12 October review (`REVIEW_FEEDBACK_2026-10-12.md`)
@@ -81,7 +91,8 @@ CPU checks, run now on the server:
 ### My side (CPU, after each push)
 - [x] `length_gap.py` and `compare_encoders.py` with corrected grouping and metrics.
 - [x] `REVIEW_RESPONSE.md` revised (claim scoped, labels fixed, parameter bookkeeping, §0 changes).
-- [ ] Analyse P9–P12; update the response.
+- [x] Analyse P9 (How2Sign); response updated.
+- [ ] Analyse P10–P12; update the response.
 - [ ] Draft the paper.
 
 ## Not queued, and why
@@ -111,10 +122,10 @@ cd "phase 2" && python scripts/test_selectivity.py && cd ..
 cd "phase 3" && python scripts/test_diagnostics.py && cd ..
 ```
 
-3. Append the review experiments to the running queue. This only works once the How2Sign queue has listed its jobs (after its ~40-minute cache build):
+3. Start the review experiments. The How2Sign queue has finished, so start them as a new queue. Use `APPEND=1` only if another queue is still running.
 
 ```bash
-APPEND=1 PARTS="windows s4d tcn_wide3" bash "phase 3/scripts/run_queue.sh"
+PARTS="windows s4d tcn_wide3" bash "phase 3/scripts/run_queue.sh"
 ```
 
 4. CPU checks (seconds to minutes; they don't need a GPU):
